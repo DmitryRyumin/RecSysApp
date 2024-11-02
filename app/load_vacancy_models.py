@@ -13,29 +13,11 @@ import numpy as np
 from collections import Counter
 
 # Importing necessary components for the Gradio app
-from app.config import config_data
-
-
-def parse_embedding_from_str(str_emb):
-    emb = []
-    for part in str_emb.strip()[1:-1].split(" "):
-        fixed_part = part.strip()
-        if len(fixed_part) > 0:
-            emb.append(float(fixed_part))
-
-    return emb
+#from app.config import config_data
 
 
 def load_embeddings(path):
-    df = pd.read_csv(path)
-    all_embs = []
-    all_key_skills = []
-    for _, row in df.iterrows():  # tqdm(df.embedding):
-        all_embs.append(parse_embedding_from_str(row["embedding"]))
-        all_key_skills.append(eval(row["key_skills"]))
-
-    df["embedding"] = all_embs
-    df["key_skills"] = all_key_skills
+    df = pd.read_parquet(path)
 
     return df
 
@@ -71,19 +53,6 @@ class EmbeddingExtractor:
 
         return embedding
 
-    def extract_batch(self, texts):
-        encoded_input = self.tokenizer(
-            texts, padding=True, truncation=True, max_length=64, return_tensors="pt"
-        )
-        with torch.no_grad():
-            model_output = self.model(**encoded_input)
-
-        for i in range(len(texts)):
-            text = texts[i]
-            embedding = model_output.pooler_output[i]
-
-            self.embeddings[text] = embedding
-
     def similarity(self, emb1, emb2):
         return 1 - self.similarity_metric(emb1, emb2)
 
@@ -102,7 +71,7 @@ class VacancyFinder:
         for title in titles:
             self.titles[title] = self.embedding_extractor.extract(title)
             self.vacancy_stats_by_title[title] = []
-            for _, row in initial_df.iterrows():
+            for _, row in initial_df[initial_df.parent == title].iterrows():
                 name = row["name"]
                 key_skills = row["key_skills"]
                 id_ = row["id"]
@@ -155,14 +124,6 @@ class VacancyFinder:
         return best_vacancies
 
 
-def aggregate_skills(all_skills):
-    skills_list = []
-    for key_skills in all_skills:
-        skills_list.extend(key_skills)
-
-    return Counter(skills_list)
-
-
 class SkillsExtractor:
 
     def __init__(
@@ -182,24 +143,54 @@ class SkillsExtractor:
         tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
         model = AutoModel.from_pretrained(model_path)
         emb_df = load_embeddings(path_to_vacancies_info)
-        embedding_extractor = EmbeddingExtractor(model, tokenizer, emb_df)
 
-        self.vacancy_finder = VacancyFinder(embedding_extractor, emb_df)
+        self.embedding_extractor = EmbeddingExtractor(model, tokenizer, emb_df)
+        self.vacancy_finder = VacancyFinder(self.embedding_extractor, emb_df)
+
 
     def key_skills_for_profession(
-        self, profession, max_skills=100, min_frequency=3, nearest_vacancies=50
+        self, profession, max_skills=100, min_frequency=3, 
+        nearest_vacancies=50, nearest_titles=5, filter_near=True
     ):
+        final_skills = []
+    
         all_key_skills = []
         for _, key_skills, _, _, _, _ in self.vacancy_finder.get_best_vacancies(
-            profession, amount=nearest_vacancies
+            profession, amount=nearest_vacancies, nearest_titles=nearest_titles
         ):
-            all_key_skills.append(key_skills)
+            all_key_skills.extend(key_skills)
 
         selected_skills = []
-        for name, amount in aggregate_skills(all_key_skills).most_common():
-            if len(selected_skills) >= max_skills or amount < min_frequency:
+        counted_skills = {}
+
+        for skill in all_key_skills:
+            found = False
+            for selected_skill in selected_skills:
+                if filter_near:
+                    selected_skill_emb = self.embedding_extractor.extract(selected_skill)
+                    skill_emb = self.embedding_extractor.extract(skill)
+                    similarity = self.embedding_extractor.similarity(skill_emb, selected_skill_emb)
+                else:
+                    if skill == selected_skill:
+                        similarity = 1.0
+                    else:
+                        similarity = 0.0
+                        
+                if similarity > 0.9:
+                    found = True
+                    counted_skills[selected_skill] += 1
+                    break
+
+            if not found:
+                selected_skills.append(skill)
+                counted_skills[skill] = 1
+
+        result_skills = []
+        for skill in sorted(selected_skills, key=lambda x: -counted_skills[x]): 
+            amount = counted_skills[skill]
+            if len(result_skills) >= max_skills or amount < min_frequency:
                 break
             else:
-                selected_skills.append(name)
+                result_skills.append(skill)
 
-        return selected_skills
+        return result_skills
