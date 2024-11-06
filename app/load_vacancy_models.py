@@ -32,7 +32,7 @@ class EmbeddingExtractor:
 
     def _initialize_embeddings(self, initial_df):
         for _, row in initial_df.iterrows():
-            name = row["name"]
+            name = row["with_name"]
             emb = row["embedding"]
 
             self.embeddings[name] = emb
@@ -72,7 +72,7 @@ class VacancyFinder:
             self.vacancy_stats_by_title[title] = []
 
             for _, row in initial_df[initial_df.parent == title].iterrows():
-                name = row["name"]
+                name = row["with_name"]
                 key_skills = row["key_skills"]
                 id_ = row["id"]
 
