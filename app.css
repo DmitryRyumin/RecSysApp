@@ -446,6 +446,7 @@ div.subject-info > div.info > div.item {
     align-items: center;
     width: 40px;
     height: 40px;
+    color: #fff;
 }
 
 div.subject-info > div.info > div.info-item:last-child,
