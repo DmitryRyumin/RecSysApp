@@ -438,6 +438,8 @@ div.subject-info > div.info:last-child {
 div.subject-info > div.info > div.item {
     display: flex;
     position: absolute;
+    font-family: 'HSESans', sans-serif !important;
+    color: #fff !important;
     right: 20px;
     background: var(--main-color);
     padding: 10px;
@@ -446,7 +448,6 @@ div.subject-info > div.info > div.item {
     align-items: center;
     width: 40px;
     height: 40px;
-    color: #fff;
 }
 
 div.subject-info > div.info > div.info-item:last-child,
