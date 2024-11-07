@@ -454,20 +454,23 @@ button.auth:active:not([disabled]) {
     background-color: #fafafa !important;
 }
 
+.icon-button-wrapper.svelte-sr71km {
+    background-color: #fafafa !important;
+}
 .chatbot-container .icon-button-wrapper {
-    background-color: none !important;
-    border-radius: 50%;
+    border-radius: 5px;
     border: none !important;
+    border-width: 0;
 }
 
 .chatbot-container .icon-button-wrapper > button {
     color: #0f2d69;
     background-color: #e0e7ff;
     border: none;
-    border-radius: 50%;
-    padding: 8px;
+    border-radius: 5px;
+    padding: 6px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -478,10 +481,11 @@ button.auth:active:not([disabled]) {
 .chatbot-container .icon-button-wrapper > button:hover {
     background-color: #b3c7ff; /* Более тёмный оттенок фона для интерактивного эффекта */
     transform: scale(1.05);
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
 .icon-button-wrapper.top-panel {
+    top:3px;
     right: 15px;
 }
 button.send_message {
