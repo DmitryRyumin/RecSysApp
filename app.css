@@ -56,6 +56,7 @@ gradio-app {
     color: var(--main-color) !important;
 }
 
+/* Шапка */
 header {
     display: flex;
     border-bottom: 2px solid var(--gray-50);
@@ -86,15 +87,10 @@ div.logo > img {
     font-size: 24px;
     font-weight: 600;
     color: var(--main-color);
-    font-family: 'HSESans', sans-serif !important;
     text-transform: uppercase;
     text-decoration: none;
     text-align: left;
     line-height: 1.2;
-}
-
-.logo-title > a:hover {
-    color: var(--additional-color);
 }
 
 .header-text {
@@ -109,6 +105,36 @@ div.logo > img {
     line-height: 1.2;
 }
 
+/* Медиазапрос для мобильных устройств */
+@media (max-width: 576px) {
+    .header-text {
+        display: none;
+    }
+
+    .logo {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        border-right: none;
+    }
+
+    .logo-title {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .logo-title > a {
+        font-size: 1.5rem; /* Делаем заголовок крупнее для мобильных */
+        text-align: left; /* Центрируем текст */
+    }
+}
+
+
+/* Переключатели */
 .tabs {
     margin-top: 10px;
 }
@@ -139,6 +165,35 @@ div.logo > img {
 }
 
 .tab-container > button.selected::after {
+    background-color: var(--main-color);
+}
+
+.tabs .overflow-menu > button {
+    background-color: var(--bg-color) !important;
+    color: var(--main-color) !important;
+}
+
+.tabs .overflow-menu > button.overflow-item-selected {
+    background-color: var(--main-color) !important;
+}
+.tabs .overflow-menu > button.overflow-item-selected > svg {
+    color: #fff !important;
+}
+
+.tabs .overflow-dropdown {
+    background-color: #fafafa !important;
+    font-family: 'HSESans', sans-serif !important;
+    margin-top: 5px;
+}
+
+.tabs .overflow-dropdown>button {
+    color: #000;
+    font-family: 'HSESans', sans-serif !important;
+    font-size: 16px;
+    text-transform: capitalize;
+}
+
+.tabs .overflow-dropdown > button.selected::after {
     background-color: var(--main-color);
 }
 
@@ -244,6 +299,41 @@ div.logo > img {
 
 .dropdown-user .dropdown-arrow {
     color: #363636;
+}
+
+@media (max-width: 480px) {
+    .user-container {
+        display: flex;
+        flex-direction: column; /* Располагаем элементы в столбик */
+        gap: 15px; /* Добавляем отступы между полями */
+    }
+
+    .user-info, .dropdown-user {
+        width: 100%; /* Полная ширина полей */
+    }
+
+    .user-info input, .dropdown-user .wrap {
+        width: 100%; /* Полная ширина элементов ввода */
+    }
+}
+
+@media (min-width: 568px) and (max-width: 1024px) {
+    .user-container {
+        display: flex;
+        flex-wrap: wrap; /* Позволяет элементам переноситься */
+        gap: 15px; /* Отступы между элементами */
+    }
+
+    .user-info {
+        flex: 1 1 calc(50% - 7.5px); /* Ширина для первых двух инпутов с учетом отступов */
+        min-width: calc(50% - 7.5px); /* Минимальная ширина для первых двух элементов */
+    }
+
+    .dropdown-user {
+        flex: 1 1 100%;
+        min-width: 100%;
+        order: 2;
+    }
 }
 
 .noti_err {
@@ -438,16 +528,24 @@ div.subject-info > div.info:last-child {
 div.subject-info > div.info > div.item {
     display: flex;
     position: absolute;
+    align-items: center;
+    justify-content: center;
     font-family: 'HSESans', sans-serif !important;
+    font-size: 20px;
     color: #fff !important;
     right: 20px;
     background: var(--main-color);
-    padding: 10px;
     border-radius: 50%;
-    justify-content: center;
-    align-items: center;
     width: 40px;
     height: 40px;
+}
+
+@media (max-width: 768px) {
+    div.subject-info > div.info > div.item {
+        width: 16px;
+        height: 16px;
+        font-size: 0.9rem;
+    }
 }
 
 div.subject-info > div.info > div.info-item:last-child,
@@ -506,6 +604,14 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill {
     border-width: 2px;
     color: #000;
     margin: 10px 10px 0px 0px;
+}
+
+@media (max-width: 768px) {
+    div.subject-info > div.info > div.info-skills > span.value > span.skill {
+        font-size: 0.9rem;
+        padding: 2px 5px;
+        margin: 6px 5px 0px 0px;
+    }
 }
 
 div.subject-info > div.info > div.info-skills > span.value > span.skill:last-child {
@@ -641,6 +747,57 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 .dropdown-models .dropdown-arrow {
     color: #363636;
 }
+
+@media (max-width: 568px) {
+    .row-1-container {
+        display: flex;
+        flex-direction: column; /* Располагаем элементы в столбик */
+        gap: 15px; /* Добавляем отступы между полями */
+    }
+
+    .settings-item, .dropdown-models, .dropdown-courses-grades {
+        width: 100%; /* Полная ширина полей */
+    }
+
+    .settings-item input, .dropdown-models .wrap, .dropdown-courses-grades .wrap {
+        width: 100%; /* Полная ширина элементов ввода */
+    }
+}
+
+@media (min-width: 568px) and (max-width: 1024px) {
+    .row-1-container {
+        display: flex;
+        flex-wrap: wrap; /* Позволяет элементам переноситься */
+        gap: 15px; /* Отступы между элементами */
+    }
+
+    .row-1-container > .form {
+        display: flex;
+        flex-wrap: wrap; /* Позволяет элементам внутри переноситься */
+        width: 100%; /* Обеспечиваем полную ширину формы */
+    }
+
+    .row-1-container .settings-item {
+        flex: 1 1 calc(50% - 7.5px); /* Первые два элемента занимают 50% ширины */
+        min-width: calc(50% - 7.5px); /* Минимальная ширина для первых двух элементов */
+    }
+    .row-1-container .has-info:first-of-type {
+        width: 70%;
+    }
+
+    .row-1-container .dropdown-models {
+        flex: 1 1 100%; /* Третий элемент занимает всю ширину */
+        min-width: 100%; /* Минимальная ширина - вся ширина контейнера */
+        order: 2; /* Устанавливаем порядок, чтобы этот элемент был последним */
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+    .row-1-container .has-info:first-of-type {
+    width: 70%;
+    }
+}
+
 
 .dropdown-courses-grades .wrap {
     background-color: #fafafa !important;

@@ -25,7 +25,7 @@ def event_handler_auth(
             value=config_data.OtherMessages_AUTH,
             interactive=is_auth_valid,
             scale=1,
-            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "auth.ico",
+            # icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "auth.ico",
             visible=True,
             elem_classes="auth",
         ),
