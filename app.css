@@ -149,15 +149,19 @@ div.logo > img {
     font-weight: 600;
     font-size: 16px;
     text-transform: uppercase;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .tab-container > button.selected {
     color: var(--main-color);
+    transition: color 0.2s ease;
 }
 
 .tab-container > button:hover {
     background-color: var(--main-color);
     color: #fff !important;
+    transform: translateY(-1px);
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .tab-container > button.selected:hover {
@@ -165,7 +169,12 @@ div.logo > img {
 }
 
 .tab-container > button.selected::after {
+    content: '';
+    display: block;
+    margin: 5px auto 0;
+    height: 2px; /* Толщина подчеркивания */
     background-color: var(--main-color);
+    transition: width 0.2s ease; /* Плавный переход для подчеркивания */
 }
 
 .tabs .overflow-menu > button {
