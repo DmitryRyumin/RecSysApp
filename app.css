@@ -459,13 +459,19 @@ button.auth:active:not([disabled]) {
 }
 
 .chatbot-container .icon-button-wrapper > button {
-    background-color: var(--main-color);
-    border-color: var(--additional-color);
-    border-width: 0.5px;
+    color: #0f2d69;
+    background-color: #e0e7ff;
+    border: none;
+    border-radius: 50%;
+    padding: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .chatbot-container .icon-button-wrapper > button:hover {
-    background-color: var(--additional-color);
+    transform: scale(1.05);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 button.send_message {
@@ -542,8 +548,8 @@ div.subject-info > div.info > div.item {
 
 @media (max-width: 768px) {
     div.subject-info > div.info > div.item {
-        width: 16px;
-        height: 16px;
+        width: 20px;
+        height: 20px;
         font-size: 0.9rem;
     }
 }

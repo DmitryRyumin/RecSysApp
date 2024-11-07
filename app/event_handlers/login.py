@@ -38,7 +38,7 @@ def event_handler_login(surname: str, username: str, dropdown_user: str) -> tupl
             value=config_data.OtherMessages_AUTH,
             interactive=not is_auth_valid,
             scale=1,
-            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "auth.ico",
+            # icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "auth.ico",
             visible=True,
             elem_classes="auth",
         ),
