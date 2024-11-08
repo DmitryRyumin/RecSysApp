@@ -10,6 +10,8 @@ License: MIT License
 import gradio as gr
 import os
 
+from pathlib import Path
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Importing necessary components for the Gradio app
@@ -25,12 +27,17 @@ gr.set_static_paths(
     ]
 )
 
+JS_HEAD = f"<script>{Path(
+    config_data.Path_APP / config_data.StaticPaths_JS / "head.js"
+).read_text(encoding='utf-8')}</script>"
+
 
 def create_gradio_app() -> gr.Blocks:
     with gr.Blocks(
         title=config_data.AppSettings_TITLE,
         theme=gr.themes.Default(font=["HSESans"]),
         css_paths=config_data.AppSettings_CSS_PATH,
+        head=JS_HEAD,
     ) as gradio_app:
         gr.HTML(HEADER)
 

@@ -133,7 +133,6 @@ div.logo > img {
     }
 }
 
-
 /* Переключатели */
 .tabs {
     margin-top: 10px;
@@ -144,7 +143,7 @@ div.logo > img {
 }
 
 .tab-container > button {
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
     font-weight: 600;
     font-size: 16px;
@@ -195,7 +194,7 @@ div.logo > img {
     margin-top: 5px;
 }
 
-.tabs .overflow-dropdown>button {
+.tabs .overflow-dropdown > button {
     color: #000;
     font-family: 'HSESans', sans-serif !important;
     font-size: 16px;
@@ -235,7 +234,7 @@ div.logo > img {
 }
 
 .user-info p {
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
 }
 
@@ -266,7 +265,7 @@ div.logo > img {
 }
 
 .dropdown-user p {
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
 }
 
@@ -317,11 +316,13 @@ div.logo > img {
         gap: 15px; /* Добавляем отступы между полями */
     }
 
-    .user-info, .dropdown-user {
+    .user-info,
+    .dropdown-user {
         width: 100%; /* Полная ширина полей */
     }
 
-    .user-info input, .dropdown-user .wrap {
+    .user-info input,
+    .dropdown-user .wrap {
         width: 100%; /* Полная ширина элементов ввода */
     }
 }
@@ -364,7 +365,8 @@ div.app-flex-container {
     margin-top: 10px;
 }
 
-button.auth {
+button.auth,
+button.send_evaluate {
     display: flex;
     padding: 10px 20px;
     font-size: 16px;
@@ -381,18 +383,21 @@ button.auth {
 }
 
 button.auth[disabled],
+button.send_evaluate[disabled],
 button.send_message[disabled] > img {
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-button.auth:hover:not([disabled]) {
+button.auth:hover:not([disabled]),
+button.send_evaluate:hover:not([disabled]) {
     border-color: var(--button-primary-border-color-hover);
     background: var(--additional-color);
     color: var(--button-primary-text-color-hover);
 }
 
-button.auth:active:not([disabled]) {
+button.auth:active:not([disabled]),
+button.send_evaluate:active:not([disabled]) {
     transform: scale(0.98);
 }
 
@@ -483,7 +488,7 @@ button.auth:active:not([disabled]) {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.chatbot-container .icon-button-wrapper > button svg{
+.chatbot-container .icon-button-wrapper > button svg {
     color: #363636;
 }
 
@@ -494,7 +499,7 @@ button.auth:active:not([disabled]) {
 }
 
 .icon-button-wrapper.top-panel {
-    top:3px;
+    top: 3px;
     right: 15px;
 }
 button.send_message {
@@ -532,7 +537,7 @@ div.edu-group:not(:first-child) {
 div.edu-group > span {
     display: block;
     text-align: center;
-    color: #000 !important;
+    color: #000000 !important;
     font-size: 18px;
     font-weight: bold;
 }
@@ -587,6 +592,17 @@ div.subject-info > div.info > div.info-courses-grades-error {
     margin-left: 15px;
 }
 
+div.subject-info > div.info > div.range {
+    display: flex;
+}
+
+div.subject-info > div.info > div.range > label,
+div.subject-info > div.info > div.range > output {
+    font-family: 'HSESans', sans-serif !important;
+    color: #ff0000;
+}
+
+div.subject-info > div.info > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
@@ -604,6 +620,7 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
     color: var(--color-accent);
 }
 
+div.subject-info > div.info > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-item > span.value,
 div.subject-info > div.info > div.info-courses-grades > span.label,
@@ -627,12 +644,17 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill {
     justify-content: center;
     padding: 5px 10px;
     border-radius: 4px;
-    border-color: var(--main-color);
     background-color: #fafafa !important;
-    border-style: solid;
-    border-width: 2px;
-    color: #000;
+    border: 2px solid var(--main-color);
+    color: #000000;
     margin: 10px 10px 0px 0px;
+    cursor: pointer;
+}
+
+div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted {
+    border: 2px solid #ff0000;
+    background-color: #ffd6d6 !important;
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
 }
 
 @media (max-width: 768px) {
@@ -648,26 +670,26 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 }
 
 .message-wrap .message > button {
-    color: #000 !important;
+    color: #000000 !important;
 }
 
 .message.user .chatbot.prose p {
-    color: #000 !important;
+    color: #000000 !important;
 }
 
 .info .info-skills > .label {
-    color: #000 !important;
+    color: #000000 !important;
 }
 
 .info .info-item span,
 .info .info-courses-grades span {
-    color: #000 !important;
+    color: #000000 !important;
 }
 
 .message-container .error {
     background-color: #fafafa !important;
     font-family: 'HSESans', sans-serif !important;
-    color: #000;
+    color: #000000;
 }
 
 .row-1-container > div {
@@ -688,7 +710,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 }
 
 .settings-item p {
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
 }
 
@@ -733,7 +755,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 .dropdown-models p,
 .dropdown-courses-grades p {
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
 }
 
@@ -784,11 +806,15 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
         gap: 15px; /* Добавляем отступы между полями */
     }
 
-    .settings-item, .dropdown-models, .dropdown-courses-grades {
+    .settings-item,
+    .dropdown-models,
+    .dropdown-courses-grades {
         width: 100%; /* Полная ширина полей */
     }
 
-    .settings-item input, .dropdown-models .wrap, .dropdown-courses-grades .wrap {
+    .settings-item input,
+    .dropdown-models .wrap,
+    .dropdown-courses-grades .wrap {
         width: 100%; /* Полная ширина элементов ввода */
     }
 }
@@ -823,10 +849,9 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 @media (min-width: 1024px) and (max-width: 1280px) {
     .row-1-container .has-info:first-of-type {
-    width: 70%;
+        width: 70%;
     }
 }
-
 
 .dropdown-courses-grades .wrap {
     background-color: #fafafa !important;
@@ -875,7 +900,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 .dropdown-courses-grades .token > span {
     font-family: 'HSESans', sans-serif !important;
-    color: #000;
+    color: #000000;
 }
 
 .dropdown-courses-grades .token-remove {
@@ -893,7 +918,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 .requirements-dataframe .table-wrap .thead > tr > th {
     background-color: #fafafa !important;
-    color: #000;
+    color: #000000;
     font-family: 'HSESans', sans-serif !important;
     font-weight: 600;
 }
@@ -906,11 +931,11 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 .requirements-dataframe .table-wrap .tbody > tr > td {
     background-color: #fafafa !important;
-    color: #000;
+    color: #000000;
 }
 
 .requirements-dataframe .table-wrap .tbody > tr > td p {
-    color: #000;
+    color: #000000;
 }
 
 .show-api,
@@ -925,4 +950,137 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
 
 .message-container .svelte-zyxd38.margin > svg > g > path {
     fill: var(--gray-25);
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance {
+    width: 250px;
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #ff0000;
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range'] {
+    outline: none;
+    height: 4px;
+    flex-grow: 1;
+    color: inherit;
+    margin-right: 1em;
+    margin-top: 3px;
+    background-color: #e3e3e3;
+    background-image: linear-gradient(#ff0000, #ff0000);
+    background-size: 0 100%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    appearance: none;
+}
+
+div.subject-info
+    > div.info
+    > div.range
+    > div.subject_relevance
+    > div.slider
+    > input[type='range']::-webkit-slider-runnable-track,
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-track {
+    border: none;
+    background: transparent;
+    appearance: none;
+}
+
+div.subject-info
+    > div.info
+    > div.range
+    > div.subject_relevance
+    > div.slider
+    > input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 0;
+    background: #ff0000;
+    border-radius: 50%;
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-thumb {
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 0;
+    background: #ff0000;
+    border-radius: 50%;
+}
+
+/* Стили значения слайдера */
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value {
+    display: inline-block;
+    position: relative;
+    height: 1.5em;
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::before,
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0.25em;
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::before {
+    top: 0;
+    background: linear-gradient(#fff, rgba(255, 255, 255, 0));
+}
+
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after {
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0), #fff);
+}
+
+/* Стили контейнера чисел */
+div.subject-info
+    > div.info
+    > div.range
+    > div.subject_relevance
+    > div.slider
+    > div.slider-value
+    > div.slider-value-number {
+    height: 1em;
+    overflow: hidden;
+    display: inline-block;
+    padding: 0.25em 0;
+    user-select: none;
+    font-weight: 600;
+}
+
+div.subject-info
+    > div.info
+    > div.range
+    > div.subject_relevance
+    > div.slider
+    > div.slider-value
+    > div.slider-value-number
+    > ul {
+    margin-top: -0.6em;
+    padding: 0;
+    list-style-type: none;
+    transition: transform 0.75s ease, opacity 0.5s ease;
+}
+
+div.subject-info
+    > div.info
+    > div.range
+    > div.subject_relevance
+    > div.slider
+    > div.slider-value
+    > div.slider-value-number
+    > ul
+    > li {
+    color: #ff0000;
+    height: 1em;
+    display: block;
+    margin: 0;
+    padding: 0.25em 0;
 }

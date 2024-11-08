@@ -1,5 +1,5 @@
 """
-File: login.py
+File: generate_response.py
 Author: Dmitry Ryumin
 Description: Event handler for Gradio app to generate response.
 License: MIT License
@@ -13,13 +13,14 @@ from gradio import ChatMessage
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
-from app.data_init import (
-    cosine_similarity,
-    df_puds_skills,
-    df_courses_grades,
-    model_manager_sbert,
-    skills_extractor,
-)
+
+# from app.data_init import (
+#     cosine_similarity,
+#     df_puds_skills,
+#     df_courses_grades,
+#     model_manager_sbert,
+#     skills_extractor,
+# )
 from app.data_utils import (
     get_embeddings,
     filter_unique_items,
@@ -31,6 +32,17 @@ from app.data_utils import (
 
 def create_html_block(label: str, value: str, class_name: str = "info-item") -> str:
     return f"<div class={class_name}><span class='label'>{label}</span> <span class='value'>{value}</span></div>"
+
+
+def create_html_range(
+    label: str, subject_id: str, class_name: str = "subject_relevance"
+) -> str:
+    return (
+        "<div class='range'>"
+        f"<label for='{class_name}_{subject_id}'>{label}</label>"
+        f"<div class='{class_name}' id='{class_name}_{subject_id}'></div>"
+        "</div>"
+    )
 
 
 def determine_edu_level(subject_info: list[str]) -> tuple[str, str]:
@@ -52,28 +64,28 @@ def generate_courses_grades(subject_info: list[str]) -> str:
     courses_grades = ""
     has_metrics = False
 
-    for i, index in enumerate(list(range(11, 21))):
-        grade_value = subject_info[index]
+    # for i, index in enumerate(list(range(11, 21))):
+    #     grade_value = subject_info[index]
 
-        match grade_value:
-            case "-":
-                continue
-            case None | "":
-                has_metrics = True
-                courses_grades += (
-                    "<div class='info-courses-grades-error'><span class='label'>"
-                    f"{config_data.InformationMessages_COURSES_GRADES_DATA[0]} "
-                    f"{config_data.InformationMessages_COURSES_GRADES_NOT_DEFINED[i]} "
-                    f"{config_data.InformationMessages_COURSES_GRADES_DATA[1]}"
-                    "</span></div>"
-                )
-            case _:
-                has_metrics = True
-                courses_grades += create_html_block(
-                    f"{config_data.DataframeHeaders_COURSES_GRADES[i]}:",
-                    format_grade(grade_value),
-                    "info-courses-grades",
-                )
+    #     match grade_value:
+    #         case "-":
+    #             continue
+    #         case None | "":
+    #             has_metrics = True
+    #             courses_grades += (
+    #                 "<div class='info-courses-grades-error'><span class='label'>"
+    #                 f"{config_data.InformationMessages_COURSES_GRADES_DATA[0]} "
+    #                 f"{config_data.InformationMessages_COURSES_GRADES_NOT_DEFINED[i]} "
+    #                 f"{config_data.InformationMessages_COURSES_GRADES_DATA[1]}"
+    #                 "</span></div>"
+    #             )
+    #         case _:
+    #             has_metrics = True
+    #             courses_grades += create_html_block(
+    #                 f"{config_data.DataframeHeaders_COURSES_GRADES[i]}:",
+    #                 format_grade(grade_value),
+    #                 "info-courses-grades",
+    #             )
 
     if has_metrics:
         courses_grades = (
@@ -104,6 +116,11 @@ def generate_subject_info(
 
     return "".join(
         [
+            create_html_range(
+                config_data.HtmlContent_SUBJECT_RELEVANCE,
+                subject_info[0],
+                "subject_relevance",
+            ),
             create_html_block(config_data.HtmlContent_SUBJECT_LABEL, subject_info[1]),
             create_html_block(
                 config_data.HtmlContent_ID_SUBJECT_LABEL, subject_info[0]
@@ -127,18 +144,36 @@ def generate_skills(
     max_skill_words: int,
 ) -> str:
     try:
-        subject_skills = (
-            df_puds_skills.filter(
-                pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_id)
-            )[0]["LLM_Skills"][0]
-            .strip()
-            .split(";")
-        )
+        # subject_skills = (
+        #     df_puds_skills.filter(
+        #         pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_id)
+        #     )[0]["LLM_Skills"][0]
+        #     .strip()
+        #     .split(";")
+        # )
+
+        # print("subject_skills", subject_skills)
+        # print()
+
+        # skills = [
+        #     re.sub(r"[.,;:\s]+$", "", skill.strip()).capitalize()
+        #     for skill in subject_skills
+        #     if len(skill.split()) <= max_skill_words and skill.strip()
+        # ]
 
         skills = [
-            re.sub(r"[.,;:\s]+$", "", skill.strip()).capitalize()
-            for skill in subject_skills
-            if len(skill.split()) <= max_skill_words and skill.strip()
+            "Стратегическое планирование",
+            " Маркетинг",
+            " PR",
+            "  Продажи",
+            " Управление проектами",
+            " BPMN",
+            "  IDEF0",
+            "  CRM",
+            "  ERP",
+            "  Финансовый учет",
+            "  KPI",
+            "  HR-менеджмент",
         ]
 
         if not skills:
@@ -168,62 +203,91 @@ def event_handler_generate_response(
     top_subjects: int,
     max_skill_words: int,
     dropdown_courses_grades: list[str],
-) -> tuple[gr.Textbox, list[ChatMessage]]:
+) -> tuple[
+    gr.Textbox,
+    list[ChatMessage],
+    gr.Column,
+    gr.Button,
+]:
     message = message.strip()
 
     if not message:
-        return (gr.Textbox(value=None), chat_history)
-
-    vacancy_embedding = get_embeddings(message, model_manager_sbert.get_current_model())
-
-    with torch.no_grad():
-        similarities = (
-            cosine_similarity(
-                vacancy_embedding, model_manager_sbert.state.puds_embeddings
-            )
-            .cpu()
-            .tolist()
-        )
-        similarities = [
-            (i, j)
-            for i, j in zip(
-                model_manager_sbert.state.puds_names["names"].to_list(), similarities
-            )
-        ]
-
-    sorted_subjects = sorted(similarities, key=lambda x: x[1], reverse=True)
-    unique_subjects = filter_unique_items(sorted_subjects, top_subjects)
-
-    all_top_items = []
-
-    for subject, similarity in unique_subjects:
-        match = next(
-            (
-                item
-                for item in model_manager_sbert.get_puds_data()
-                if item.get(config_data.DataframeHeaders_RU_SUBJECTS[0]) == subject
-            ),
-            None,
+        return (
+            gr.Textbox(value=None),
+            chat_history,
+            gr.Column(visible=False),
+            gr.Button(visible=False, interactive=False),
         )
 
-        if match:
-            formatted_subject = (
-                f"{match.get(config_data.DataframeHeaders_RU_ID, "-")} | {subject} | CS={similarity:.4f} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[2], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[1], "-")} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[3], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[4], "-")} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[5], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[6], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[7], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[8], "-")}"
-            )
-        else:
-            formatted_subject = f"- | {subject} | CS={similarity:.4f}"
+    # vacancy_embedding = get_embeddings(message, model_manager_sbert.get_current_model())
 
-        all_top_items.append(formatted_subject)
+    # with torch.no_grad():
+    #     similarities = (
+    #         cosine_similarity(
+    #             vacancy_embedding, model_manager_sbert.state.puds_embeddings
+    #         )
+    #         .cpu()
+    #         .tolist()
+    #     )
+    #     similarities = [
+    #         (i, j)
+    #         for i, j in zip(
+    #             model_manager_sbert.state.puds_names["names"].to_list(), similarities
+    #         )
+    #     ]
 
-    subjects_sorted = sort_subjects(all_top_items)
+    # sorted_subjects = sorted(similarities, key=lambda x: x[1], reverse=True)
+    # unique_subjects = filter_unique_items(sorted_subjects, top_subjects)
+
+    # print("unique_subjects", unique_subjects)
+    # print()
+
+    unique_subjects = [
+        ("Технологии прикладного анализа данных SAS", 0.38843128085136414),
+        ("BI-системы: визуализация и дашборды", 0.37330883741378784),
+        ("Проектирование дэшбордов и аналитических систем", 0.36774954199790955),
+        ("Управление диджитал агентством", 0.33948785066604614),
+        ("Дизайн", 0.32830435037612915),
+    ]
+
+    # all_top_items = []
+
+    # for subject, similarity in unique_subjects:
+    # match = next(
+    #     (
+    #         item
+    #         for item in model_manager_sbert.get_puds_data()
+    #         if item.get(config_data.DataframeHeaders_RU_SUBJECTS[0]) == subject
+    #     ),
+    #     None,
+    # )
+    # match = next(temp, None)
+
+    # print("match", match)
+
+    #     if match:
+    #         formatted_subject = (
+    #             f"{match.get(config_data.DataframeHeaders_RU_ID, "-")} | {subject} | CS={similarity:.4f} | "
+    #             f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[2], "-")} | "
+    #             + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[1], "-")} | "
+    #             f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[3], "-")} | "
+    #             + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[4], "-")} | "
+    #             f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[5], "-")} | "
+    #             + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[6], "-")} | "
+    #             + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[7], "-")} | "
+    #             + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[8], "-")}"
+    #         )
+    #     else:
+    #         formatted_subject = f"- | {subject} | CS={similarity:.4f}"
+
+    #     all_top_items.append(formatted_subject)
+
+    # subjects_sorted = sort_subjects(all_top_items)
+
+    # print()
+    # print("subjects_sorted", subjects_sorted)
+
+    subjects_sorted = "16281501878 | BI-системы: визуализация и дашборды | CS=0.3733 | Москва | факультет креативных индустрий | Школа коммуникаций | Бакалавриат | 3 модуль 2024/2025 - 3 модуль 2024/2025 | для своего кампуса | без онлайн-курса | -; 16281501261 | Управление диджитал агентством | CS=0.3395 | Москва | факультет креативных индустрий | Школа коммуникаций | Бакалавриат | 3 модуль 2024/2025 - 3 модуль 2024/2025 | для своего кампуса | без онлайн-курса | -; 16281498344 | Проектирование дэшбордов и аналитических систем | CS=0.3677 | НИУ ВШЭ - Санкт-Петербург | Факультет Санкт-Петербургская школа физико-математических и компьютерных наук | департамент информатики | Магистратура | 1 модуль 2024/2025 - 2 модуль 2024/2025 | для всех кампусов НИУ ВШЭ | с онлайн-курсом | -; 5490547065 | Технологии прикладного анализа данных SAS | CS=0.3884 | Москва | факультет компьютерных наук | базовая кафедра компании SAS | - | 3 модуль 2022/2023 - 4 модуль 2022/2023 | для своего кампуса | без онлайн-курса | -; 16281507465 | Дизайн | CS=0.3283 | Москва | факультет креативных индустрий | Школа дизайна | None | 1 модуль 2024/2025 - 4 модуль 2024/2025 | для своего кампуса | без онлайн-курса | -"
 
     grouped_subjects = {}
     for subject in subjects_sorted.split(";"):
@@ -237,18 +301,18 @@ def event_handler_generate_response(
                 subject_info.extend(["-", "-"])
                 continue
 
-            course_grades = df_courses_grades.filter(
-                pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_info[0])
-            )[0]
+            # course_grades = df_courses_grades.filter(
+            #     pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_info[0])
+            # )[0]
 
-            curr_grade = round_if_number(course_grades[grade][0])
-            mean_curr_grade = (
-                round_if_number(course_grades[mean_grade][0])
-                if mean_grade in course_grades.columns
-                else "-"
-            )
+            # curr_grade = round_if_number(course_grades[grade][0])
+            # mean_curr_grade = (
+            #     round_if_number(course_grades[mean_grade][0])
+            #     if mean_grade in course_grades.columns
+            #     else "-"
+            # )
 
-            subject_info.extend([curr_grade, mean_curr_grade])
+            # subject_info.extend([curr_grade, mean_curr_grade])
 
         edu_level_label, edu_level = determine_edu_level(subject_info)
 
@@ -258,7 +322,9 @@ def event_handler_generate_response(
 
     content = ""
 
-    vacancy_skills = skills_extractor.key_skills_for_profession(message)
+    # vacancy_skills = skills_extractor.key_skills_for_profession(message)
+
+    vacancy_skills = ["Скил 1", "Скил 2", "Скил 3", "Скил 4"]
 
     skills_vacancy = "".join(
         [f"<span class='skill'>{skill}</span>" for skill in vacancy_skills]
@@ -297,4 +363,9 @@ def event_handler_generate_response(
     chat_history.append(ChatMessage(role="user", content=message))
     chat_history.append(ChatMessage(role="assistant", content=content))
 
-    return (gr.Textbox(value=None), chat_history)
+    return (
+        gr.Textbox(value=None),
+        chat_history,
+        gr.Column(visible=True),
+        gr.Button(visible=True, interactive=True),
+    )

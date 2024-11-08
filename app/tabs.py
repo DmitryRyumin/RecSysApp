@@ -162,6 +162,21 @@ def app_tab():
                 elem_classes="send_message",
             )
 
+    with gr.Column(
+        visible=False,
+        render=True,
+        variant="default",
+        elem_classes="evaluate-container",
+    ) as evaluate_column:
+        send_evaluate = gr.Button(
+            value=config_data.OtherMessages_EVALUATE,
+            interactive=False,
+            scale=1,
+            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "evaluate.ico",
+            visible=False,
+            elem_classes="send_evaluate",
+        )
+
     return (
         surname,
         username,
@@ -174,6 +189,8 @@ def app_tab():
         message_row,
         message,
         send_message,
+        evaluate_column,
+        send_evaluate,
     )
 
 

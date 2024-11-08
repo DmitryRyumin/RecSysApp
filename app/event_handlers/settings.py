@@ -9,11 +9,12 @@ import gradio as gr
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
-from app.data_init import model_manager_sbert
+
+# from app.data_init import model_manager_sbert
 
 
 def event_handler_dropdown_models(message: str, dropdown_models: str) -> gr.Button:
-    model_manager_sbert.change_model(dropdown_models)
+    # model_manager_sbert.change_model(dropdown_models)
 
     gr.Info(
         message=config_data.AppInfo_MODEL.format(dropdown_models),

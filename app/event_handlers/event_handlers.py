@@ -12,6 +12,7 @@ from app.event_handlers.auth import event_handler_auth
 from app.event_handlers.login import event_handler_login
 from app.event_handlers.generate_response import event_handler_generate_response
 from app.event_handlers.message import event_handler_message
+from app.event_handlers.evaluate import event_handler_evaluate
 from app.event_handlers.settings import event_handler_dropdown_models
 
 
@@ -27,6 +28,8 @@ def setup_app_event_handlers(
     message_row,
     message,
     send_message,
+    evaluate_column,
+    send_evaluate,
     top_subjects,
     max_skill_words,
     dropdown_models,
@@ -79,7 +82,19 @@ def setup_app_event_handlers(
             max_skill_words,
             dropdown_courses_grades,
         ],
-        outputs=[message, chatbot],
+        outputs=[
+            message,
+            chatbot,
+            evaluate_column,
+            send_evaluate,
+        ],
+        queue=True,
+    )
+
+    send_evaluate.click(
+        fn=event_handler_evaluate,
+        inputs=[send_evaluate, chatbot],
+        outputs=[],
         queue=True,
     )
 
