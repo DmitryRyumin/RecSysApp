@@ -471,6 +471,12 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea {
     background-color: #fafafa !important;
     font-family: 'HSESans', sans-serif !important;
     color: #363636;
+    border: 1px solid transparent !important;
+}
+
+.message-container .input-container > textarea:focus {
+    border: 1px solid var(--main-color) !important;
+    box-shadow: 0 0 0 1px var(--main-color), 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset !important;
 }
 
 div.add_evals-container > div.form > div.feedback > label > div > textarea {
