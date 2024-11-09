@@ -480,12 +480,11 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea {
 }
 
 div.add_evals-container > div.form > div.feedback > label > div > textarea {
-    border: 1px solid #ff0000;
-    box-shadow: None;
+    border: 1px solid #ff0000 !important;
 }
 
-div.add_evals-container > div.form > div.feedback > label > div > textarea:focus-within {
-    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
+div.add_evals-container > div.form > div.feedback > label > div > textarea:focus {
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset !important;
 }
 
 .message-container .wrap {
