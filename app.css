@@ -761,61 +761,64 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
     box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
 }
 
-.dropdown-models,
-.dropdown-courses-grades {
+div.dropdown-add-vacancy-skills,
+div.dropdown-models,
+div.dropdown-courses-grades {
     background-color: #fafafa !important;
 }
 
-.dropdown-models .has-info,
-.dropdown-courses-grades .has-info {
+div.dropdown-add-vacancy-skills span[data-testid='block-info'],
+div.dropdown-models .has-info,
+div.dropdown-courses-grades .has-info {
     color: var(--main-color);
     font-family: 'HSESans', sans-serif !important;
     font-weight: 600;
 }
 
-.dropdown-models p,
-.dropdown-courses-grades p {
+div.dropdown-models p,
+div.dropdown-courses-grades p {
     color: #000000;
     font-family: 'HSESans', sans-serif !important;
 }
 
-.dropdown-models .wrap {
+div.dropdown-models div.wrap {
     background-color: #fafafa !important;
     height: 42px;
     border: 1px solid #363636 !important;
     font-family: 'HSESans', sans-serif !important;
 }
 
-.dropdown-models .wrap .options {
+div.dropdown-models div.wrap .options {
     background-color: #fafafa !important;
     margin-top: 5px;
 }
 
-.dropdown-models .wrap .options > li {
+div.dropdown-models div.wrap .options > li {
     color: #363636;
     font-family: 'HSESans', sans-serif !important;
     background-color: #fafafa !important;
 }
 
-.dropdown-models .wrap .options > li.selected {
+div.dropdown-models div.wrap .options > li.selected {
     background-color: #dfdede !important;
 }
 
-.dropdown-models .wrap .options > li:hover {
+div.dropdown-models div.wrap .options > li:hover {
     background-color: #dfdede !important;
 }
 
-.dropdown-models .wrap input {
+div.dropdown-models div.wrap input {
     color: #363636;
     font-family: 'HSESans', sans-serif !important;
 }
 
-.dropdown-models .secondary-wrap input:disabled {
+div.dropdown-models div.secondary-wrap input,
+div.dropdown-models div.secondary-wrap input:disabled {
     color: #363636 !important;
     -webkit-text-fill-color: #363636 !important;
 }
 
-.dropdown-models .dropdown-arrow {
+div.dropdown-models svg.dropdown-arrow {
     color: #363636;
 }
 
@@ -827,14 +830,16 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
     }
 
     .settings-item,
-    .dropdown-models,
-    .dropdown-courses-grades {
+    div.dropdown-add-vacancy-skills,
+    div.dropdown-models,
+    div.dropdown-courses-grades {
         width: 100%; /* Полная ширина полей */
     }
 
     .settings-item input,
-    .dropdown-models .wrap,
-    .dropdown-courses-grades .wrap {
+    div.dropdown-add-vacancy-skills div.wrap,
+    div.dropdown-models div.wrap,
+    div.dropdown-courses-grades div.wrap {
         width: 100%; /* Полная ширина элементов ввода */
     }
 }
@@ -873,61 +878,70 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
     }
 }
 
-.dropdown-courses-grades .wrap {
+div.dropdown-add-vacancy-skills div.wrap,
+div.dropdown-courses-grades div.wrap {
     background-color: #fafafa !important;
     border: 1px solid #363636 !important;
     font-family: 'HSESans', sans-serif !important;
 }
 
-.dropdown-courses-grades .wrap .options {
+div.dropdown-courses-grades div.wrap .options {
     background-color: #fafafa !important;
     margin-top: 5px;
 }
 
-.dropdown-courses-grades .wrap .options > li {
+div.dropdown-courses-grades div.wrap .options > li {
     color: #363636;
     font-family: 'HSESans', sans-serif !important;
     background-color: #fafafa !important;
 }
 
-.dropdown-courses-grades .wrap .options > li.selected {
+div.dropdown-courses-grades div.wrap .options > li.selected {
     background-color: #dfdede !important;
 }
 
-.dropdown-courses-grades .wrap .options > li:hover {
+div.dropdown-courses-grades div.wrap .options > li:hover {
     background-color: #dfdede !important;
 }
 
-.dropdown-courses-grades .wrap input {
+div.dropdown-courses-grades div.wrap input {
     color: #363636;
     font-family: 'HSESans', sans-serif !important;
 }
 
-.dropdown-courses-grades .secondary-wrap input:disabled {
+div.dropdown-add-vacancy-skills div.secondary-wrap input,
+div.dropdown-courses-grades div.secondary-wrap input,
+div.dropdown-add-vacancy-skills div.secondary-wrap input:disabled,
+div.dropdown-courses-grades div.secondary-wrap input:disabled {
     color: #363636 !important;
     -webkit-text-fill-color: #363636 !important;
 }
 
-.dropdown-courses-grades .dropdown-arrow {
+.dropdown-add-vacancy-skills svg.dropdown-arrow,
+.dropdown-courses-grades svg.dropdown-arrow {
     color: #363636;
 }
 
-.dropdown-courses-grades .token {
+div.dropdown-add-vacancy-skills div.token,
+div.dropdown-courses-grades div.token {
     border-radius: 4px;
     border-color: var(--main-color);
     background-color: #fafafa !important;
 }
 
-.dropdown-courses-grades .token > span {
+div.dropdown-add-vacancy-skills div.token > span,
+div.dropdown-courses-grades div.token > span {
     font-family: 'HSESans', sans-serif !important;
     color: #000000;
 }
 
-.dropdown-courses-grades .token-remove {
+div.dropdown-add-vacancy-skills div.token-remove,
+div.dropdown-courses-grades div.token-remove {
     background-color: var(--main-color);
 }
 
-.dropdown-courses-grades .token-remove > svg {
+div.dropdown-add-vacancy-skills div.token-remove > svg,
+div.dropdown-courses-grades div.token-remove > svg {
     fill: #fafafa !important;
 }
 

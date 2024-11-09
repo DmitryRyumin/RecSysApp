@@ -208,6 +208,26 @@ def app_tab():
         visible=False,
         render=True,
         variant="default",
+        elem_classes="add_evals-container",
+    ) as add_evals_column:
+        add_vacancy_skills = gr.Dropdown(
+            choices=None,
+            value=None,
+            multiselect=True,
+            allow_custom_value=True,
+            label=config_data.Labels_ADD_VACANCY_SKILLS,
+            info=None,
+            show_label=True,
+            interactive=False,
+            visible=False,
+            render=True,
+            elem_classes="dropdown-add-vacancy-skills",
+        )
+
+    with gr.Column(
+        visible=False,
+        render=True,
+        variant="default",
         elem_classes="evaluate-container",
     ) as evaluate_column:
         send_evaluate = gr.Button(
@@ -234,6 +254,8 @@ def app_tab():
         message_row,
         message,
         send_message,
+        add_evals_column,
+        add_vacancy_skills,
         evaluate_column,
         send_evaluate,
     )

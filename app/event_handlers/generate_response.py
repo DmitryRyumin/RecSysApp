@@ -189,6 +189,8 @@ def event_handler_generate_response(
     gr.Textbox,
     list[ChatMessage],
     gr.Column,
+    gr.Dropdown,
+    gr.Column,
     gr.Button,
 ]:
     message = message.strip()
@@ -197,6 +199,8 @@ def event_handler_generate_response(
         return (
             gr.Textbox(value=None),
             chat_history,
+            gr.Column(visible=False),
+            gr.Dropdown(visible=False, interactive=False),
             gr.Column(visible=False),
             gr.Button(visible=False, interactive=False),
         )
@@ -327,6 +331,8 @@ def event_handler_generate_response(
     return (
         gr.Textbox(value=None),
         chat_history,
+        gr.Column(visible=True),
+        gr.Dropdown(visible=True, interactive=True),
         gr.Column(visible=True),
         gr.Button(visible=True, interactive=True),
     )

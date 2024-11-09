@@ -2,7 +2,7 @@
 TITLE = "RecSys"
 APP_VERSION = "0.0.5"
 CSS_PATH = "app.css"
-QUALITY = false
+QUALITY = true
 
 [AppInfo]
 DURATION = 5
@@ -61,6 +61,7 @@ TOP_SUBJECTS = "Количество предлагаемых предметов
 MAX_SKILL_WORDS = "Максимальное количество слов в одном навыке"
 MODEL = "Модель для сопоставления вакансии с ПУДами"
 COURSES_GRADES = "Показатели успеваемости студентов"
+ADD_VACANCY_SKILLS = "Укажите навыки вакансии, который по Вашему мнению, важны, но отсутствуют в выдаче"
 
 [EducationLevels]
 ALL_LEVELS = "Бакалавриат, Специалитет, Магистратура, Аспирантура"

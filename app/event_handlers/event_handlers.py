@@ -32,6 +32,8 @@ def setup_app_event_handlers(
     message_row,
     message,
     send_message,
+    add_evals_column,
+    add_vacancy_skills,
     evaluate_column,
     send_evaluate,
     top_subjects,
@@ -105,6 +107,8 @@ def setup_app_event_handlers(
         outputs=[
             message,
             chatbot,
+            add_evals_column,
+            add_vacancy_skills,
             evaluate_column,
             send_evaluate,
         ],
