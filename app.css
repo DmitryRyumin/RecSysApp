@@ -470,10 +470,24 @@ div.step-2 {
     border: 1px solid var(--main-color) !important;
 }
 
-.message-container .input-container > textarea {
+.message-container .input-container > textarea,
+div.add_evals-container > div.form > div.feedback > label > div > textarea {
     background-color: #fafafa !important;
     font-family: 'HSESans', sans-serif !important;
     color: #363636;
+}
+
+div.add_evals-container > div.form > div.feedback > label > div > textarea {
+    border: 1px solid #ff0000;
+    box-shadow: None;
+}
+
+.message-container .input-container > textarea:focus-within {
+    box-shadow: 0 0 0 1px var(--main-color), 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
+}
+
+div.add_evals-container > div.form > div.feedback > label > div > textarea:focus-within {
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
 }
 
 .message-container .wrap {
@@ -617,7 +631,8 @@ div.add_evals-container > div.add-range {
     border: 1px solid #ff0000 !important;
 }
 
-div.add_evals-container > div.add-range {
+div.add_evals-container > div.add-range,
+div.add_evals-container > div.form > div.feedback {
     background-color: rgb(250, 250, 250) !important;
     box-shadow: var(--block-shadow);
     border-radius: var(--block-radius);
@@ -793,6 +808,7 @@ div.dropdown-courses-grades {
 }
 
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
+div.add_evals-container span[data-testid='block-info'],
 div.dropdown-models .has-info,
 div.dropdown-courses-grades .has-info {
     color: var(--main-color);
@@ -800,7 +816,8 @@ div.dropdown-courses-grades .has-info {
     font-weight: 600;
 }
 
-div.dropdown-add-vacancy-skills span[data-testid='block-info'] {
+div.dropdown-add-vacancy-skills span[data-testid='block-info'],
+div.add_evals-container span[data-testid='block-info'] {
     color: #ff0000;
 }
 

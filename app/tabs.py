@@ -225,7 +225,36 @@ def app_tab():
             elem_classes="dropdown-add-vacancy-skills",
         )
 
-        add_range = gr.HTML(value=ADD_RANGE, visible=False, elem_classes="add-range")
+        add_range = gr.HTML(
+            value=ADD_RANGE.format(
+                config_data.HtmlContent_USEFULNESS_CURRENT,
+                config_data.HtmlContent_DEMAND_CURRENT,
+                config_data.HtmlContent_INTERFACE_CURRENT,
+            ),
+            visible=False,
+            elem_classes="add-range",
+        )
+
+        feedback = gr.Textbox(
+            value=None,
+            lines=3,
+            max_lines=20,
+            placeholder=None,
+            label=config_data.Labels_FEEDBACK,
+            info=None,
+            show_label=True,
+            container=True,
+            scale=7,
+            interactive=True,
+            visible=False,
+            autofocus=False,
+            autoscroll=True,
+            render=True,
+            type="text",
+            show_copy_button=False,
+            max_length=None,
+            elem_classes="feedback",
+        )
 
     with gr.Column(
         visible=False,
@@ -260,6 +289,7 @@ def app_tab():
         add_evals_column,
         add_vacancy_skills,
         add_range,
+        feedback,
         evaluate_column,
         send_evaluate,
     )
