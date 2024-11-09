@@ -126,160 +126,146 @@ const initializeObservers = (target) => {
 //     })
 // }
 
-function extractVacancySkills(subjectInfo) {
+const NO_DATA = 'Нет данных';
+const NOT_SPECIFIED = 'не указан';
 
-    const allSkills = Array.from(subjectInfo.querySelectorAll('.value .skill')).map((skill) =>
+/**
+ * Извлекает навыки из указанного контейнера.
+ * @param {Element} container - DOM-элемент, содержащий навыки.
+ * @param {string} skillsSelector - Селектор для навыков.
+ * @returns {Object} Объект с релевантными и удаленными навыками.
+ */
+function extractSkills(container, skillsSelector) {
+    let skillsLabel = container.querySelector(`${skillsSelector} .label`)?.textContent.trim() || NO_DATA;
+
+    // Удаляем двоеточие из конца строки, если оно есть
+    skillsLabel = skillsLabel.replace(/:$/, '');
+
+    // Извлечение всех навыков
+    const allSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill`)].map((skill) =>
         skill.textContent.trim()
     );
-    const deletedSkills = Array.from(subjectInfo.querySelectorAll('.value .skill.deleted')).map((skill) =>
+
+    // Извлечение навыков, которые помечены как удаленные
+    const deletedSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill.deleted`)].map((skill) =>
         skill.textContent.trim()
     );
+
+    // Фильтрация релевантных навыков
+    const deletedSkillsSet = new Set(deletedSkills);
+    const relevantSkills = allSkills.filter((skill) => !deletedSkillsSet.has(skill));
 
     return {
-        vacancy_skills: allSkills,
-        vacancy_skills_deleted: deletedSkills,
+        [`${skillsLabel} (релевантные)`]: relevantSkills,
+        [`${skillsLabel} (удаленные)`]: deletedSkills,
     };
 }
 
-// Функция для извлечения данных из блока range в edu-group
+/**
+ * Извлекает данные о релевантности курса.
+ * @param {Element} infoBlock - Блок с информацией о курсе.
+ * @returns {Object} Объект с данными о релевантности курса.
+ */
 function extractRangeData(infoBlock) {
     const rangeBlock = infoBlock.querySelector('.range');
     if (!rangeBlock) {
-        return { 'Релевантность курса': 'Нет данных' };
+        return { 'Релевантность курса': NO_DATA };
     }
 
-    let rangeLabel = rangeBlock.querySelector('label')?.textContent.trim() || 'Нет данных';
-    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || 'Нет данных';
+    let rangeLabel = rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA;
+    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA;
 
     // Удаляем двоеточие из конца строки, если оно есть
-    if (rangeLabel.endsWith(':')) {
-        rangeLabel = rangeLabel.replace(/:$/, '');
-    }
+    rangeLabel = rangeLabel.replace(/:$/, '');
 
-    // Используем label как ключ
     return { [rangeLabel]: rangeValue };
 }
 
-// Функция для извлечения данных из всех элементов .info-item внутри блока .info
+/**
+ * Извлекает детали курса из блока информации.
+ * @param {Element} infoBlock - Блок с информацией о курсе.
+ * @returns {Object} Объект с деталями курса.
+ */
 function extractCourseData(infoBlock) {
     const infoItems = infoBlock.querySelectorAll('.info-item');
     const courseDetails = {};
 
     infoItems.forEach((item) => {
-        const label = item.querySelector('.label')?.textContent.trim() || 'Нет данных';
-        const value = item.querySelector('.value')?.textContent.trim() || 'Нет данных';
+        const label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
         courseDetails[label] = value;
     });
 
-    // Проверка наличия блока .info-number-education-error
-    const educationErrorBlock = infoBlock.querySelector('.info-number-education-error');
-    if (educationErrorBlock) {
-        courseDetails['Курс обучения'] = 'не указан';
+    // Проверка наличия блока ошибки номера обучения
+    if (infoBlock.querySelector('.info-number-education-error')) {
+        courseDetails['Курс обучения'] = NOT_SPECIFIED;
     }
 
     return courseDetails;
 }
 
-// Функция для извлечения данных о получаемых навыках
-function extractPUDskills(infoBlock) {
-    let skillsLabel = infoBlock.querySelector('.info-skills .label')?.textContent.trim() || 'Нет данных';
-
-    // Удаляем двоеточие из конца строки, если оно есть
-    if (skillsLabel.endsWith(':')) {
-        skillsLabel = skillsLabel.replace(/:$/, '');
-    }
-
-    const allSkills = Array.from(infoBlock.querySelectorAll('.info-skills .value .skill')).map(skill =>
-        skill.textContent.trim()
-    );
-    const deletedSkills = Array.from(infoBlock.querySelectorAll('.info-skills .value .skill.deleted')).map(skill =>
-        skill.textContent.trim()
-    );
-
-    return {
-        [skillsLabel]: allSkills,
-        [`${skillsLabel} (удаленные)`]: deletedSkills
-    };
-}
-
+/**
+ * Основная функция для обработки данных при нажатии кнопки.
+ */
 function handleButtonClick() {
-
-    // Инициализация переменной для итогового JSON
-    let result = {
-        user_message: null,
+    const result = {
+        user_message: NO_DATA,
         vacancy: null,
         edu_groups: [],
     };
 
     // Поиск сообщения пользователя
-    const userMessage = document.querySelector('.chatbot-container .message.user button > span.chatbot.prose');
+    result.user_message = document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() || NO_DATA;
 
-    if (userMessage) {
-        result.user_message = userMessage.textContent.trim() || 'Нет данных';
-    } else {
-        console.log('Сообщение пользователя не найдено!');
-    }
-
-    // Поиск элемента span с классами chatbot и prose, который является прямым потомком кнопки
+    // Поиск контейнера с ответом бота
     const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
 
     if (!spanContainer) {
-        console.log('Элемент span с классами chatbot prose не найден');
+        console.error('Элемент span с классами chatbot prose не найден');
         return;
     }
 
-    // Поиск элемента .subject-info где лежат вакансии
+    // Извлечение информации о вакансии
     const subjectInfo = spanContainer.querySelector('.subject-info');
-
     if (subjectInfo && subjectInfo.parentElement === spanContainer) {
-        // Вызов функции для извлечения данных о навыках вакансии
-        const vacancyData = extractVacancySkills(subjectInfo);
-
-        // Добавление данных о вакансиях в итоговый JSON
-        result.vacancy = vacancyData;
-
-        // console.log('Результат после обработки вакансий:', JSON.stringify(result, null, 2));
+        result.vacancy = extractSkills(subjectInfo, '.info-skills');
     } else {
-        console.log('Элемент .subject-info не найден');
+        console.error('Элемент .subject-info не найден');
         return;
     }
 
-    // ОБРАБОТКА ВСЕХ ЭЛЕМЕНТОВ EDU-GROUP
+    // Обработка групп образовательных программ
     const eduGroups = spanContainer.querySelectorAll('.edu-group');
 
     if (eduGroups.length > 0) {
-        // Проход по каждому элементу .edu-group
-        Array.from(eduGroups).forEach((eduGroup, index) => {
+        eduGroups.forEach((eduGroup, index) => {
             const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`;
 
-            // Извлечение всех курсов из .info внутри текущей edu-group
-            const courses = Array.from(eduGroup.querySelectorAll('.info')).map((infoBlock) => {
-                // Извлечение данных из всех элементов .info-item и других блоков
+            // Извлечение курсов из текущей группы
+            const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
                 const courseDetails = extractCourseData(infoBlock);
                 const relevanceData = extractRangeData(infoBlock);
-                const pudSkills = extractPUDskills(infoBlock);
+                const pudSkills = extractSkills(infoBlock, '.info-skills');
 
                 return {
-                    ...courseDetails, // Добавляем все извлеченные данные (discipline, id и т.д.)
-                    ...relevanceData, // Добавляем данные о релевантности
-                    ...pudSkills, // Добавляем данные о получаемых навыках
+                    ...courseDetails,
+                    ...relevanceData,
+                    ...pudSkills,
                 };
             });
 
-            // Добавление группы и её данных в JSON
             result.edu_groups.push({
                 label: groupLabel,
                 courses: courses,
             });
         });
     } else {
-        console.log('Элементы .edu-group не найдены');
+        console.error('Элементы .edu-group не найдены');
     }
 
-    // Выводим итоговый результат в консоль
+    // Вывод итогового результата
     console.log('Полный результат:', JSON.stringify(result, null, 2));
 
-    // Вернуть результат, если потребуется
     return result;
 }
 
