@@ -184,17 +184,15 @@ function extractSkills(container, skillsSelector) {
 }
 
 /**
- * Извлекает данные о релевантности курса.
+ * Извлекает данные о релевантности курса с возможностью задать кастомный лейбл.
  * @param {Element} infoBlock - Блок с информацией о курсе.
+ * @param {string} [customLabel] - (Необязательный) Кастомный лейбл для диапазона.
  * @returns {Object} Объект с данными о релевантности курса.
  */
-function extractRangeData(infoBlock) {
-    const rangeBlock = infoBlock.querySelector('.range');
-    if (!rangeBlock) {
-        return { 'Релевантность курса': NO_DATA };
-    }
+function extractRangeData(rangeBlock, customLabel) {
+    // const rangeBlock = infoBlock.querySelector('.range');
 
-    let rangeLabel = rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA;
+    let rangeLabel = customLabel || rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA;
     const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA;
 
     // Удаляем двоеточие из конца строки, если оно есть
@@ -224,6 +222,31 @@ function extractCourseData(infoBlock) {
     }
 
     return courseDetails;
+}
+
+/**
+ * Извлекает дополнительные навыки из блока .dropdown-add-vacancy-skills.
+ * @param {string} containerSelector - Селектор контейнера с дополнительными навыками.
+ * @returns {Array} Массив дополнительных навыков.
+ */
+function extractAdditionalVacancySkills(containerSelector) {
+    const container = document.querySelector(containerSelector);
+
+    if (!container) {
+        console.error('Элемент контейнера дополнительных навыков не найден');
+        return [];
+    }
+
+    // Находим все элементы с классом 'token' внутри контейнера
+    const tokenElements = container.querySelectorAll('.token');
+
+    // Извлекаем текстовые значения из span внутри каждого элемента 'token'
+    const skills = [...tokenElements].map((token) => {
+        const skillText = token.querySelector('span')?.textContent.trim() || NO_DATA;
+        return skillText;
+    });
+
+    return skills;
 }
 
 // Функция для отправки данных на сервер
@@ -270,6 +293,8 @@ function handleButtonClick() {
         user_message: NO_DATA,
         vacancy: null,
         edu_groups: [],
+        additional_vacancy_skills: [],
+        feedback: null,
     };
 
     // Извлечение данных пользователя
@@ -307,7 +332,7 @@ function handleButtonClick() {
             // Извлечение курсов из текущей группы
             const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
                 const courseDetails = extractCourseData(infoBlock);
-                const relevanceData = extractRangeData(infoBlock);
+                const relevanceData = extractRangeData(infoBlock.querySelector('.range'));
                 const pudSkills = extractSkills(infoBlock, '.info-skills');
 
                 return {
@@ -325,6 +350,29 @@ function handleButtonClick() {
     } else {
         console.error('Элементы .edu-group не найдены');
     }
+
+    // Извлечение дополнительных навыков вакансии
+    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills');
+
+    // Извлечение данных из блока с оценкой сервиса
+    const addRangeContainer = document.querySelector('.block.add-range');
+    if (addRangeContainer) {
+        const customLabels = ['Полезность', 'Востребованность', 'Удобство'];
+
+        const ranges = [...addRangeContainer.querySelectorAll('.range')].map((rangeBlock, index) => {
+            // Получаем кастомный лейбл для текущего rangeBlock
+            const customLabel = customLabels[index] || `Диапазон ${index + 1}`;
+            return extractRangeData(rangeBlock, customLabel);
+        });
+
+        // Объединяем все диапазоны в один объект
+        result.additional_ranges = Object.assign({}, ...ranges);
+    } else {
+        console.error('Элемент .add-range не найден');
+    }
+
+    // Извлечение отзыва пользователя из textarea внутри .block .feedback
+    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA;
 
     // Вывод итогового результата
     console.log('Полный результат:', JSON.stringify(result, null, 2));
