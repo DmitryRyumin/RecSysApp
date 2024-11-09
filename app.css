@@ -157,13 +157,13 @@ div.logo > img {
 
 .tab-container > button:hover {
     background-color: var(--main-color);
-    color: #fff !important;
+    color: #ffffff !important;
     transform: translateY(-1px);
     transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .tab-container > button.selected:hover {
-    color: #fff;
+    color: #ffffff;
 }
 
 .tab-container > button.selected::after {
@@ -184,7 +184,7 @@ div.logo > img {
     background-color: var(--main-color) !important;
 }
 .tabs .overflow-menu > button.overflow-item-selected > svg {
-    color: #fff !important;
+    color: #ffffff !important;
 }
 
 .tabs .overflow-dropdown {
@@ -445,7 +445,7 @@ div.step-2 {
 .chatbot-container .chatbot .wrapper > label {
     background-color: var(--main-color);
     font-family: 'HSESans', sans-serif !important;
-    color: #fff !important;
+    color: #ffffff !important;
 }
 
 .chatbot-container .chatbot .placeholder-content {
@@ -586,7 +586,7 @@ div.subject-info > div.info > div.item {
     justify-content: center;
     font-family: 'HSESans', sans-serif !important;
     font-size: 20px;
-    color: #fff !important;
+    color: #ffffff !important;
     right: 20px;
     background: var(--main-color);
     border-radius: 50%;
@@ -612,17 +612,42 @@ div.subject-info > div.info > div.info-courses-grades-error {
     margin-left: 15px;
 }
 
+div.add_evals-container > div.form,
+div.add_evals-container > div.add-range {
+    border: 1px solid #ff0000 !important;
+}
+
+div.add_evals-container > div.add-range {
+    background-color: rgb(250, 250, 250) !important;
+    box-shadow: var(--block-shadow);
+    border-radius: var(--block-radius);
+    overflow-y: hidden;
+    padding: var(--block-padding);
+}
+
+div.add-range > div.range,
 div.subject-info > div.info > div.range {
     display: flex;
 }
 
+div.add-range > div.range {
+    flex-direction: column;
+}
+
+div.add-range > div.range:not(:first-child) {
+    margin-top: 10px;
+}
+
 div.subject-info > div.info > div.range > label,
-div.subject-info > div.info > div.range > output {
+div.subject-info > div.info > div.range > output,
+div.add-range > div.range > label,
+div.add-range > div.range > output {
     font-family: 'HSESans', sans-serif !important;
     color: #ff0000;
 }
 
 div.subject-info > div.info > div.range > label,
+div.add-range > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
@@ -775,6 +800,10 @@ div.dropdown-courses-grades .has-info {
     font-weight: 600;
 }
 
+div.dropdown-add-vacancy-skills span[data-testid='block-info'] {
+    color: #ff0000;
+}
+
 div.dropdown-models p,
 div.dropdown-courses-grades p {
     color: #000000;
@@ -885,6 +914,14 @@ div.dropdown-courses-grades div.wrap {
     font-family: 'HSESans', sans-serif !important;
 }
 
+div.dropdown-add-vacancy-skills div.wrap {
+    border: 1px solid #ff0000 !important;
+}
+
+div.dropdown-add-vacancy-skills div.wrap:focus-within {
+    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
+}
+
 div.dropdown-courses-grades div.wrap .options {
     background-color: #fafafa !important;
     margin-top: 5px;
@@ -917,9 +954,12 @@ div.dropdown-courses-grades div.secondary-wrap input:disabled {
     -webkit-text-fill-color: #363636 !important;
 }
 
-.dropdown-add-vacancy-skills svg.dropdown-arrow,
 .dropdown-courses-grades svg.dropdown-arrow {
     color: #363636;
+}
+
+.dropdown-add-vacancy-skills svg.dropdown-arrow {
+    color: #ff0000;
 }
 
 div.dropdown-add-vacancy-skills div.token,
@@ -927,6 +967,11 @@ div.dropdown-courses-grades div.token {
     border-radius: 4px;
     border-color: var(--main-color);
     background-color: #fafafa !important;
+}
+
+div.dropdown-add-vacancy-skills div.token {
+    border-color: #ff0000;
+    background-color: rgb(255, 214, 214) !important;
 }
 
 div.dropdown-add-vacancy-skills div.token > span,
@@ -938,6 +983,11 @@ div.dropdown-courses-grades div.token > span {
 div.dropdown-add-vacancy-skills div.token-remove,
 div.dropdown-courses-grades div.token-remove {
     background-color: var(--main-color);
+}
+
+div.dropdown-add-vacancy-skills div.token-remove {
+    background-color: #ff0000;
+    border: none !important;
 }
 
 div.dropdown-add-vacancy-skills div.token-remove > svg,
@@ -986,18 +1036,21 @@ div.dropdown-courses-grades div.token-remove > svg {
     fill: var(--gray-25);
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance {
+div.subject-info > div.info > div.range > div.subject_relevance,
+div.add-range > div.range > div.slider-container {
     width: 250px;
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider,
+div.add-range > div.range > div.slider-container > div.slider {
     display: flex;
     align-items: center;
     font-size: 16px;
     color: #ff0000;
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range'] {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range'],
+div.add-range > div.range > div.slider-container > div.slider > input[type='range'] {
     outline: none;
     height: 4px;
     flex-grow: 1;
@@ -1018,7 +1071,9 @@ div.subject-info
     > div.subject_relevance
     > div.slider
     > input[type='range']::-webkit-slider-runnable-track,
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-track {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-track,
+div.add-range > div.range > div.slider-container > div.slider > input[type='range']::-webkit-slider-runnable-track,
+div.add-range > div.range > div.slider-container > div.slider > input[type='range']::-moz-range-track {
     border: none;
     background: transparent;
     appearance: none;
@@ -1029,7 +1084,8 @@ div.subject-info
     > div.range
     > div.subject_relevance
     > div.slider
-    > input[type='range']::-webkit-slider-thumb {
+    > input[type='range']::-webkit-slider-thumb,
+div.add-range > div.range > div.slider-container > div.slider > input[type='range']::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
@@ -1038,7 +1094,8 @@ div.subject-info
     border-radius: 50%;
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-thumb {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range']::-moz-range-thumb,
+div.add-range > div.range > div.slider-container > div.slider > input[type='range']::-moz-range-thumb {
     -moz-appearance: none;
     width: 16px;
     height: 16px;
@@ -1048,14 +1105,17 @@ div.subject-info > div.info > div.range > div.subject_relevance > div.slider > i
 }
 
 /* Стили значения слайдера */
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value {
     display: inline-block;
     position: relative;
     height: 1.5em;
 }
 
 div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::before,
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value::before,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value::after {
     content: '';
     position: absolute;
     left: 0;
@@ -1063,14 +1123,16 @@ div.subject-info > div.info > div.range > div.subject_relevance > div.slider > d
     height: 0.25em;
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::before {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::before,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value::before {
     top: 0;
-    background: linear-gradient(#fff, rgba(255, 255, 255, 0));
+    background: linear-gradient(#ffffff, rgba(255, 255, 255, 0));
 }
 
-div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after {
+div.subject-info > div.info > div.range > div.subject_relevance > div.slider > div.slider-value::after,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value::after {
     bottom: 0;
-    background: linear-gradient(rgba(255, 255, 255, 0), #fff);
+    background: linear-gradient(rgba(255, 255, 255, 0), #ffffff);
 }
 
 /* Стили контейнера чисел */
@@ -1080,7 +1142,8 @@ div.subject-info
     > div.subject_relevance
     > div.slider
     > div.slider-value
-    > div.slider-value-number {
+    > div.slider-value-number,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value > div.slider-value-number {
     height: 1em;
     overflow: hidden;
     display: inline-block;
@@ -1096,7 +1159,8 @@ div.subject-info
     > div.slider
     > div.slider-value
     > div.slider-value-number
-    > ul {
+    > ul,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value > div.slider-value-number > ul {
     margin-top: -0.6em;
     padding: 0;
     list-style-type: none;
@@ -1111,7 +1175,8 @@ div.subject-info
     > div.slider-value
     > div.slider-value-number
     > ul
-    > li {
+    > li,
+div.add-range > div.range > div.slider-container > div.slider > div.slider-value > div.slider-value-number > ul > li {
     color: #ff0000;
     height: 1em;
     display: block;

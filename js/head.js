@@ -96,15 +96,10 @@ class Slider {
     }
 }
 
-// Функция для инициализации слайдеров и добавления обработчиков событий
 const initializeObservers = (target) => {
-    // Инициализация слайдеров
-    target.querySelectorAll('div.subject-info > div.info > div.range > div.subject_relevance').forEach((element) => {
-        if (!element.classList.contains('initialized')) {
-            new Slider(element, { min: 1, max: 7, value: 4 })
-            element.classList.add('initialized')
-        }
-    })
+    // Инициализация слайдеров в 'subject-info' и 'add-range'
+    initializeSliders(target, 'div.subject-info > div.info > div.range > div.subject_relevance')
+    initializeSliders(target, 'div.add-range > div.range > div.slider-container')
 
     // Добавление обработчиков кликов для элементов навыков
     target
@@ -112,19 +107,19 @@ const initializeObservers = (target) => {
         .forEach(toggleClassOnClick)
 }
 
-// Функция для обработки клика по кнопке
-// function handleButtonClick() {
-//     // Включаем обновление страницы для пересчета изменений
-//     requestAnimationFrame(() => {
-//         const chatbot = document.querySelector('div.chatbot-container > div.chatbot button[data-testid="bot"]')
-//         if (chatbot) {
-//             const ariaLabel = chatbot.getAttribute('aria-label')
-//             console.log('Обновленное значение aria-label:', ariaLabel)
-//         } else {
-//             console.log('Элемент chatbot не найден')
-//         }
-//     })
-// }
+/**
+ * Инициализирует слайдеры для заданных элементов, если они не были инициализированы.
+ * @param {Element} target - Элемент, внутри которого нужно инициализировать слайдеры.
+ * @param {string} selector - Селектор для поиска элементов слайдеров.
+ */
+const initializeSliders = (target, selector) => {
+    target.querySelectorAll(selector).forEach((element) => {
+        if (!element.classList.contains('initialized')) {
+            new Slider(element, { min: 1, max: 7, value: 4 })
+            element.classList.add('initialized')
+        }
+    })
+}
 
 const NO_DATA = 'Нет данных'
 const NOT_SPECIFIED = 'не указан'

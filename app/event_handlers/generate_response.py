@@ -190,6 +190,7 @@ def event_handler_generate_response(
     list[ChatMessage],
     gr.Column,
     gr.Dropdown,
+    gr.HTML,
     gr.Column,
     gr.Button,
 ]:
@@ -201,6 +202,7 @@ def event_handler_generate_response(
             chat_history,
             gr.Column(visible=False),
             gr.Dropdown(visible=False, interactive=False),
+            gr.HTML(visible=False),
             gr.Column(visible=False),
             gr.Button(visible=False, interactive=False),
         )
@@ -333,6 +335,7 @@ def event_handler_generate_response(
         chat_history,
         gr.Column(visible=True),
         gr.Dropdown(visible=True, interactive=True),
+        gr.HTML(visible=True),
         gr.Column(visible=True),
         gr.Button(visible=True, interactive=True),
     )

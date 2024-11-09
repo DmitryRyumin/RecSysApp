@@ -10,6 +10,7 @@ import gradio as gr
 # Importing necessary components for the Gradio app
 from app.description import DESCRIPTION
 from app.description_steps import STEP_1, STEP_2
+from app.html_components import ADD_RANGE
 from app.config import config_data
 from app.requirements_app import read_requirements
 from app.components import html_message
@@ -224,6 +225,8 @@ def app_tab():
             elem_classes="dropdown-add-vacancy-skills",
         )
 
+        add_range = gr.HTML(value=ADD_RANGE, visible=False, elem_classes="add-range")
+
     with gr.Column(
         visible=False,
         render=True,
@@ -256,6 +259,7 @@ def app_tab():
         send_message,
         add_evals_column,
         add_vacancy_skills,
+        add_range,
         evaluate_column,
         send_evaluate,
     )
