@@ -466,10 +466,6 @@ div.step-2 {
     background-color: #fafafa !important;
 }
 
-.message-container > div:focus {
-    border: 1px solid var(--main-color) !important;
-}
-
 .message-container .input-container > textarea,
 div.add_evals-container > div.form > div.feedback > label > div > textarea {
     background-color: #fafafa !important;
@@ -480,10 +476,6 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea {
 div.add_evals-container > div.form > div.feedback > label > div > textarea {
     border: 1px solid #ff0000;
     box-shadow: None;
-}
-
-.message-container .input-container > textarea:focus-within {
-    box-shadow: 0 0 0 1px var(--main-color), 0px 2px 4px 0px rgba(0, 0, 0, 0.1) inset;
 }
 
 div.add_evals-container > div.form > div.feedback > label > div > textarea:focus-within {
