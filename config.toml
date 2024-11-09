@@ -2,7 +2,7 @@
 TITLE = "RecSys"
 APP_VERSION = "0.0.5"
 CSS_PATH = "app.css"
-QUALITY = true
+QUALITY = false
 
 [AppInfo]
 DURATION = 5
@@ -86,9 +86,14 @@ COURSES_GRADES = "Метрики курса:"
 [TabCreators]
 "Приложение" = "app_tab"
 "Настройки" = "settings_app_tab"
-# "💡 О приложении" = "about_app_tab"
-# "🎭 Об авторах" = "about_authors_tab"
+# "О приложении" = "about_app_tab"
+# "Об авторах" = "about_authors_tab"
 "Зависимости" = "requirements_app_tab"
+
+[TabCreatorsHide]
+QUALITY = [
+    "Настройки"
+]
 
 [StaticPaths]
 MODELS = "models"
@@ -161,6 +166,7 @@ DROPDOWN_ROLE = [
 USER_MAX_LENGTH = 20
 TOP_SUBJECTS_RANGE = [5, 40]
 TOP_SUBJECTS = 20
+TOP_SUBJECTS_QUALITY = 10
 MAX_SKILL_WORDS_RANGE = [1, 10]
 MAX_SKILL_WORDS = 4
 PRIORITY = [

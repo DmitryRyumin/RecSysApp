@@ -41,24 +41,34 @@ def create_gradio_app() -> gr.Blocks:
     ) as gradio_app:
         gr.HTML(HEADER)
 
-        tab_results = {}
+        tab_instances = {}
 
         available_functions = {
-            attr: getattr(app.tabs, attr)
-            for attr in dir(app.tabs)
-            if callable(getattr(app.tabs, attr)) and attr.endswith("_tab")
+            name: func
+            for name, func in vars(app.tabs).items()
+            if callable(func) and name.endswith("_tab")
         }
 
         tab_creators = load_tab_creators(CONFIG_NAME, available_functions)
 
+        tab_show = lambda tab_name: not (
+            config_data.AppSettings_QUALITY
+            and tab_name in config_data.TabCreatorsHide_QUALITY
+        )
+
         for tab_name, create_tab_function in tab_creators.items():
-            with gr.Tab(tab_name):
-                app_instance = create_tab_function()
-                tab_results[tab_name] = app_instance
+            with gr.Tab(
+                tab_name,
+                interactive=tab_show(tab_name),
+                visible=tab_show(tab_name),
+            ):
+                tab_instances[tab_name] = create_tab_function()
 
-        keys = list(tab_results.keys())
+        keys = list(tab_instances.keys())
 
-        setup_app_event_handlers(*(tab_results[keys[0]] + tab_results[keys[1]]))
+        setup_app_event_handlers(
+            *(tab_instances.get(keys[0]) + tab_instances.get(keys[1]))
+        )
 
     return gradio_app
 

@@ -253,7 +253,11 @@ def settings_app_tab():
             elem_classes="row-1-container",
         ):
             top_subjects = gr.Number(
-                value=config_data.Settings_TOP_SUBJECTS,
+                value=(
+                    config_data.Settings_TOP_SUBJECTS
+                    if not config_data.AppSettings_QUALITY
+                    else config_data.Settings_TOP_SUBJECTS_QUALITY
+                ),
                 label=config_data.Labels_TOP_SUBJECTS,
                 info=config_data.InformationMessages_FROM_TO.format(
                     config_data.Settings_TOP_SUBJECTS_RANGE[0],
