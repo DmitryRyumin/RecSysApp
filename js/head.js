@@ -121,8 +121,8 @@ const initializeSliders = (target, selector) => {
     })
 }
 
-const NO_DATA = 'Нет данных'
-const NOT_SPECIFIED = 'не указан'
+const NO_DATA = 'Нет данных';
+const NOT_SPECIFIED = 'не указан';
 
 /**
  * Извлекает данные из полей ввода с классами предков .user-info и .dropdown-user.
@@ -130,25 +130,25 @@ const NOT_SPECIFIED = 'не указан'
  * @returns {Object} Объект с данными полей ввода.
  */
 function extractUserInputData(containerSelector) {
-    const userContainer = document.querySelector(containerSelector)
+    const userContainer = document.querySelector(containerSelector);
 
     if (!userContainer) {
-        console.error('Элемент контейнера пользователя не найден')
-        return { error: 'Container not found' }
+        console.error('Элемент контейнера пользователя не найден');
+        return { error: 'Container not found' };
     }
 
     // Извлечение значений полей
-    const userInfoLabels = userContainer.querySelectorAll('span[data-testid="block-info"]')
-    const userInfoInputs = userContainer.querySelectorAll('.user-info input')
-    const dropdownUserInput = userContainer.querySelector('.dropdown-user input')
+    const userInfoLabels = userContainer.querySelectorAll('span[data-testid="block-info"]');
+    const userInfoInputs = userContainer.querySelectorAll('.user-info input');
+    const dropdownUserInput = userContainer.querySelector('.dropdown-user input');
 
     const userData = {
         [userInfoLabels[0]?.textContent.trim() || NO_DATA]: userInfoInputs[0]?.value || NO_DATA, // Первый input
         [userInfoLabels[1]?.textContent.trim() || NO_DATA]: userInfoInputs[1]?.value || NO_DATA, // Второй input
         [userInfoLabels[2]?.textContent.trim() || NO_DATA]: dropdownUserInput?.value || NO_DATA, // Третий input
-    }
+    };
 
-    return userData
+    return userData;
 }
 
 /**
@@ -158,29 +158,29 @@ function extractUserInputData(containerSelector) {
  * @returns {Object} Объект с релевантными и удаленными навыками.
  */
 function extractSkills(container, skillsSelector) {
-    let skillsLabel = container.querySelector(`${skillsSelector} .label`)?.textContent.trim() || NO_DATA
+    let skillsLabel = container.querySelector(`${skillsSelector} .label`)?.textContent.trim() || NO_DATA;
 
     // Удаляем двоеточие из конца строки, если оно есть
-    skillsLabel = skillsLabel.replace(/:$/, '')
+    skillsLabel = skillsLabel.replace(/:$/, '');
 
     // Извлечение всех навыков
     const allSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill`)].map((skill) =>
-        skill.textContent.trim(),
-    )
+        skill.textContent.trim()
+    );
 
     // Извлечение навыков, которые помечены как удаленные
     const deletedSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill.deleted`)].map((skill) =>
-        skill.textContent.trim(),
-    )
+        skill.textContent.trim()
+    );
 
     // Фильтрация релевантных навыков
-    const deletedSkillsSet = new Set(deletedSkills)
-    const relevantSkills = allSkills.filter((skill) => !deletedSkillsSet.has(skill))
+    const deletedSkillsSet = new Set(deletedSkills);
+    const relevantSkills = allSkills.filter((skill) => !deletedSkillsSet.has(skill));
 
     return {
         [`${skillsLabel} (релевантные)`]: relevantSkills,
         [`${skillsLabel} (удаленные)`]: deletedSkills,
-    }
+    };
 }
 
 /**
@@ -189,18 +189,18 @@ function extractSkills(container, skillsSelector) {
  * @returns {Object} Объект с данными о релевантности курса.
  */
 function extractRangeData(infoBlock) {
-    const rangeBlock = infoBlock.querySelector('.range')
+    const rangeBlock = infoBlock.querySelector('.range');
     if (!rangeBlock) {
-        return { 'Релевантность курса': NO_DATA }
+        return { 'Релевантность курса': NO_DATA };
     }
 
-    let rangeLabel = rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA
-    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA
+    let rangeLabel = rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA;
+    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA;
 
     // Удаляем двоеточие из конца строки, если оно есть
-    rangeLabel = rangeLabel.replace(/:$/, '')
+    rangeLabel = rangeLabel.replace(/:$/, '');
 
-    return { [rangeLabel]: rangeValue }
+    return { [rangeLabel]: rangeValue };
 }
 
 /**
@@ -209,92 +209,130 @@ function extractRangeData(infoBlock) {
  * @returns {Object} Объект с деталями курса.
  */
 function extractCourseData(infoBlock) {
-    const infoItems = infoBlock.querySelectorAll('.info-item')
-    const courseDetails = {}
+    const infoItems = infoBlock.querySelectorAll('.info-item');
+    const courseDetails = {};
 
     infoItems.forEach((item) => {
-        const label = item.querySelector('.label')?.textContent.trim() || NO_DATA
-        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA
-        courseDetails[label] = value
-    })
+        const label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
+        courseDetails[label] = value;
+    });
 
     // Проверка наличия блока ошибки номера обучения
     if (infoBlock.querySelector('.info-number-education-error')) {
-        courseDetails['Курс обучения'] = NOT_SPECIFIED
+        courseDetails['Курс обучения'] = NOT_SPECIFIED;
     }
 
-    return courseDetails
+    return courseDetails;
+}
+
+// Функция для отправки данных на сервер
+function sendDataToServer(data) {
+    fetch('http://127.0.0.1:8000/api/submit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Ошибка сети при отправке данных');
+            }
+            return response.json();
+        })
+        .then((responseData) => {
+            if (responseData.status === 'success') {
+                // Действия при успешной обработке
+                alert(responseData.message);
+            } else if (responseData.status === 'error') {
+                // Действия при ошибке на сервере
+                alert('Ошибка сервера: ' + responseData.error);
+                // Дополнительная информация об ошибке: responseData.error
+            } else {
+                // Обработка неожиданных статусов
+                alert('Неизвестный статус ответа от сервера.');
+            }
+        })
+        .catch((error) => {
+            // Обработка ошибок без вывода деталей в консоль
+            alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.');
+        });
 }
 
 /**
  * Основная функция для обработки данных при нажатии кнопки.
  */
+
 function handleButtonClick() {
     const result = {
         user_data: null,
         user_message: NO_DATA,
         vacancy: null,
         edu_groups: [],
-    }
+    };
 
     // Извлечение данных пользователя
-    result.user_data = extractUserInputData('.user-container')
+    result.user_data = extractUserInputData('.user-container');
 
     // Поиск сообщения пользователя
     result.user_message =
         document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() ||
-        NO_DATA
+        NO_DATA;
 
     // Поиск контейнера с ответом бота
-    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose')
+    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
 
     if (!spanContainer) {
-        console.error('Элемент span с классами chatbot prose не найден')
-        return
+        console.error('Элемент span с классами chatbot prose не найден');
+        return;
     }
 
     // Извлечение информации о вакансии
-    const subjectInfo = spanContainer.querySelector('.subject-info')
+    const subjectInfo = spanContainer.querySelector('.subject-info');
     if (subjectInfo && subjectInfo.parentElement === spanContainer) {
-        result.vacancy = extractSkills(subjectInfo, '.info-skills')
+        result.vacancy = extractSkills(subjectInfo, '.info-skills');
     } else {
-        console.error('Элемент .subject-info не найден')
-        return
+        console.error('Элемент .subject-info не найден');
+        return;
     }
 
     // Обработка групп образовательных программ
-    const eduGroups = spanContainer.querySelectorAll('.edu-group')
+    const eduGroups = spanContainer.querySelectorAll('.edu-group');
 
     if (eduGroups.length > 0) {
         eduGroups.forEach((eduGroup, index) => {
-            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`
+            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`;
 
             // Извлечение курсов из текущей группы
             const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
-                const courseDetails = extractCourseData(infoBlock)
-                const relevanceData = extractRangeData(infoBlock)
-                const pudSkills = extractSkills(infoBlock, '.info-skills')
+                const courseDetails = extractCourseData(infoBlock);
+                const relevanceData = extractRangeData(infoBlock);
+                const pudSkills = extractSkills(infoBlock, '.info-skills');
 
                 return {
                     ...courseDetails,
                     ...relevanceData,
                     ...pudSkills,
-                }
-            })
+                };
+            });
 
             result.edu_groups.push({
                 label: groupLabel,
                 courses: courses,
-            })
-        })
+            });
+        });
     } else {
-        console.error('Элементы .edu-group не найдены')
+        console.error('Элементы .edu-group не найдены');
     }
 
     // Вывод итогового результата
-    console.log('Полный результат:', JSON.stringify(result, null, 2))
+    console.log('Полный результат:', JSON.stringify(result, null, 2));
 
-    return result
+    // Отправка данных на сервер
+    sendDataToServer(result);
+
+    return result;
 }
 
 // Наблюдатель за добавлением кнопки send_evaluate
