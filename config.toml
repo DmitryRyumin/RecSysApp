@@ -1,7 +1,8 @@
 [AppSettings]
 TITLE = "RecSys"
-APP_VERSION = "0.0.4.3"
+APP_VERSION = "0.0.5"
 CSS_PATH = "app.css"
+QUALITY = true
 
 [AppInfo]
 DURATION = 5
@@ -43,13 +44,18 @@ COURSES_GRADES_NOT_DEFINED = [
 
 [OtherMessages]
 IMPORTANT = "Обязательно"
+ACCOUNT = "Персональные данные"
+HIDE_ACCOUNT = "Скрыть персональные данные"
 AUTH = "Запомнить персональные данные"
 JOB_DESC = "Введите название вакансии и ее описание"
+EVALUATE = "Сохранить ответы"
 
 [Labels]
+GROUP_NUMBER = "Номер группы (только для студентов)"
 SURNAME = "Фамилия"
 USERNAME = "Имя"
 USER_AFFILIATION = "Принадлежность"
+USER_ROLE = "Роль или направление"
 CHATBOT = "Подбор предметов из ВШЭ для определенной вакансии"
 TOP_SUBJECTS = "Количество предлагаемых предметов"
 MAX_SKILL_WORDS = "Максимальное количество слов в одном навыке"
@@ -65,6 +71,7 @@ LEVELS_EDUCATION_LABEL = "Уровни обучения:"
 LEVEL_EDUCATION_LABEL = "Уровень обучения:"
 NUMBERS_EDUCATION = "Курсы обучения:"
 NUMBER_EDUCATION = "Курс обучения:"
+SUBJECT_RELEVANCE = "Релевантность курса:"
 SUBJECT_LABEL = "Дисциплина:"
 ID_SUBJECT_LABEL = "ID дисциплины:"
 DEPARTMENT_LABEL = "Кафедра:"
@@ -87,6 +94,7 @@ COURSES_GRADES = "Метрики курса:"
 MODELS = "models"
 IMAGES = "images"
 FONTS = "fonts"
+JS = "js"
 PUDS = "data/ПУДы.parquet"
 PUDS_EMBEDDINGS = "data/ПУДы_эмбеддинги.safetensors"
 RU_SUBJECTS = "data/Названия_дисциплин_для_эмбеддингов.parquet"
@@ -135,6 +143,20 @@ DROPDOWN_USER = [
     "Дизайнер (студент)",
     "Госуправление (студент)",
     "Технические специальности (студент)",
+]
+DROPDOWN_ROLE = [
+    "Руководитель образовательной программы",
+    "Преподаватель",
+    "Сотрудник учебного офиса",
+    "Студент (история)",
+    "Студент (филология)",
+    "Студент (физика)",
+    "Студент (социология и социальная Информатика)",
+    "Студент (юриспруденция)",
+    "Студент (МБ по бизнесу и экономике)",
+    "Студент (Прикладной анализ данных и ИИ)",
+    "Студент (дизайн)",
+    "Другое",
 ]
 USER_MAX_LENGTH = 20
 TOP_SUBJECTS_RANGE = [5, 40]

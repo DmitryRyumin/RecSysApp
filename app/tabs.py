@@ -16,9 +16,23 @@ from app.components import html_message
 
 
 def app_tab():
-    gr.Markdown(value=DESCRIPTION)
+    with gr.Row(
+        visible=True,
+        render=True,
+        variant="default",
+        elem_classes="account-container",
+    ):
+        gr.Markdown(value=DESCRIPTION)
 
-    gr.HTML(value=STEP_1)
+        account = gr.Button(
+            value=config_data.OtherMessages_ACCOUNT,
+            interactive=False,
+            scale=1,
+            visible=False,
+            elem_classes=["account", "hide"],
+        )
+
+    step_1 = gr.HTML(value=STEP_1)
 
     with gr.Row(
         visible=True,
@@ -32,7 +46,11 @@ def app_tab():
             max_lines=1,
             placeholder=config_data.OtherMessages_IMPORTANT,
             label=config_data.Labels_SURNAME,
-            info=config_data.InformationMessages_SURNAME,
+            info=(
+                config_data.InformationMessages_SURNAME
+                if not config_data.AppSettings_QUALITY
+                else None
+            ),
             show_label=True,
             container=True,
             scale=1,
@@ -51,9 +69,21 @@ def app_tab():
             value=None,
             lines=1,
             max_lines=1,
-            placeholder=config_data.OtherMessages_IMPORTANT,
-            label=config_data.Labels_USERNAME,
-            info=config_data.InformationMessages_USERNAME,
+            placeholder=(
+                config_data.OtherMessages_IMPORTANT
+                if not config_data.AppSettings_QUALITY
+                else None
+            ),
+            label=(
+                config_data.Labels_USERNAME
+                if not config_data.AppSettings_QUALITY
+                else config_data.Labels_GROUP_NUMBER
+            ),
+            info=(
+                config_data.InformationMessages_USERNAME
+                if not config_data.AppSettings_QUALITY
+                else None
+            ),
             show_label=True,
             container=True,
             scale=1,
@@ -69,12 +99,24 @@ def app_tab():
         )
 
         dropdown_user = gr.Dropdown(
-            choices=config_data.Settings_DROPDOWN_USER,
+            choices=(
+                config_data.Settings_DROPDOWN_USER
+                if not config_data.AppSettings_QUALITY
+                else config_data.Settings_DROPDOWN_ROLE
+            ),
             value=None,
             multiselect=False,
             allow_custom_value=False,
-            label=config_data.Labels_USER_AFFILIATION,
-            info=config_data.InformationMessages_USER_AFFILIATION,
+            label=(
+                config_data.Labels_USER_AFFILIATION
+                if not config_data.AppSettings_QUALITY
+                else config_data.Labels_USER_ROLE
+            ),
+            info=(
+                config_data.InformationMessages_USER_AFFILIATION
+                if not config_data.AppSettings_QUALITY
+                else None
+            ),
             show_label=True,
             interactive=True,
             visible=True,
@@ -87,7 +129,7 @@ def app_tab():
         render=True,
         variant="default",
         elem_classes="auth-container",
-    ):
+    ) as auth_row:
         auth = gr.Button(
             value=config_data.OtherMessages_AUTH,
             interactive=False,
@@ -103,7 +145,7 @@ def app_tab():
         visible=True,
     )
 
-    step_2 = gr.HTML(value=STEP_2, visible=False)
+    step_2 = gr.HTML(value=STEP_2, visible=False, elem_classes="step-2")
 
     with gr.Column(
         visible=False,
@@ -162,10 +204,28 @@ def app_tab():
                 elem_classes="send_message",
             )
 
+    with gr.Column(
+        visible=False,
+        render=True,
+        variant="default",
+        elem_classes="evaluate-container",
+    ) as evaluate_column:
+        send_evaluate = gr.Button(
+            value=config_data.OtherMessages_EVALUATE,
+            interactive=False,
+            scale=1,
+            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "evaluate.ico",
+            visible=False,
+            elem_classes="send_evaluate",
+        )
+
     return (
+        account,
+        step_1,
         surname,
         username,
         dropdown_user,
+        auth_row,
         auth,
         noti_auth,
         step_2,
@@ -174,6 +234,8 @@ def app_tab():
         message_row,
         message,
         send_message,
+        evaluate_column,
+        send_evaluate,
     )
 
 

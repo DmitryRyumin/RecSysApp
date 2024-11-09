@@ -1,5 +1,5 @@
 """
-File: login.py
+File: generate_response.py
 Author: Dmitry Ryumin
 Description: Event handler for Gradio app to generate response.
 License: MIT License
@@ -13,6 +13,7 @@ from gradio import ChatMessage
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
+
 from app.data_init import (
     cosine_similarity,
     df_puds_skills,
@@ -31,6 +32,17 @@ from app.data_utils import (
 
 def create_html_block(label: str, value: str, class_name: str = "info-item") -> str:
     return f"<div class={class_name}><span class='label'>{label}</span> <span class='value'>{value}</span></div>"
+
+
+def create_html_range(
+    label: str, subject_id: str, class_name: str = "subject_relevance"
+) -> str:
+    return (
+        "<div class='range'>"
+        f"<label for='{class_name}_{subject_id}'>{label}</label>"
+        f"<div class='{class_name}' id='{class_name}_{subject_id}'></div>"
+        "</div>"
+    )
 
 
 def determine_edu_level(subject_info: list[str]) -> tuple[str, str]:
@@ -104,6 +116,11 @@ def generate_subject_info(
 
     return "".join(
         [
+            create_html_range(
+                config_data.HtmlContent_SUBJECT_RELEVANCE,
+                subject_info[0],
+                "subject_relevance",
+            ),
             create_html_block(config_data.HtmlContent_SUBJECT_LABEL, subject_info[1]),
             create_html_block(
                 config_data.HtmlContent_ID_SUBJECT_LABEL, subject_info[0]
@@ -168,11 +185,21 @@ def event_handler_generate_response(
     top_subjects: int,
     max_skill_words: int,
     dropdown_courses_grades: list[str],
-) -> tuple[gr.Textbox, list[ChatMessage]]:
+) -> tuple[
+    gr.Textbox,
+    list[ChatMessage],
+    gr.Column,
+    gr.Button,
+]:
     message = message.strip()
 
     if not message:
-        return (gr.Textbox(value=None), chat_history)
+        return (
+            gr.Textbox(value=None),
+            chat_history,
+            gr.Column(visible=False),
+            gr.Button(visible=False, interactive=False),
+        )
 
     vacancy_embedding = get_embeddings(message, model_manager_sbert.get_current_model())
 
@@ -297,4 +324,9 @@ def event_handler_generate_response(
     chat_history.append(ChatMessage(role="user", content=message))
     chat_history.append(ChatMessage(role="assistant", content=content))
 
-    return (gr.Textbox(value=None), chat_history)
+    return (
+        gr.Textbox(value=None),
+        chat_history,
+        gr.Column(visible=True),
+        gr.Button(visible=True, interactive=True),
+    )

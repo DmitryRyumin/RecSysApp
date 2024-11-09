@@ -8,17 +8,22 @@ License: MIT License
 import gradio as gr
 
 # Importing necessary components for the Gradio app
+from app.event_handlers.account import event_handler_account
 from app.event_handlers.auth import event_handler_auth
 from app.event_handlers.login import event_handler_login
 from app.event_handlers.generate_response import event_handler_generate_response
 from app.event_handlers.message import event_handler_message
+from app.event_handlers.evaluate import event_handler_evaluate
 from app.event_handlers.settings import event_handler_dropdown_models
 
 
 def setup_app_event_handlers(
+    account,
+    step_1,
     surname,
     username,
     dropdown_user,
+    auth_row,
     auth,
     noti_auth,
     step_2,
@@ -27,11 +32,26 @@ def setup_app_event_handlers(
     message_row,
     message,
     send_message,
+    evaluate_column,
+    send_evaluate,
     top_subjects,
     max_skill_words,
     dropdown_models,
     dropdown_courses_grades,
 ):
+    account.click(
+        fn=event_handler_account,
+        inputs=[account, surname, username],
+        outputs=[
+            account,
+            surname,
+            username,
+            dropdown_user,
+            step_2,
+        ],
+        queue=True,
+    )
+
     gr.on(
         triggers=[surname.change, username.change, dropdown_user.change],
         fn=event_handler_auth,
@@ -47,9 +67,12 @@ def setup_app_event_handlers(
         fn=event_handler_login,
         inputs=[surname, username, dropdown_user],
         outputs=[
+            account,
+            step_1,
             surname,
             username,
             dropdown_user,
+            auth_row,
             auth,
             noti_auth,
             step_2,
@@ -79,7 +102,19 @@ def setup_app_event_handlers(
             max_skill_words,
             dropdown_courses_grades,
         ],
-        outputs=[message, chatbot],
+        outputs=[
+            message,
+            chatbot,
+            evaluate_column,
+            send_evaluate,
+        ],
+        queue=True,
+    )
+
+    send_evaluate.click(
+        fn=event_handler_evaluate,
+        inputs=[send_evaluate, chatbot],
+        outputs=[],
         queue=True,
     )
 
