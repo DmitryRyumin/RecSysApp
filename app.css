@@ -672,12 +672,18 @@ div.subject-info > div.info > div.range > label,
 div.add-range > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.label,
+div.subject-info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
 div.subject-info > div.info > div.info-number-education-error > span.label,
 div.subject-info > div.info > div.info-courses-grades-error > span.label {
     font-weight: bold;
+}
+
+div.subject-info > div.info-skills > span.label,
+div.subject-info > div.info > div.info-skills > span.label {
+    color: rgb(0, 0, 0) !important;
 }
 
 div.subject-info > div.info > div.info-item-error > span.label,
@@ -718,6 +724,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill {
     cursor: pointer;
 }
 
+div.subject-info > div.info-skills > span.value > span.skill.deleted,
 div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted {
     border: 2px solid #ff0000;
     background-color: #ffd6d6 !important;
