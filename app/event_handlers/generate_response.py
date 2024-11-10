@@ -38,7 +38,9 @@ def create_html_range(
     label: str, subject_id: str, class_name: str = "subject_relevance"
 ) -> str:
     return (
-        "<div class='range'>"
+        ""
+        if not config_data.AppSettings_QUALITY
+        else "<div class='range'>"
         f"<label for='{class_name}_{subject_id}'>{label}</label>"
         f"<div class='{class_name}' id='{class_name}_{subject_id}'></div>"
         "</div>"
@@ -165,7 +167,7 @@ def generate_skills(
             [f"<span class='skill'>{skill}</span>" for skill in skills]
         )
         return (
-            "<div class='info-skills'><span class='label'>"
+            f"<div class='info-skills{"-static" if not config_data.AppSettings_QUALITY else ""}'><span class='label'>"
             + config_data.HtmlContent_SKILLS_LABEL
             + "</span> <span class='value'>"
             + f"{skills_content}</span></div>"
@@ -346,10 +348,16 @@ def event_handler_generate_response(
         gr.Textbox(value=None, visible=not config_data.AppSettings_QUALITY),
         gr.Button(visible=not config_data.AppSettings_QUALITY),
         chat_history,
-        gr.Column(visible=True),
-        gr.Dropdown(visible=True, interactive=True),
-        gr.HTML(visible=True),
-        gr.Textbox(visible=True),
-        gr.Column(visible=True),
-        gr.Button(visible=True, interactive=True),
+        gr.Column(visible=config_data.AppSettings_QUALITY),
+        gr.Dropdown(
+            visible=config_data.AppSettings_QUALITY,
+            interactive=config_data.AppSettings_QUALITY,
+        ),
+        gr.HTML(visible=config_data.AppSettings_QUALITY),
+        gr.Textbox(visible=config_data.AppSettings_QUALITY),
+        gr.Column(visible=config_data.AppSettings_QUALITY),
+        gr.Button(
+            visible=config_data.AppSettings_QUALITY,
+            interactive=config_data.AppSettings_QUALITY,
+        ),
     )

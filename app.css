@@ -677,6 +677,7 @@ div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info-static > div.info > div.info-skills > span.label,
+div.subject-info > div.info > div.info-skills-static > span.label,
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
 div.subject-info > div.info > div.info-number-education-error > span.label,
@@ -685,7 +686,8 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
 }
 
 div.subject-info-static > div.info > div.info-skills > span.label,
-div.subject-info > div.info > div.info-skills > span.label {
+div.subject-info > div.info > div.info-skills > span.label,
+div.subject-info > div.info > div.info-skills-static > span.label {
     color: #000 !important;
 }
 
@@ -703,6 +705,7 @@ div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.value,
 div.subject-info-static > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
+div.subject-info > div.info > div.info-skills-static > span.label,
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
 div.subject-info > div.info > div.info-number-education-error > span.label,
@@ -712,12 +715,14 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
 }
 
 div.subject-info-static > div.info > div.info-skills > span.value,
-div.subject-info > div.info > div.info-skills > span.value {
+div.subject-info > div.info > div.info-skills > span.value,
+div.subject-info > div.info > div.info-skills-static > span.value {
     display: contents;
 }
 
 div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
-div.subject-info > div.info > div.info-skills > span.value > span.skill {
+div.subject-info > div.info > div.info-skills > span.value > span.skill,
+div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -730,6 +735,11 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill {
     cursor: pointer;
 }
 
+div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
+div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
+    cursor: default;
+}
+
 div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted {
     border: 2px solid #ff0000;
     background-color: #ffd6d6 !important;
@@ -738,7 +748,8 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
 
 @media (max-width: 768px) {
     div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
-    div.subject-info > div.info > div.info-skills > span.value > span.skill {
+    div.subject-info > div.info > div.info-skills > span.value > span.skill,
+    div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
         font-size: 0.9rem;
         padding: 2px 5px;
         margin: 6px 5px 0px 0px;
@@ -746,7 +757,8 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
 }
 
 div.subject-info-static > div.info > div.info-skills > span.value > span.skill:last-child,
-div.subject-info > div.info > div.info-skills > span.value > span.skill:last-child {
+div.subject-info > div.info > div.info-skills > span.value > span.skill:last-child,
+div.subject-info > div.info > div.info-skills-static > span.value > span.skill:last-child {
     margin-right: 0px;
 }
 
@@ -758,7 +770,8 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill:last-chi
     color: #000000 !important;
 }
 
-.info .info-skills > .label {
+.info .info-skills > .label,
+.info .info-skills-static > .label {
     color: #000000 !important;
 }
 

@@ -162,4 +162,5 @@ def save_data(json_data):
         return False
 
 
-create_tables()
+if config_data.AppSettings_QUALITY:
+    create_tables()
