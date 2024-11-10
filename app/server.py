@@ -9,6 +9,8 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
+from app.event_handlers.db_handler import save_data
+
 app = FastAPI()
 
 app.add_middleware(
@@ -24,13 +26,19 @@ app.add_middleware(
 async def receive_data(request: Request):
     try:
         data = await request.json()
-        print("Полученные данные:", data)
+        # print("Полученные данные:", data)
 
-        # Дополнительная логика обработки данных
-        return {
-            "message": "Данные успешно получены",
-            "status": "success",
-        }
+        # Сохранение данных с использованием модуля db_handler
+        if save_data(data):
+            return {
+                "message": "Данные успешно получены и сохранены",
+                "status": "success",
+            }
+        else:
+            return {
+                "message": "Ошибка при сохранении данных",
+                "status": "error",
+            }
     except Exception as e:
         # Обработка исключений и возврат ошибки
         return {
@@ -39,9 +47,7 @@ async def receive_data(request: Request):
             "error": str(e),
         }
 
-
 server = None
-
 
 def run_server():
     global server
