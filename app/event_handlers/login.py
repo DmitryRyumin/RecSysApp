@@ -10,11 +10,13 @@ import gradio as gr
 # Importing necessary components for the Gradio app
 from app.config import config_data
 from app.components import html_message
+from app.data_utils import generate_user_id
 
 
 def event_handler_login(surname: str, username: str, dropdown_user: str) -> tuple[
     gr.Button,
     gr.HTML,
+    gr.Textbox,
     gr.Textbox,
     gr.Textbox,
     gr.Dropdown,
@@ -52,6 +54,7 @@ def event_handler_login(surname: str, username: str, dropdown_user: str) -> tupl
             ],
         ),
         gr.HTML(visible=not is_auth_valid),
+        gr.Textbox(value=generate_user_id() if is_auth_valid else None),
         gr.Textbox(
             value=surname, interactive=not is_auth_valid, visible=not is_auth_valid
         ),

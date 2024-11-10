@@ -41,6 +41,27 @@ def app_tab():
         variant="default",
         elem_classes="user-container",
     ):
+        userid = gr.Textbox(
+            value=None,
+            lines=1,
+            max_lines=1,
+            placeholder=None,
+            label=None,
+            info=None,
+            show_label=False,
+            container=False,
+            scale=1,
+            interactive=False,
+            visible=False,
+            autofocus=False,
+            autoscroll=True,
+            render=True,
+            type="text",
+            show_copy_button=False,
+            max_length=None,
+            elem_classes="user-id",
+        )
+
         surname = gr.Textbox(
             value=None,
             lines=1,
@@ -274,6 +295,7 @@ def app_tab():
     return (
         account,
         step_1,
+        userid,
         surname,
         username,
         dropdown_user,

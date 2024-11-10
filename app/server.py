@@ -5,11 +5,13 @@ Description: Server for the application.
 License: MIT License
 """
 
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
-from app.event_handlers.db_handler import save_data
+# Importing necessary components for the Gradio app
+from app.config import config_data
+from app.db import save_data
 
 app = FastAPI()
 
@@ -47,11 +49,18 @@ async def receive_data(request: Request):
             "error": str(e),
         }
 
+
 server = None
+
 
 def run_server():
     global server
-    config = uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="info")
+    config = uvicorn.Config(
+        app,
+        host=config_data.AppSettings_SERVER_NAME,
+        port=config_data.AppSettings_SERVER_PORT,
+        log_level="info",
+    )
     server = uvicorn.Server(config)
     server.run()
 

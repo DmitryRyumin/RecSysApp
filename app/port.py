@@ -7,20 +7,29 @@ License: MIT License
 
 import socket
 import psutil
+from typing import Iterable, Union
 
 
 def is_port_in_use(host: str, port: int) -> bool:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex((host, port)) == 0
+    try:
+        with socket.create_connection((host, port), timeout=1):
+            return True
+    except (ConnectionRefusedError, OSError):
+        return False
 
 
-def free_port(port: int) -> None:
+def free_ports(ports: Union[int, Iterable[int]]) -> None:
+    ports_to_free = {ports} if isinstance(ports, int) else set(ports)
+
     for proc in psutil.process_iter(attrs=["pid", "name"]):
         try:
-            for conn in proc.net_connections(kind="inet"):
-                if conn.laddr.port == port:
+            connections = proc.net_connections(kind="inet")
+            for conn in connections:
+                if conn.laddr.port in ports_to_free:
                     proc.terminate()
                     proc.wait()
-                    return
+                    ports_to_free.discard(conn.laddr.port)
+                    if not ports_to_free:
+                        return
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue

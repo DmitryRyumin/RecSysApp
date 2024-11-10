@@ -7,4 +7,5 @@ fastparquet==2024.5.0
 sentence_transformers==3.2.1
 safetensors==0.4.5
 einops==0.8.0
-fastapi==0.115.3
+fastapi==0.115.4
+duckdb==1.1.3

@@ -20,6 +20,7 @@ from app.event_handlers.settings import event_handler_dropdown_models
 def setup_app_event_handlers(
     account,
     step_1,
+    userid,
     surname,
     username,
     dropdown_user,
@@ -73,6 +74,7 @@ def setup_app_event_handlers(
         outputs=[
             account,
             step_1,
+            userid,
             surname,
             username,
             dropdown_user,

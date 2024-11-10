@@ -21,7 +21,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 from app.config import CONFIG_NAME, config_data, load_tab_creators
 from app.event_handlers.event_handlers import setup_app_event_handlers
 from app.header import HEADER
-from app.port import is_port_in_use, free_port
+from app.port import is_port_in_use, free_ports
 from app.server import run_server, stop_server_func
 import app.tabs
 
@@ -85,6 +85,19 @@ def create_gradio_app() -> gr.Blocks:
 
 
 if __name__ == "__main__":
+    ports_to_check = [
+        config_data.AppSettings_PORT,
+        (
+            config_data.AppSettings_SERVER_PORT
+            if config_data.AppSettings_QUALITY
+            else None
+        ),
+    ]
+
+    for port in filter(None, ports_to_check):
+        if is_port_in_use(config_data.AppSettings_SERVER_NAME, port):
+            free_ports(port)
+
     if config_data.AppSettings_QUALITY:
         signal.signal(signal.SIGINT, signal_handler)
 
@@ -93,11 +106,6 @@ if __name__ == "__main__":
         server_thread.start()
 
     try:
-        if is_port_in_use(
-            config_data.AppSettings_SERVER_NAME, config_data.AppSettings_PORT
-        ):
-            free_port(config_data.AppSettings_PORT)
-
         create_gradio_app().queue(api_open=False).launch(
             favicon_path=config_data.Path_APP
             / config_data.StaticPaths_IMAGES

@@ -1,10 +1,12 @@
 [AppSettings]
+APP_VERSION = "0.0.5"
 SERVER_NAME = "127.0.0.1"
 PORT = 7860
+SERVER_PORT = 8000
 TITLE = "RecSys"
-APP_VERSION = "0.0.5"
 CSS_PATH = "app.css"
 QUALITY = true
+DB = "RecSys.duckdb"
 
 [AppInfo]
 DURATION = 5
@@ -107,6 +109,7 @@ MODELS = "models"
 IMAGES = "images"
 FONTS = "fonts"
 JS = "js"
+DB = "db"
 PUDS = "data/ПУДы.parquet"
 PUDS_EMBEDDINGS = "data/ПУДы_эмбеддинги.safetensors"
 RU_SUBJECTS = "data/Названия_дисциплин_для_эмбеддингов.parquet"

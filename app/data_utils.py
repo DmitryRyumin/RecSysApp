@@ -8,8 +8,10 @@ License: MIT License
 import re
 import torch
 import polars as pl
+import hashlib
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path, PosixPath
+from datetime import datetime
 from typing import Any, Union, Optional
 
 from sentence_transformers import SentenceTransformer
@@ -317,3 +319,9 @@ def format_grade(value: Union[int, float, Decimal]) -> str:
         if isinstance(value, (int, float, Decimal))
         else str(value)
     )
+
+
+def generate_user_id(length: int = 16) -> str:
+    return hashlib.sha256(
+        datetime.now().isoformat(timespec="milliseconds").encode()
+    ).hexdigest()[:length]
