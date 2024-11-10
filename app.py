@@ -81,8 +81,6 @@ def create_gradio_app() -> gr.Blocks:
             *(tab_instances.get(keys[0]) + tab_instances.get(keys[1]))
         )
 
-        gradio_app.unload()
-
     return gradio_app
 
 

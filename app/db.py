@@ -7,16 +7,13 @@ License: MIT License
 
 import duckdb
 
+# Importing necessary components for the Gradio app
 from app.config import config_data
 
-# Формирование полного пути и проверка существования директории
 db_path = config_data.Path_APP / config_data.StaticPaths_DB / config_data.AppSettings_DB
-db_path.parent.mkdir(
-    parents=True, exist_ok=True
-)  # Создание родительской директории, если она отсутствует
+db_path.parent.mkdir(parents=True, exist_ok=True)
 
 
-# Создание подключения через контекстный менеджер для выполнения операций
 def create_tables():
     with duckdb.connect(str(db_path)) as conn:
         conn.execute(
@@ -73,7 +70,6 @@ def save_data(json_data):
             raise ValueError("Идентификатор пользователя отсутствует в JSON")
 
         with duckdb.connect(str(db_path)) as conn:
-            # Сохранение данных пользователя
             user_data = json_data.get("user_data", {})
             conn.execute(
                 """
@@ -88,7 +84,6 @@ def save_data(json_data):
                 ),
             )
 
-            # Сохранение данных о курсах
             for group in json_data.get("edu_groups", []):
                 label = group.get("label")
                 for course in group.get("courses", []):
@@ -126,7 +121,6 @@ def save_data(json_data):
                         ),
                     )
 
-            # Сохранение данных обратной связи
             feedback_data = json_data.get("additional_ranges", {})
             feedback_comment = json_data.get("feedback", "")
             vacancy_skills = json_data.get("vacancy", {})
@@ -163,10 +157,9 @@ def save_data(json_data):
             conn.commit()
 
         return True
-    except Exception as e:
-        print(f"Ошибка при сохранении данных: {e}")
+    except Exception:
+        print("Данные не сохранены")
         return False
 
 
-# Создание таблиц при запуске модуля
 create_tables()
