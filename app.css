@@ -698,7 +698,6 @@ div.subject-info > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-item > span.value,
 div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.value,
-div.subject-info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
@@ -708,12 +707,10 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
     padding-right: 5px;
 }
 
-div.subject-info > div.info-skills > span.value,
 div.subject-info > div.info > div.info-skills > span.value {
     display: contents;
 }
 
-div.subject-info > div.info-skills > span.value > span.skill,
 div.subject-info > div.info > div.info-skills > span.value > span.skill {
     display: inline-flex;
     align-items: center;
@@ -735,7 +732,6 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
 }
 
 @media (max-width: 768px) {
-    div.subject-info > div.info-skills > span.value > span.skill,
     div.subject-info > div.info > div.info-skills > span.value > span.skill {
         font-size: 0.9rem;
         padding: 2px 5px;
@@ -743,7 +739,6 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
     }
 }
 
-div.subject-info > div.info-skills > span.value > span.skill:last-child,
 div.subject-info > div.info > div.info-skills > span.value > span.skill:last-child {
     margin-right: 0px;
 }
