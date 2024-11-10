@@ -213,6 +213,11 @@ def event_handler_generate_response(
             gr.Button(visible=False, interactive=False),
         )
 
+    if config_data.AppSettings_QUALITY:
+        top_subjects = config_data.Settings_TOP_SUBJECTS_QUALITY
+        max_skill_words = config_data.Settings_MAX_SKILL_WORDS
+        dropdown_courses_grades = [config_data.DataframeHeaders_COURSES_GRADES[0]]
+
     vacancy_embedding = get_embeddings(message, model_manager_sbert.get_current_model())
 
     with torch.no_grad():

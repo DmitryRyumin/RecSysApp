@@ -72,6 +72,7 @@ def create_gradio_app() -> gr.Blocks:
                 tab_name,
                 interactive=tab_show(tab_name),
                 visible=tab_show(tab_name),
+                render=tab_show(tab_name),
             ):
                 tab_instances[tab_name] = create_tab_function()
 
