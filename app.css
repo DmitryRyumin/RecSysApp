@@ -642,6 +642,16 @@ div.subject-info > div.info > div.range {
     display: flex;
 }
 
+div.add-range > div.wrap {
+    background-color: #fafafa !important;
+    height: 100%;
+    display: flex;
+}
+
+div.add-range > div.wrap > div.progress-text {
+    bottom: 0px;
+}
+
 div.add-range > div.range {
     flex-direction: column;
 }
@@ -834,6 +844,10 @@ div.dropdown-models div.wrap {
 div.dropdown-models div.wrap .options {
     background-color: #fafafa !important;
     margin-top: 5px;
+}
+
+div.add_evals-container > div.form > div.feedback > div.wrap {
+    background-color: #fafafa !important;
 }
 
 div.dropdown-models div.wrap .options > li {

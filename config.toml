@@ -1,4 +1,6 @@
 [AppSettings]
+SERVER_NAME = "127.0.0.1"
+PORT = 7860
 TITLE = "RecSys"
 APP_VERSION = "0.0.5"
 CSS_PATH = "app.css"

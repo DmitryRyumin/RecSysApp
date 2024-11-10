@@ -121,8 +121,16 @@ def setup_app_event_handlers(
 
     send_evaluate.click(
         fn=event_handler_evaluate,
-        inputs=[send_evaluate, chatbot],
-        outputs=[],
+        inputs=[],
+        outputs=[
+            chatbot,
+            add_evals_column,
+            add_vacancy_skills,
+            add_range,
+            feedback,
+            evaluate_column,
+            send_evaluate,
+        ],
         queue=True,
     )
 

@@ -121,8 +121,8 @@ const initializeSliders = (target, selector) => {
     })
 }
 
-const NO_DATA = 'Нет данных';
-const NOT_SPECIFIED = 'не указан';
+const NO_DATA = 'Нет данных'
+const NOT_SPECIFIED = 'не указан'
 
 /**
  * Извлекает данные из полей ввода с классами предков .user-info и .dropdown-user.
@@ -130,25 +130,25 @@ const NOT_SPECIFIED = 'не указан';
  * @returns {Object} Объект с данными полей ввода.
  */
 function extractUserInputData(containerSelector) {
-    const userContainer = document.querySelector(containerSelector);
+    const userContainer = document.querySelector(containerSelector)
 
     if (!userContainer) {
-        console.error('Элемент контейнера пользователя не найден');
-        return { error: 'Container not found' };
+        console.error('Элемент контейнера пользователя не найден')
+        return { error: 'Container not found' }
     }
 
     // Извлечение значений полей
-    const userInfoLabels = userContainer.querySelectorAll('span[data-testid="block-info"]');
-    const userInfoInputs = userContainer.querySelectorAll('.user-info input');
-    const dropdownUserInput = userContainer.querySelector('.dropdown-user input');
+    const userInfoLabels = userContainer.querySelectorAll('span[data-testid="block-info"]')
+    const userInfoInputs = userContainer.querySelectorAll('.user-info input')
+    const dropdownUserInput = userContainer.querySelector('.dropdown-user input')
 
     const userData = {
         [userInfoLabels[0]?.textContent.trim() || NO_DATA]: userInfoInputs[0]?.value || NO_DATA, // Первый input
         [userInfoLabels[1]?.textContent.trim() || NO_DATA]: userInfoInputs[1]?.value || NO_DATA, // Второй input
         [userInfoLabels[2]?.textContent.trim() || NO_DATA]: dropdownUserInput?.value || NO_DATA, // Третий input
-    };
+    }
 
-    return userData;
+    return userData
 }
 
 /**
@@ -158,29 +158,29 @@ function extractUserInputData(containerSelector) {
  * @returns {Object} Объект с релевантными и удаленными навыками.
  */
 function extractSkills(container, skillsSelector) {
-    let skillsLabel = container.querySelector(`${skillsSelector} .label`)?.textContent.trim() || NO_DATA;
+    let skillsLabel = container.querySelector(`${skillsSelector} .label`)?.textContent.trim() || NO_DATA
 
     // Удаляем двоеточие из конца строки, если оно есть
-    skillsLabel = skillsLabel.replace(/:$/, '');
+    skillsLabel = skillsLabel.replace(/:$/, '')
 
     // Извлечение всех навыков
     const allSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill`)].map((skill) =>
-        skill.textContent.trim()
-    );
+        skill.textContent.trim(),
+    )
 
     // Извлечение навыков, которые помечены как удаленные
     const deletedSkills = [...container.querySelectorAll(`${skillsSelector} .value .skill.deleted`)].map((skill) =>
-        skill.textContent.trim()
-    );
+        skill.textContent.trim(),
+    )
 
     // Фильтрация релевантных навыков
-    const deletedSkillsSet = new Set(deletedSkills);
-    const relevantSkills = allSkills.filter((skill) => !deletedSkillsSet.has(skill));
+    const deletedSkillsSet = new Set(deletedSkills)
+    const relevantSkills = allSkills.filter((skill) => !deletedSkillsSet.has(skill))
 
     return {
         [`${skillsLabel} (релевантные)`]: relevantSkills,
         [`${skillsLabel} (удаленные)`]: deletedSkills,
-    };
+    }
 }
 
 /**
@@ -192,13 +192,13 @@ function extractSkills(container, skillsSelector) {
 function extractRangeData(rangeBlock, customLabel) {
     // const rangeBlock = infoBlock.querySelector('.range');
 
-    let rangeLabel = customLabel || rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA;
-    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA;
+    let rangeLabel = customLabel || rangeBlock.querySelector('label')?.textContent.trim() || NO_DATA
+    const rangeValue = rangeBlock.querySelector('input[type="hidden"]')?.value || NO_DATA
 
     // Удаляем двоеточие из конца строки, если оно есть
-    rangeLabel = rangeLabel.replace(/:$/, '');
+    rangeLabel = rangeLabel.replace(/:$/, '')
 
-    return { [rangeLabel]: rangeValue };
+    return { [rangeLabel]: rangeValue }
 }
 
 /**
@@ -207,21 +207,21 @@ function extractRangeData(rangeBlock, customLabel) {
  * @returns {Object} Объект с деталями курса.
  */
 function extractCourseData(infoBlock) {
-    const infoItems = infoBlock.querySelectorAll('.info-item');
-    const courseDetails = {};
+    const infoItems = infoBlock.querySelectorAll('.info-item')
+    const courseDetails = {}
 
     infoItems.forEach((item) => {
-        const label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
-        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
-        courseDetails[label] = value;
-    });
+        const label = item.querySelector('.label')?.textContent.trim() || NO_DATA
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA
+        courseDetails[label] = value
+    })
 
     // Проверка наличия блока ошибки номера обучения
     if (infoBlock.querySelector('.info-number-education-error')) {
-        courseDetails['Курс обучения'] = NOT_SPECIFIED;
+        courseDetails['Курс обучения'] = NOT_SPECIFIED
     }
 
-    return courseDetails;
+    return courseDetails
 }
 
 /**
@@ -230,23 +230,23 @@ function extractCourseData(infoBlock) {
  * @returns {Array} Массив дополнительных навыков.
  */
 function extractAdditionalVacancySkills(containerSelector) {
-    const container = document.querySelector(containerSelector);
+    const container = document.querySelector(containerSelector)
 
     if (!container) {
-        console.error('Элемент контейнера дополнительных навыков не найден');
-        return [];
+        console.error('Элемент контейнера дополнительных навыков не найден')
+        return []
     }
 
     // Находим все элементы с классом 'token' внутри контейнера
-    const tokenElements = container.querySelectorAll('.token');
+    const tokenElements = container.querySelectorAll('.token')
 
     // Извлекаем текстовые значения из span внутри каждого элемента 'token'
     const skills = [...tokenElements].map((token) => {
-        const skillText = token.querySelector('span')?.textContent.trim() || NO_DATA;
-        return skillText;
-    });
+        const skillText = token.querySelector('span')?.textContent.trim() || NO_DATA
+        return skillText
+    })
 
-    return skills;
+    return skills
 }
 
 // Функция для отправки данных на сервер
@@ -260,27 +260,27 @@ function sendDataToServer(data) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error('Ошибка сети при отправке данных');
+                throw new Error('Ошибка сети при отправке данных')
             }
-            return response.json();
+            return response.json()
         })
         .then((responseData) => {
             if (responseData.status === 'success') {
                 // Действия при успешной обработке
-                alert(responseData.message);
+                alert(responseData.message)
             } else if (responseData.status === 'error') {
                 // Действия при ошибке на сервере
-                alert('Ошибка сервера: ' + responseData.error);
+                alert('Ошибка сервера: ' + responseData.error)
                 // Дополнительная информация об ошибке: responseData.error
             } else {
                 // Обработка неожиданных статусов
-                alert('Неизвестный статус ответа от сервера.');
+                alert('Неизвестный статус ответа от сервера.')
             }
         })
         .catch((error) => {
             // Обработка ошибок без вывода деталей в консоль
-            alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.');
-        });
+            alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.')
+        })
 }
 
 /**
@@ -295,92 +295,92 @@ function handleButtonClick() {
         edu_groups: [],
         additional_vacancy_skills: [],
         feedback: null,
-    };
+    }
 
     // Извлечение данных пользователя
-    result.user_data = extractUserInputData('.user-container');
+    result.user_data = extractUserInputData('.user-container')
 
     // Поиск сообщения пользователя
     result.user_message =
         document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() ||
-        NO_DATA;
+        NO_DATA
 
     // Поиск контейнера с ответом бота
-    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
+    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose')
 
     if (!spanContainer) {
-        console.error('Элемент span с классами chatbot prose не найден');
-        return;
+        console.error('Элемент span с классами chatbot prose не найден')
+        return
     }
 
     // Извлечение информации о вакансии
-    const subjectInfo = spanContainer.querySelector('.subject-info');
+    const subjectInfo = spanContainer.querySelector('.subject-info')
     if (subjectInfo && subjectInfo.parentElement === spanContainer) {
-        result.vacancy = extractSkills(subjectInfo, '.info-skills');
+        result.vacancy = extractSkills(subjectInfo, '.info-skills')
     } else {
-        console.error('Элемент .subject-info не найден');
-        return;
+        console.error('Элемент .subject-info не найден')
+        return
     }
 
     // Обработка групп образовательных программ
-    const eduGroups = spanContainer.querySelectorAll('.edu-group');
+    const eduGroups = spanContainer.querySelectorAll('.edu-group')
 
     if (eduGroups.length > 0) {
         eduGroups.forEach((eduGroup, index) => {
-            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`;
+            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`
 
             // Извлечение курсов из текущей группы
             const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
-                const courseDetails = extractCourseData(infoBlock);
-                const relevanceData = extractRangeData(infoBlock.querySelector('.range'));
-                const pudSkills = extractSkills(infoBlock, '.info-skills');
+                const courseDetails = extractCourseData(infoBlock)
+                const relevanceData = extractRangeData(infoBlock.querySelector('.range'))
+                const pudSkills = extractSkills(infoBlock, '.info-skills')
 
                 return {
                     ...courseDetails,
                     ...relevanceData,
                     ...pudSkills,
-                };
-            });
+                }
+            })
 
             result.edu_groups.push({
                 label: groupLabel,
                 courses: courses,
-            });
-        });
+            })
+        })
     } else {
-        console.error('Элементы .edu-group не найдены');
+        console.error('Элементы .edu-group не найдены')
     }
 
     // Извлечение дополнительных навыков вакансии
-    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills');
+    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills')
 
     // Извлечение данных из блока с оценкой сервиса
-    const addRangeContainer = document.querySelector('.block.add-range');
+    const addRangeContainer = document.querySelector('.block.add-range')
     if (addRangeContainer) {
-        const customLabels = ['Полезность', 'Востребованность', 'Удобство'];
+        const customLabels = ['Полезность', 'Востребованность', 'Удобство']
 
         const ranges = [...addRangeContainer.querySelectorAll('.range')].map((rangeBlock, index) => {
             // Получаем кастомный лейбл для текущего rangeBlock
-            const customLabel = customLabels[index] || `Диапазон ${index + 1}`;
-            return extractRangeData(rangeBlock, customLabel);
-        });
+            const customLabel = customLabels[index] || `Диапазон ${index + 1}`
+            return extractRangeData(rangeBlock, customLabel)
+        })
 
         // Объединяем все диапазоны в один объект
-        result.additional_ranges = Object.assign({}, ...ranges);
+        result.additional_ranges = Object.assign({}, ...ranges)
     } else {
-        console.error('Элемент .add-range не найден');
+        console.error('Элемент .add-range не найден')
     }
 
     // Извлечение отзыва пользователя из textarea внутри .block .feedback
-    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA;
+    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA
 
     // Вывод итогового результата
-    console.log('Полный результат:', JSON.stringify(result, null, 2));
+    console.log('Полный результат:', JSON.stringify(result, null, 2))
 
     // Отправка данных на сервер
-    sendDataToServer(result);
+    sendDataToServer(result)
 
-    return result;
+    return result
 }
 
 // Наблюдатель за добавлением кнопки send_evaluate

@@ -1,11 +1,16 @@
+"""
+File: server.py
+Author: Dmitry Ryumin
+Description: Server for the application.
+License: MIT License
+"""
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-import threading
 
 app = FastAPI()
 
-# Настройка CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -13,6 +18,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.post("/api/submit")
 async def receive_data(request: Request):
@@ -30,20 +36,21 @@ async def receive_data(request: Request):
         return {
             "message": "Произошла ошибка при обработке данных",
             "status": "error",
-            "error": str(e)
+            "error": str(e),
         }
 
-# Глобальная переменная для хранения экземпляра сервера
+
 server = None
 
-# Функция для запуска сервера
+
 def run_server():
     global server
     config = uvicorn.Config(app, host="127.0.0.1", port=8000, log_level="info")
     server = uvicorn.Server(config)
-    server.run()  # Запуск сервера
+    server.run()
+
 
 def stop_server_func():
     global server
     if server:
-        server.should_exit = True  # Сигнализируем серверу о необходимости остановки
+        server.should_exit = True

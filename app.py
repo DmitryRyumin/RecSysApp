@@ -20,9 +20,10 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 # Importing necessary components for the Gradio app
 from app.config import CONFIG_NAME, config_data, load_tab_creators
 from app.event_handlers.event_handlers import setup_app_event_handlers
-import app.tabs
 from app.header import HEADER
+from app.port import is_port_in_use, free_port
 from app.server import run_server, stop_server_func
+import app.tabs
 
 
 gr.set_static_paths(
@@ -36,13 +37,11 @@ JS_HEAD = f"<script>{Path(
     config_data.Path_APP / config_data.StaticPaths_JS / "head.js"
 ).read_text(encoding='utf-8')}</script>"
 
-def signal_handler(sig, frame):
-    print("Прерывание программы пользователем")
-    stop_server_func()  # Сигнализируем серверу о необходимости остановки
-    sys.exit(0)         # Завершаем программу
 
-# Устанавливаем обработчик для прерывания Ctrl+C
-signal.signal(signal.SIGINT, signal_handler)
+def signal_handler(sig, frame):
+    stop_server_func()
+    sys.exit(0)
+
 
 def create_gradio_app() -> gr.Blocks:
     with gr.Blocks(
@@ -86,13 +85,19 @@ def create_gradio_app() -> gr.Blocks:
 
 
 if __name__ == "__main__":
+    if config_data.AppSettings_QUALITY:
+        signal.signal(signal.SIGINT, signal_handler)
 
-    # Запуск FastAPI в отдельном потоке
-    server_thread = threading.Thread(target=run_server)
-    server_thread.daemon = True  # Поток завершится при выходе из программы
-    server_thread.start()
+        server_thread = threading.Thread(target=run_server)
+        server_thread.daemon = True
+        server_thread.start()
 
     try:
+        if is_port_in_use(
+            config_data.AppSettings_SERVER_NAME, config_data.AppSettings_PORT
+        ):
+            free_port(config_data.AppSettings_PORT)
+
         create_gradio_app().queue(api_open=False).launch(
             favicon_path=config_data.Path_APP
             / config_data.StaticPaths_IMAGES
@@ -106,10 +111,12 @@ if __name__ == "__main__":
                 "fonts/HSE_Sans/HSESans-Black.otf",
                 "fonts/HSE_Sans/HSESans-Thin.otf",
             ],
+            server_name=config_data.AppSettings_SERVER_NAME,
+            server_port=config_data.AppSettings_PORT,
         )
     except KeyboardInterrupt:
-        print("Программа прервана пользователем")
+        pass
     finally:
-        stop_server_func()  # Сигнализируем серверу о необходимости остановки
-        server_thread.join()  # Дожидаемся завершения потока сервера
-        print("Сервер остановлен")
+        if config_data.AppSettings_QUALITY:
+            stop_server_func()
+            server_thread.join()
