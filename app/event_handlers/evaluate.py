@@ -12,6 +12,9 @@ from gradio import ChatMessage
 
 
 def event_handler_evaluate() -> tuple[
+    gr.Row,
+    gr.Textbox,
+    gr.Button,
     list[ChatMessage],
     gr.Column,
     gr.Dropdown,
@@ -21,6 +24,9 @@ def event_handler_evaluate() -> tuple[
     gr.Button,
 ]:
     return (
+        gr.Row(visible=True),
+        gr.Textbox(value=None, visible=True),
+        gr.Button(visible=True),
         gr.Chatbot(
             value=None,
             type="messages",

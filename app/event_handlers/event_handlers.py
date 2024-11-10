@@ -107,7 +107,9 @@ def setup_app_event_handlers(
             dropdown_courses_grades,
         ],
         outputs=[
+            message_row,
             message,
+            send_message,
             chatbot,
             add_evals_column,
             add_vacancy_skills,
@@ -123,6 +125,9 @@ def setup_app_event_handlers(
         fn=event_handler_evaluate,
         inputs=[],
         outputs=[
+            message_row,
+            message,
+            send_message,
             chatbot,
             add_evals_column,
             add_vacancy_skills,

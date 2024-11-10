@@ -186,7 +186,9 @@ def event_handler_generate_response(
     max_skill_words: int,
     dropdown_courses_grades: list[str],
 ) -> tuple[
+    gr.Row,
     gr.Textbox,
+    gr.Button,
     list[ChatMessage],
     gr.Column,
     gr.Dropdown,
@@ -199,7 +201,9 @@ def event_handler_generate_response(
 
     if not message:
         return (
+            gr.Row(visible=True),
             gr.Textbox(value=None),
+            gr.Button(visible=True),
             chat_history,
             gr.Column(visible=False),
             gr.Dropdown(interactive=False, visible=False),
@@ -333,7 +337,9 @@ def event_handler_generate_response(
     chat_history.append(ChatMessage(role="assistant", content=content))
 
     return (
-        gr.Textbox(value=None),
+        gr.Row(visible=not config_data.AppSettings_QUALITY),
+        gr.Textbox(value=None, visible=not config_data.AppSettings_QUALITY),
+        gr.Button(visible=not config_data.AppSettings_QUALITY),
         chat_history,
         gr.Column(visible=True),
         gr.Dropdown(visible=True, interactive=True),
