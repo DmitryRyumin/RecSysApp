@@ -6,7 +6,7 @@ SERVER_PORT = 8000
 TITLE = "RecSys"
 CSS_PATH = "app.css"
 QUALITY = true
-DB = "RecSys.duckdb"
+DB = "recsys.duckdb"
 
 [AppInfo]
 DURATION = 5
