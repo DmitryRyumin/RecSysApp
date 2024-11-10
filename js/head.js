@@ -289,6 +289,7 @@ function sendDataToServer(data) {
 
 function handleButtonClick() {
     const result = {
+        user_id: null,
         user_data: null,
         user_message: NO_DATA,
         vacancy: null,
@@ -298,7 +299,10 @@ function handleButtonClick() {
     }
 
     // Извлечение данных пользователя
-    result.user_data = extractUserInputData('.user-container')
+    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA;
+
+    // Извлечение данных пользователя
+    result.user_data = extractUserInputData('.user-container .form')
 
     // Поиск сообщения пользователя
     result.user_message =
