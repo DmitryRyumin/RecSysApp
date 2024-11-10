@@ -1,6 +1,6 @@
 """
 File: evaluate.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Event handler for Gradio app to evaluate.
 License: MIT License
 """

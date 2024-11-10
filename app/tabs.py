@@ -1,6 +1,6 @@
 """
 File: tabs.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Gradio app tabs - Contains the definition of various tabs for the Gradio app interface.
 License: MIT License
 """

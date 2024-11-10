@@ -1,6 +1,6 @@
 """
 File: html_components.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: HTML components.
 License: MIT License
 """

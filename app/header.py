@@ -1,6 +1,6 @@
 """
 File: header.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Project header for the Gradio app.
 License: MIT License
 """

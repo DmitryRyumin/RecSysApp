@@ -1,6 +1,6 @@
 """
 File: server.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Server for the application.
 License: MIT License
 """

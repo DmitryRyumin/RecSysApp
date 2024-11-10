@@ -1,6 +1,6 @@
 """
 File: multiprocessing_init.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Multithreading and parallel computing.
 License: MIT License
 """

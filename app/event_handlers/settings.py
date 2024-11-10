@@ -1,6 +1,6 @@
 """
 File: settings.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Event handler for Gradio app to settings.
 License: MIT License
 """

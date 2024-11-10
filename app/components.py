@@ -1,6 +1,6 @@
 """
 File: components.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Utility functions for creating Gradio components.
 License: MIT License
 """

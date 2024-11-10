@@ -1,6 +1,6 @@
 """
 File: utils.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Functions for data handling.
 License: MIT License
 """

@@ -1,6 +1,6 @@
 """
 File: db.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Module for working with database in DuckDB.
 License: MIT License
 """
@@ -22,6 +22,7 @@ if not os.path.exists(db_directory):
 # Подключение к базе данных DuckDB
 conn = duckdb.connect(db_path)
 
+
 # Создание таблиц (если они еще не существуют)
 def create_tables():
     conn.execute(
@@ -35,7 +36,8 @@ def create_tables():
     """
     )
 
-    conn.execute("""
+    conn.execute(
+        """
     CREATE TABLE IF NOT EXISTS courses (
         user_id TEXT,
         course_id TEXT,
@@ -52,9 +54,11 @@ def create_tables():
         relevant_skills TEXT,
         unrelated_skills TEXT
     )
-    """)
+    """
+    )
 
-    conn.execute("""
+    conn.execute(
+        """
     CREATE TABLE IF NOT EXISTS feedback (
         user_id TEXT,
         message TEXT,
@@ -66,7 +70,8 @@ def create_tables():
         unrelated_vacancy_skills TEXT,
         additional_vacancy_skills TEXT
     )
-    """)
+    """
+    )
 
 
 # Функция для сохранения данных
@@ -94,8 +99,12 @@ def save_data(json_data):
             label = group.get("label")
             for course in group.get("courses", []):
                 course_id = course.get("ID дисциплины:")
-                relevant_skills = "; ".join(course.get("Получаемые навыки (релевантные)", []))
-                unrelated_skills = "; ".join(course.get("Получаемые навыки (удаленные)", []))
+                relevant_skills = "; ".join(
+                    course.get("Получаемые навыки (релевантные)", [])
+                )
+                unrelated_skills = "; ".join(
+                    course.get("Получаемые навыки (удаленные)", [])
+                )
 
                 conn.execute(
                     """
@@ -126,9 +135,15 @@ def save_data(json_data):
         feedback_data = json_data.get("additional_ranges", {})
         feedback_comment = json_data.get("feedback", "")
         vacancy_skills = json_data.get("vacancy", {})
-        relevant_vacancy_skills = "; ".join(vacancy_skills.get("Навыки вакансии (релевантные)", []))
-        unrelated_vacancy_skills = "; ".join(vacancy_skills.get("Навыки вакансии (удаленные)", []))
-        additional_vacancy_skills = "; ".join(json_data.get("additional_vacancy_skills", []))
+        relevant_vacancy_skills = "; ".join(
+            vacancy_skills.get("Навыки вакансии (релевантные)", [])
+        )
+        unrelated_vacancy_skills = "; ".join(
+            vacancy_skills.get("Навыки вакансии (удаленные)", [])
+        )
+        additional_vacancy_skills = "; ".join(
+            json_data.get("additional_vacancy_skills", [])
+        )
 
         conn.execute(
             """
@@ -153,7 +168,6 @@ def save_data(json_data):
     except Exception as e:
         print(f"Ошибка при сохранении данных: {e}")
         return False
-
 
 
 # Создание таблиц при первом запуске

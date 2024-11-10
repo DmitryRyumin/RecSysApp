@@ -1,6 +1,6 @@
 """
 File: data_init.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Initial data loading.
 License: MIT License
 """

@@ -1,6 +1,6 @@
 """
 File: event_handlers.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: File containing functions for configuring event handlers for Gradio components.
 License: MIT License
 """

@@ -1,6 +1,6 @@
 """
 File: description.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Project description for the Gradio app.
 License: MIT License
 """

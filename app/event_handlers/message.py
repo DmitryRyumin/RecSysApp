@@ -1,6 +1,6 @@
 """
 File: auth.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Event handler for Gradio app to change message.
 License: MIT License
 """

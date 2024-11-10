@@ -1,6 +1,6 @@
 """
 File: config.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Configuration module for handling settings.
 License: MIT License
 """

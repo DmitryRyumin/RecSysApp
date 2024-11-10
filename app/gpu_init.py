@@ -1,6 +1,6 @@
 """
 File: gpu_init.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: GPU initialization.
 License: MIT License
 """

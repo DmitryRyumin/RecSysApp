@@ -1,6 +1,6 @@
 """
 File: load_models.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Classes for loading models and updating embeddings.
 License: MIT License
 """

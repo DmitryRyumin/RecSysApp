@@ -1,6 +1,6 @@
 """
 File: description_steps.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Project steps description for the Gradio app.
 License: MIT License
 """

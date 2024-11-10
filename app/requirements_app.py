@@ -1,6 +1,6 @@
 """
 File: requirements_app.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Project requirements for the Gradio app.
 License: MIT License
 """

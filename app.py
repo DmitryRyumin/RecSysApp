@@ -1,6 +1,6 @@
 """
 File: app.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Main application file.
              The file defines the Gradio interface, sets up the main blocks and tabs,
              and includes event handlers for various components.

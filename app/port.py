@@ -1,6 +1,6 @@
 """
 File: port.py
-Author: Dmitry Ryumin
+Author: Dmitry Ryumin and Alexandr Axyonov
 Description: Utility functions to check and free ports by terminating processes holding them.
 License: MIT License
 """
