@@ -73,7 +73,7 @@ def save_data(json_data):
             user_data = json_data.get("user_data", {})
             conn.execute(
                 """
-                INSERT OR REPLACE INTO users (id, last_name, group_number, role) 
+                INSERT OR REPLACE INTO users (id, last_name, group_number, role)
                 VALUES (?, ?, ?, ?)
                 """,
                 (
@@ -98,7 +98,7 @@ def save_data(json_data):
                     conn.execute(
                         """
                         INSERT INTO courses (
-                            user_id, course_id, label, discipline, department, faculty, campus, level, 
+                            user_id, course_id, label, discipline, department, faculty, campus, level,
                             audience, format, course_number, relevance, relevant_skills, unrelated_skills
                         )
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -115,7 +115,7 @@ def save_data(json_data):
                             course.get("Охват аудитории:"),
                             course.get("Формат изучения:"),
                             course.get("Курс обучения"),
-                            int(course.get("Релевантность курса", 0)),
+                            int(course.get("Релевантность курса запросу", 0)),
                             relevant_skills,
                             unrelated_skills,
                         ),
@@ -125,10 +125,10 @@ def save_data(json_data):
             feedback_comment = json_data.get("feedback", "")
             vacancy_skills = json_data.get("vacancy", {})
             relevant_vacancy_skills = "; ".join(
-                vacancy_skills.get("Навыки вакансии (релевантные)", [])
+                vacancy_skills.get("Требуемые навыки (кликните все неподходящие навыки) (релевантные)", [])
             )
             unrelated_vacancy_skills = "; ".join(
-                vacancy_skills.get("Навыки вакансии (удаленные)", [])
+                vacancy_skills.get("Требуемые навыки (кликните все неподходящие навыки) (удаленные)", [])
             )
             additional_vacancy_skills = "; ".join(
                 json_data.get("additional_vacancy_skills", [])
@@ -137,7 +137,7 @@ def save_data(json_data):
             conn.execute(
                 """
                 INSERT INTO feedback (
-                    user_id, message, feedback_comment, utility, popularity, comfort, 
+                    user_id, message, feedback_comment, utility, popularity, comfort,
                     relevant_vacancy_skills, unrelated_vacancy_skills, additional_vacancy_skills
                 )
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
