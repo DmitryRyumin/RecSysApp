@@ -6,10 +6,10 @@ License: MIT License
 """
 
 import duckdb
-import uuid
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
+from app.data_utils import generate_user_id
 
 db_path = config_data.Path_APP / config_data.StaticPaths_DB / config_data.AppSettings_DB
 db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -69,7 +69,7 @@ def create_tables():
 def save_data(json_data):
     try:
         # Генерация уникального session_id для текущей сессии
-        session_id = str(uuid.uuid4())
+        session_id = generate_user_id()
 
         user_id = json_data.get("user_id")
         if not user_id:
