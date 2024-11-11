@@ -20,7 +20,7 @@ def create_tables():
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS users (
-                id TEXT PRIMARY KEY,
+                user_id TEXT PRIMARY KEY,
                 username TEXT,
                 group_number TEXT,
                 role TEXT
@@ -79,7 +79,7 @@ def save_data(json_data):
             user_data = json_data.get("user_data", {})
             conn.execute(
                 """
-                INSERT OR REPLACE INTO users (id, username, group_number, role)
+                INSERT OR REPLACE INTO users (user_id, username, group_number, role)
                 VALUES (?, ?, ?, ?)
                 """,
                 (
@@ -93,7 +93,7 @@ def save_data(json_data):
             for group in json_data.get("edu_groups", []):
                 label = group.get("label")
                 for course in group.get("courses", []):
-                    course_id = course.get("ID дисциплины:")
+                    course_id = course.get("ID дисциплины")
                     relevant_skills = "; ".join(
                         course.get("Получаемые навыки (релевантные)", [])
                     )
@@ -114,13 +114,13 @@ def save_data(json_data):
                             session_id,
                             course_id,
                             label,
-                            course.get("Дисциплина:"),
-                            course.get("Кафедра:"),
-                            course.get("Факультет кафедры:"),
-                            course.get("Кампус:"),
-                            course.get("Уровень обучения:"),
-                            course.get("Охват аудитории:"),
-                            course.get("Формат изучения:"),
+                            course.get("Дисциплина"),
+                            course.get("Кафедра"),
+                            course.get("Факультет кафедры"),
+                            course.get("Кампус"),
+                            course.get("Уровень обучения"),
+                            course.get("Охват аудитории"),
+                            course.get("Формат изучения"),
                             course.get("Курс обучения"),
                             int(course.get("Релевантность курса запросу", 0)),
                             relevant_skills,
