@@ -37,7 +37,7 @@ def event_handler_login(username: str, group_number: str, dropdown_role: str) ->
     username = username.strip()
     group_number = group_number.strip()
 
-    is_auth_valid = username and group_number
+    is_auth_valid = username and dropdown_role
 
     return (
         gr.Button(
