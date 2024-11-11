@@ -6,6 +6,7 @@ License: MIT License
 """
 
 import duckdb
+import uuid
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
@@ -30,6 +31,7 @@ def create_tables():
             """
             CREATE TABLE IF NOT EXISTS courses (
                 user_id TEXT,
+                session_id TEXT,
                 course_id TEXT,
                 label TEXT,
                 discipline TEXT,
@@ -50,6 +52,7 @@ def create_tables():
             """
             CREATE TABLE IF NOT EXISTS feedback (
                 user_id TEXT,
+                session_id TEXT,
                 message TEXT,
                 feedback_comment TEXT,
                 utility INTEGER,
@@ -65,6 +68,9 @@ def create_tables():
 
 def save_data(json_data):
     try:
+        # Генерация уникального session_id для текущей сессии
+        session_id = str(uuid.uuid4())
+
         user_id = json_data.get("user_id")
         if not user_id:
             raise ValueError("Идентификатор пользователя отсутствует в JSON")
@@ -98,13 +104,14 @@ def save_data(json_data):
                     conn.execute(
                         """
                         INSERT INTO courses (
-                            user_id, course_id, label, discipline, department, faculty, campus, level,
+                            user_id, session_id, course_id, label, discipline, department, faculty, campus, level,
                             audience, format, course_number, relevance, relevant_skills, unrelated_skills
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         """,
                         (
                             user_id,
+                            session_id,
                             course_id,
                             label,
                             course.get("Дисциплина:"),
@@ -143,13 +150,14 @@ def save_data(json_data):
             conn.execute(
                 """
                 INSERT INTO feedback (
-                    user_id, message, feedback_comment, utility, popularity, comfort,
+                    user_id, session_id, message, feedback_comment, utility, popularity, comfort,
                     relevant_vacancy_skills, unrelated_vacancy_skills, additional_vacancy_skills
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     user_id,
+                    session_id,
                     json_data.get("user_message"),
                     feedback_comment,
                     int(feedback_data.get("Полезность", 4)),
@@ -163,8 +171,8 @@ def save_data(json_data):
             conn.commit()
 
         return True
-    except Exception:
-        print("Данные не сохранены")
+    except Exception as e:
+        print(f"Ошибка при сохранении данных: {e}")
         return False
 
 
