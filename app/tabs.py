@@ -63,50 +63,13 @@ def app_tab():
             elem_classes="user-id",
         )
 
-        surname = gr.Textbox(
-            value=None,
-            lines=1,
-            max_lines=1,
-            placeholder=config_data.OtherMessages_IMPORTANT,
-            label=config_data.Labels_SURNAME,
-            info=(
-                config_data.InformationMessages_SURNAME
-                if not config_data.AppSettings_QUALITY
-                else None
-            ),
-            show_label=True,
-            container=True,
-            scale=1,
-            interactive=True,
-            visible=True,
-            autofocus=False,
-            autoscroll=True,
-            render=True,
-            type="text",
-            show_copy_button=False,
-            max_length=config_data.Settings_USER_MAX_LENGTH,
-            elem_classes="user-info",
-        )
-
         username = gr.Textbox(
             value=None,
             lines=1,
             max_lines=1,
-            placeholder=(
-                config_data.OtherMessages_IMPORTANT
-                if not config_data.AppSettings_QUALITY
-                else None
-            ),
-            label=(
-                config_data.Labels_USERNAME
-                if not config_data.AppSettings_QUALITY
-                else config_data.Labels_GROUP_NUMBER
-            ),
-            info=(
-                config_data.InformationMessages_USERNAME
-                if not config_data.AppSettings_QUALITY
-                else None
-            ),
+            placeholder=config_data.OtherMessages_IMPORTANT,
+            label=config_data.Labels_USERNAME,
+            info=None,
             show_label=True,
             container=True,
             scale=1,
@@ -121,25 +84,34 @@ def app_tab():
             elem_classes="user-info",
         )
 
-        dropdown_user = gr.Dropdown(
-            choices=(
-                config_data.Settings_DROPDOWN_USER
-                if not config_data.AppSettings_QUALITY
-                else config_data.Settings_DROPDOWN_ROLE
-            ),
+        group_number = gr.Textbox(
+            value=None,
+            lines=1,
+            max_lines=1,
+            placeholder=None,
+            label=config_data.Labels_GROUP_NUMBER,
+            info=None,
+            show_label=True,
+            container=True,
+            scale=1,
+            interactive=True,
+            visible=True,
+            autofocus=False,
+            autoscroll=True,
+            render=True,
+            type="text",
+            show_copy_button=False,
+            max_length=config_data.Settings_USER_MAX_LENGTH,
+            elem_classes="user-info",
+        )
+
+        dropdown_role = gr.Dropdown(
+            choices=config_data.Settings_DROPDOWN_ROLE,
             value=None,
             multiselect=False,
             allow_custom_value=False,
-            label=(
-                config_data.Labels_USER_AFFILIATION
-                if not config_data.AppSettings_QUALITY
-                else config_data.Labels_USER_ROLE
-            ),
-            info=(
-                config_data.InformationMessages_USER_AFFILIATION
-                if not config_data.AppSettings_QUALITY
-                else None
-            ),
+            label=config_data.Labels_USER_ROLE,
+            info=None,
             show_label=True,
             interactive=True,
             visible=True,
@@ -320,9 +292,9 @@ def app_tab():
         account,
         step_1,
         userid,
-        surname,
         username,
-        dropdown_user,
+        group_number,
+        dropdown_role,
         auth_row,
         auth,
         noti_auth,

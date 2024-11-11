@@ -1257,18 +1257,11 @@ div.user-instruction > div.instruction_text {
     padding: var(--block-padding);
 }
 
-div.user-instruction > div.instruction_text p,
-div.user-instruction > div.instruction_text li {
+div.user-instruction > div.instruction_text p {
     color: #363636;
 }
 
-div.user-instruction > div.instruction_text ul {
-    list-style-type: disc;
-    list-style-position: outside;
-    padding-left: 20px;
-}
-
-div.user-instruction > div.instruction_text li > span {
+div.user-instruction > div.instruction_text p > span {
     background-color: #dfdede !important;
     padding: 3px 5px;
     color: var(--main-color) !important;

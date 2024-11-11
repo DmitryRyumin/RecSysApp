@@ -13,7 +13,7 @@ from app.components import html_message
 from app.data_utils import generate_user_id
 
 
-def event_handler_login(surname: str, username: str, dropdown_user: str) -> tuple[
+def event_handler_login(username: str, group_number: str, dropdown_role: str) -> tuple[
     gr.Button,
     gr.HTML,
     gr.Textbox,
@@ -34,22 +34,14 @@ def event_handler_login(surname: str, username: str, dropdown_user: str) -> tupl
     gr.Textbox,
     gr.Button,
 ]:
-    surname = surname.strip()
     username = username.strip()
+    group_number = group_number.strip()
 
-    is_auth_valid = (
-        (surname and username and dropdown_user)
-        if not config_data.AppSettings_QUALITY
-        else (surname and dropdown_user)
-    )
+    is_auth_valid = username and group_number
 
     return (
         gr.Button(
-            value=(
-                f"{surname} {username}"
-                if not config_data.AppSettings_QUALITY
-                else surname
-            ),
+            value=(username),
             interactive=is_auth_valid,
             visible=is_auth_valid,
             elem_classes=[
@@ -60,10 +52,10 @@ def event_handler_login(surname: str, username: str, dropdown_user: str) -> tupl
         gr.HTML(visible=not is_auth_valid),
         gr.Textbox(value=generate_user_id() if is_auth_valid else None),
         gr.Textbox(
-            value=surname, interactive=not is_auth_valid, visible=not is_auth_valid
+            value=username, interactive=not is_auth_valid, visible=not is_auth_valid
         ),
         gr.Textbox(
-            value=username, interactive=not is_auth_valid, visible=not is_auth_valid
+            value=group_number, interactive=not is_auth_valid, visible=not is_auth_valid
         ),
         gr.Dropdown(interactive=not is_auth_valid, visible=not is_auth_valid),
         gr.Row(visible=not is_auth_valid),

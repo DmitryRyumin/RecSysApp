@@ -13,16 +13,12 @@ from app.components import html_message
 
 
 def event_handler_auth(
-    surname: str, username: str, dropdown_user: str
+    username: str, group_number: str, dropdown_role: str
 ) -> tuple[gr.Button, gr.HTML]:
-    surname = surname.strip()
     username = username.strip()
+    group_number = group_number.strip()
 
-    is_auth_valid = (
-        (surname and username and dropdown_user)
-        if not config_data.AppSettings_QUALITY
-        else (surname and dropdown_user)
-    )
+    is_auth_valid = username and dropdown_role
 
     return (
         gr.Button(interactive=is_auth_valid),

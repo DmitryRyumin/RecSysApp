@@ -22,9 +22,9 @@ def setup_app_event_handlers(
     account,
     step_1,
     userid,
-    surname,
     username,
-    dropdown_user,
+    group_number,
+    dropdown_role,
     auth_row,
     auth,
     noti_auth,
@@ -51,21 +51,21 @@ def setup_app_event_handlers(
 ):
     account.click(
         fn=event_handler_account,
-        inputs=[account, surname, username],
+        inputs=[account, username],
         outputs=[
             account,
-            surname,
             username,
-            dropdown_user,
+            group_number,
+            dropdown_role,
             step_2,
         ],
         queue=True,
     )
 
     gr.on(
-        triggers=[surname.change, username.change, dropdown_user.change],
+        triggers=[username.change, group_number.change, dropdown_role.change],
         fn=event_handler_auth,
-        inputs=[surname, username, dropdown_user],
+        inputs=[username, group_number, dropdown_role],
         outputs=[
             auth,
             noti_auth,
@@ -75,14 +75,14 @@ def setup_app_event_handlers(
 
     auth.click(
         fn=event_handler_login,
-        inputs=[surname, username, dropdown_user],
+        inputs=[username, group_number, dropdown_role],
         outputs=[
             account,
             step_1,
             userid,
-            surname,
             username,
-            dropdown_user,
+            group_number,
+            dropdown_role,
             auth_row,
             auth,
             noti_auth,

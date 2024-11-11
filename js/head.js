@@ -251,7 +251,7 @@ function extractAdditionalVacancySkills(containerSelector) {
 
 // Функция для отправки данных на сервер
 function sendDataToServer(data) {
-    fetch('http://0.0.0.0:8000/api/submit', {
+    fetch('http://127.0.0.1:8000/api/submit', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

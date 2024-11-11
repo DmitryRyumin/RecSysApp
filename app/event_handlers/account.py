@@ -11,7 +11,7 @@ import gradio as gr
 from app.config import config_data
 
 
-def event_handler_account(account: str, surname: str, username: str) -> tuple[
+def event_handler_account(account: str, username: str) -> tuple[
     gr.Button,
     gr.Textbox,
     gr.Textbox,
@@ -25,11 +25,7 @@ def event_handler_account(account: str, surname: str, username: str) -> tuple[
             value=(
                 config_data.OtherMessages_HIDE_ACCOUNT
                 if is_account_hidden
-                else (
-                    f"{surname} {username}"
-                    if not config_data.AppSettings_QUALITY
-                    else surname
-                )
+                else username
             )
         ),
         gr.Textbox(visible=is_account_hidden),
