@@ -15,3 +15,5 @@ STEPS_TEMPLATE = """\
 STEP_1 = STEPS_TEMPLATE.format(text=config_data.InformationMessages_STEP_1)
 
 STEP_2 = STEPS_TEMPLATE.format(text=config_data.InformationMessages_STEP_2)
+
+INSTRUCTION = STEPS_TEMPLATE.format(text=config_data.InformationMessages_INSTRUCTION)

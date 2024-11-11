@@ -313,7 +313,11 @@ def event_handler_generate_response(
     content += (
         f"<div class='subject-info{"-static" if not config_data.AppSettings_QUALITY else ""}'>"
         "<div class='info'><div class='info-skills'><span class='label'>"
-        + config_data.HtmlContent_VACANCY_LABEL
+        + config_data.HtmlContent_VACANCY_LABEL.format(
+            "<span class='important'>"
+            + config_data.HtmlContent_VACANCY_LABEL_CLICK
+            + "</span>"
+        )
         + "</span> <span class='value'>"
         + f"{skills_vacancy}</span></div></div></div>"
     )

@@ -11,6 +11,7 @@ import gradio as gr
 from app.event_handlers.account import event_handler_account
 from app.event_handlers.auth import event_handler_auth
 from app.event_handlers.login import event_handler_login
+from app.event_handlers.instruction import event_handler_instruction
 from app.event_handlers.generate_response import event_handler_generate_response
 from app.event_handlers.message import event_handler_message
 from app.event_handlers.evaluate import event_handler_evaluate
@@ -27,6 +28,10 @@ def setup_app_event_handlers(
     auth_row,
     auth,
     noti_auth,
+    instruction_column,
+    instruction,
+    instruction_text,
+    start_evaluate,
     step_2,
     chatbot_column,
     chatbot,
@@ -81,6 +86,28 @@ def setup_app_event_handlers(
             auth_row,
             auth,
             noti_auth,
+            instruction_column,
+            instruction,
+            instruction_text,
+            start_evaluate,
+            step_2,
+            message_row,
+            chatbot_column,
+            chatbot,
+            message,
+            send_message,
+        ],
+        queue=True,
+    )
+
+    start_evaluate.click(
+        fn=event_handler_instruction,
+        inputs=[],
+        outputs=[
+            instruction_column,
+            instruction,
+            instruction_text,
+            start_evaluate,
             step_2,
             message_row,
             chatbot_column,

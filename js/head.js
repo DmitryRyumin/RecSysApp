@@ -251,7 +251,7 @@ function extractAdditionalVacancySkills(containerSelector) {
 
 // Функция для отправки данных на сервер
 function sendDataToServer(data) {
-    fetch('http://127.0.0.1:8000/api/submit', {
+    fetch('http://0.0.0.0:8000/api/submit', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -299,7 +299,7 @@ function handleButtonClick() {
     }
 
     // Извлечение данных пользователя
-    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA;
+    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA
 
     // Извлечение данных пользователя
     result.user_data = extractUserInputData('.user-container .form')

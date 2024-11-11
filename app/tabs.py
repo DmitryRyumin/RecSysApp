@@ -9,7 +9,8 @@ import gradio as gr
 
 # Importing necessary components for the Gradio app
 from app.description import DESCRIPTION
-from app.description_steps import STEP_1, STEP_2
+from app.instruction import INSTRUCTION_TEXT
+from app.description_steps import STEP_1, STEP_2, INSTRUCTION
 from app.html_components import ADD_RANGE
 from app.config import config_data
 from app.requirements_app import read_requirements
@@ -167,6 +168,29 @@ def app_tab():
         visible=True,
     )
 
+    with gr.Column(
+        visible=False,
+        render=True,
+        variant="default",
+        elem_classes="user-instruction",
+    ) as instruction_column:
+        instruction = gr.HTML(
+            value=INSTRUCTION, visible=False, elem_classes="instruction"
+        )
+
+        instruction_text = gr.HTML(
+            value=INSTRUCTION_TEXT, visible=False, elem_classes="instruction_text"
+        )
+
+        start_evaluate = gr.Button(
+            value=config_data.OtherMessages_START_EVALUATE,
+            interactive=False,
+            scale=1,
+            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "ok.ico",
+            visible=False,
+            elem_classes="start_evaluate",
+        )
+
     step_2 = gr.HTML(value=STEP_2, visible=False, elem_classes="step-2")
 
     with gr.Column(
@@ -302,6 +326,10 @@ def app_tab():
         auth_row,
         auth,
         noti_auth,
+        instruction_column,
+        instruction,
+        instruction_text,
+        start_evaluate,
         step_2,
         chatbot_column,
         chatbot,

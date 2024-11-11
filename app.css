@@ -368,6 +368,7 @@ div.app-flex-container {
 
 button.account,
 button.auth,
+button.start_evaluate,
 button.send_evaluate {
     display: flex;
     padding: 10px 20px;
@@ -396,6 +397,7 @@ button.auth.hide {
 
 button.account[disabled],
 button.auth[disabled],
+button.start_evaluate[disabled],
 button.send_evaluate[disabled],
 button.send_message[disabled] > img {
     cursor: not-allowed;
@@ -404,6 +406,7 @@ button.send_message[disabled] > img {
 
 button.account:hover:not([disabled]),
 button.auth:hover:not([disabled]),
+button.start_evaluate:hover:not([disabled]),
 button.send_evaluate:hover:not([disabled]) {
     border-color: var(--button-primary-border-color-hover);
     background: var(--additional-color);
@@ -412,6 +415,7 @@ button.send_evaluate:hover:not([disabled]) {
 
 button.account:active:not([disabled]),
 button.auth:active:not([disabled]),
+button.start_evaluate:active:not([disabled]),
 button.send_evaluate:active:not([disabled]) {
     transform: scale(0.98);
 }
@@ -688,7 +692,11 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
 div.subject-info-static > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills-static > span.label {
-    color: #000 !important;
+    color: #000000 !important;
+}
+
+div.subject-info > div.info > div.info-skills > span.label > span.important {
+    color: #ff0000 !important;
 }
 
 div.subject-info > div.info > div.info-item-error > span.label,
@@ -1237,4 +1245,31 @@ div.add-range > div.range > div.slider-container > div.slider > div.slider-value
     display: block;
     margin: 0;
     padding: 0.25em 0;
+}
+
+div.user-instruction > div.instruction_text {
+    background-color: #fafafa !important;
+    font-family: 'HSESans', sans-serif !important;
+    border: 1px solid var(--main-color) !important;
+    box-shadow: var(--block-shadow);
+    border-radius: var(--block-radius);
+    overflow-y: hidden;
+    padding: var(--block-padding);
+}
+
+div.user-instruction > div.instruction_text p,
+div.user-instruction > div.instruction_text li {
+    color: #363636;
+}
+
+div.user-instruction > div.instruction_text ul {
+    list-style-type: disc;
+    list-style-position: outside;
+    padding-left: 20px;
+}
+
+div.user-instruction > div.instruction_text li > span {
+    background-color: #dfdede !important;
+    padding: 3px 5px;
+    color: var(--main-color) !important;
 }
