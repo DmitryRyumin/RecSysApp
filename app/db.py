@@ -20,7 +20,7 @@ def create_tables():
             """
             CREATE TABLE IF NOT EXISTS users (
                 id TEXT PRIMARY KEY,
-                last_name TEXT,
+                username TEXT,
                 group_number TEXT,
                 role TEXT
             )
@@ -73,12 +73,12 @@ def save_data(json_data):
             user_data = json_data.get("user_data", {})
             conn.execute(
                 """
-                INSERT OR REPLACE INTO users (id, last_name, group_number, role)
+                INSERT OR REPLACE INTO users (id, username, group_number, role)
                 VALUES (?, ?, ?, ?)
                 """,
                 (
                     user_id,
-                    user_data.get("Фамилия"),
+                    user_data.get("Имя пользователя"),
                     user_data.get("Номер группы (только для студентов)"),
                     user_data.get("Роль или направление"),
                 ),
@@ -125,10 +125,16 @@ def save_data(json_data):
             feedback_comment = json_data.get("feedback", "")
             vacancy_skills = json_data.get("vacancy", {})
             relevant_vacancy_skills = "; ".join(
-                vacancy_skills.get("Требуемые навыки (кликните все неподходящие навыки) (релевантные)", [])
+                vacancy_skills.get(
+                    "Требуемые навыки (кликните все неподходящие навыки) (релевантные)",
+                    [],
+                )
             )
             unrelated_vacancy_skills = "; ".join(
-                vacancy_skills.get("Требуемые навыки (кликните все неподходящие навыки) (удаленные)", [])
+                vacancy_skills.get(
+                    "Требуемые навыки (кликните все неподходящие навыки) (удаленные)",
+                    [],
+                )
             )
             additional_vacancy_skills = "; ".join(
                 json_data.get("additional_vacancy_skills", [])
