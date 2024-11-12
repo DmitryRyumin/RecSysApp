@@ -840,7 +840,9 @@ div.subject-info > div.info > div.info-skills {
     .info .range > label,
     .info .info-item span,
     .info .info-courses-grades span,
-    .info .info-number-education-error span {
+    .info .info-number-education-error span,
+    .info .info-courses-grades-error span,
+    .info .info-skills-error span {
         font-size: 0.9rem;
     }
 }
