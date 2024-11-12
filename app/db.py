@@ -60,7 +60,8 @@ def create_tables():
                 comfort INTEGER,
                 relevant_vacancy_skills TEXT,
                 unrelated_vacancy_skills TEXT,
-                additional_vacancy_skills TEXT
+                additional_vacancy_skills TEXT,
+                additional_subject_skills TEXT,
             )
             """
         )
@@ -163,13 +164,17 @@ def save_data(json_data):
                 json_data.get("additional_vacancy_skills", [])
             )
 
+            additional_subjects_skills = "; ".join(
+                json_data.get("additional_subjects_skills", [])
+            )
+
             conn.execute(
                 """
                 INSERT INTO feedback (
                     user_id, session_id, message, feedback_comment, utility, popularity, comfort,
-                    relevant_vacancy_skills, unrelated_vacancy_skills, additional_vacancy_skills
+                    relevant_vacancy_skills, unrelated_vacancy_skills, additional_vacancy_skills, additional_subject_skills
                 )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     user_id,
@@ -182,6 +187,7 @@ def save_data(json_data):
                     relevant_vacancy_skills,
                     unrelated_vacancy_skills,
                     additional_vacancy_skills,
+                    additional_subjects_skills
                 ),
             )
 

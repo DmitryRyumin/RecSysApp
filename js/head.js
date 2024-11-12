@@ -233,24 +233,27 @@ function extractCourseData(infoBlock) {
  * @param {string} containerSelector - Селектор контейнера с дополнительными навыками.
  * @returns {Array} Массив дополнительных навыков.
  */
-function extractAdditionalVacancySkills(containerSelector) {
-    const container = document.querySelector(containerSelector)
+function extractAdditionalSkills (containerSelector) {
+    const container = document.querySelector(containerSelector);
 
     if (!container) {
-        console.error('Элемент контейнера дополнительных навыков не найден')
-        return []
+        console.error('Элемент контейнера дополнительных навыков не найден');
+        return [];
     }
 
     // Находим все элементы с классом 'token' внутри контейнера
-    const tokenElements = container.querySelectorAll('.token')
+    const tokenElements = container.querySelectorAll('.token');
 
     // Извлекаем текстовые значения из span внутри каждого элемента 'token'
-    const skills = [...tokenElements].map((token) => {
-        const skillText = token.querySelector('span')?.textContent.trim() || NO_DATA
-        return skillText
-    })
+    const skills = [...tokenElements]
+        .map((token) => {
+            const skillText = token.querySelector('span')?.textContent.trim() || '';
+            // Возвращаем только те навыки, которые не пустые
+            return skillText ? skillText : null;
+        })
+        .filter((skill) => skill !== null); // Пропускаем пустые значения
 
-    return skills
+    return skills;
 }
 
 function calculateTimeDifference(startTime, endTime) {
@@ -322,6 +325,7 @@ function handleButtonClick() {
         vacancy: null,
         edu_groups: [],
         additional_vacancy_skills: [],
+        additional_subjects_skills: [],
         feedback: null,
         time: null,
     };
@@ -384,7 +388,10 @@ function handleButtonClick() {
     }
 
     // Извлечение дополнительных навыков вакансии
-    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills');
+    result.additional_vacancy_skills = extractAdditionalSkills('.dropdown-add-vacancy-skills');
+
+    // Извлечение дополнительных навыков дисциплин
+    result.additional_subjects_skills = extractAdditionalSkills('.dropdown-add-subjects-skills');
 
     // Извлечение данных из блока с оценкой сервиса
     const addRangeContainer = document.querySelector('.block.add-range');
