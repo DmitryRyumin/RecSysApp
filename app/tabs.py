@@ -185,6 +185,27 @@ def app_tab():
             elem_classes="chatbot",
         )
 
+        chatbot_timer = gr.Textbox(
+            value=None,
+            lines=1,
+            max_lines=1,
+            placeholder=None,
+            label=None,
+            info=None,
+            show_label=False,
+            container=False,
+            scale=1,
+            interactive=False,
+            visible=False,
+            autofocus=False,
+            autoscroll=True,
+            render=True,
+            type="text",
+            show_copy_button=False,
+            max_length=None,
+            elem_classes="chatbot-timer",
+        )
+
         with gr.Row(
             visible=False,
             render=True,
@@ -305,6 +326,7 @@ def app_tab():
         step_2,
         chatbot_column,
         chatbot,
+        chatbot_timer,
         message_row,
         message,
         send_message,

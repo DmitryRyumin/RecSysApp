@@ -10,6 +10,7 @@ import torch
 import polars as pl
 import gradio as gr
 from gradio import ChatMessage
+from datetime import datetime, timezone
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
@@ -192,6 +193,7 @@ def event_handler_generate_response(
     gr.Textbox,
     gr.Button,
     list[ChatMessage],
+    gr.Textbox,
     gr.Column,
     gr.Dropdown,
     gr.HTML,
@@ -207,6 +209,7 @@ def event_handler_generate_response(
             gr.Textbox(value=None),
             gr.Button(visible=True),
             chat_history,
+            gr.Textbox(value=None, visible=False),
             gr.Column(visible=False),
             gr.Dropdown(interactive=False, visible=False),
             gr.HTML(visible=False),
@@ -356,6 +359,7 @@ def event_handler_generate_response(
         gr.Textbox(value=None, visible=not config_data.AppSettings_QUALITY),
         gr.Button(visible=not config_data.AppSettings_QUALITY),
         chat_history,
+        gr.Textbox(value=datetime.now(timezone.utc).timestamp(), visible=False),
         gr.Column(visible=config_data.AppSettings_QUALITY),
         gr.Dropdown(
             visible=config_data.AppSettings_QUALITY,
