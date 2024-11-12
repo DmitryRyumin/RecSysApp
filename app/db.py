@@ -64,6 +64,22 @@ def create_tables():
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS session_time (
+                user_id TEXT,
+                session_id TEXT,
+                start_timestamp TEXT,
+                end_timestamp TEXT,
+                elapsed_time_ms REAL,
+                elapsed_time_s REAL,
+                hours INTEGER,
+                minutes INTEGER,
+                seconds INTEGER,
+                milliseconds INTEGER
+            )
+            """
+        )
 
 
 def save_data(json_data):
@@ -168,6 +184,31 @@ def save_data(json_data):
                     additional_vacancy_skills,
                 ),
             )
+
+            # Вставка данных времени с новыми полями
+            time_data = json_data.get("time", {})
+            conn.execute(
+                """
+                INSERT INTO session_time (
+                    user_id, session_id, start_timestamp, end_timestamp, elapsed_time_ms, elapsed_time_s,
+                    hours, minutes, seconds, milliseconds
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    user_id,
+                    session_id,
+                    time_data.get("start_timestamp"),
+                    time_data.get("end_timestamp"),
+                    float(time_data.get("elapsed_time_ms", 0)),
+                    float(time_data.get("elapsed_time_s", 0)),
+                    int(time_data.get("hours", 0)),
+                    int(time_data.get("minutes", 0)),
+                    int(time_data.get("seconds", 0)),
+                    int(time_data.get("milliseconds", 0)),
+                ),
+            )
+
             conn.commit()
 
         return True

@@ -211,13 +211,13 @@ function extractCourseData(infoBlock) {
     const courseDetails = {}
 
     infoItems.forEach((item) => {
-        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA
-        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA
+        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
 
         // Удаляем двоеточие из конца строки, если оно есть
-        label = label.replace(/:$/, '')
+        label = label.replace(/:$/, '');
 
-        courseDetails[label] = value
+        courseDetails[label] = value;
     })
 
     // Проверка наличия блока ошибки номера обучения
@@ -251,6 +251,29 @@ function extractAdditionalVacancySkills(containerSelector) {
     })
 
     return skills
+}
+
+function calculateTimeDifference(startTime, endTime) {
+    // Рассчитываем разницу в миллисекундах
+    let timeDifferenceMs = endTime - startTime;
+
+    // Разбивка времени на часы, минуты, секунды и миллисекунды
+    const hours = Math.floor(timeDifferenceMs / (1000 * 60 * 60));
+    timeDifferenceMs %= 1000 * 60 * 60; // Оставшаяся часть после вычитания часов
+
+    const minutes = Math.floor(timeDifferenceMs / (1000 * 60));
+    timeDifferenceMs %= 1000 * 60; // Оставшаяся часть после вычитания минут
+
+    const seconds = Math.floor(timeDifferenceMs / 1000);
+    const milliseconds = timeDifferenceMs % 1000; // Оставшаяся часть после вычитания секунд
+
+    // Возвращаем объект с разбивкой времени
+    return {
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds,
+        milliseconds: milliseconds,
+    };
 }
 
 // Функция для отправки данных на сервер
@@ -300,95 +323,119 @@ function handleButtonClick() {
         edu_groups: [],
         additional_vacancy_skills: [],
         feedback: null,
-    }
+        time: null,
+    };
 
     // Извлечение данных пользователя
-    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA
+    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA;
 
     // Извлечение данных пользователя
-    result.user_data = extractUserInputData('.user-container .form')
+    result.user_data = extractUserInputData('.user-container .form');
 
     // Поиск сообщения пользователя
     result.user_message =
         document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() ||
-        NO_DATA
+        NO_DATA;
 
     // Поиск контейнера с ответом бота
-    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose')
+    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
 
     if (!spanContainer) {
-        console.error('Элемент span с классами chatbot prose не найден')
-        return
+        console.error('Элемент span с классами chatbot prose не найден');
+        return;
     }
 
     // Извлечение информации о вакансии
-    const subjectInfo = spanContainer.querySelector('.subject-info')
+    const subjectInfo = spanContainer.querySelector('.subject-info');
     if (subjectInfo && subjectInfo.parentElement === spanContainer) {
-        result.vacancy = extractSkills(subjectInfo, '.info-skills')
+        result.vacancy = extractSkills(subjectInfo, '.info-skills');
     } else {
-        console.error('Элемент .subject-info не найден')
-        return
+        console.error('Элемент .subject-info не найден');
+        return;
     }
 
     // Обработка групп образовательных программ
-    const eduGroups = spanContainer.querySelectorAll('.edu-group')
+    const eduGroups = spanContainer.querySelectorAll('.edu-group');
 
     if (eduGroups.length > 0) {
         eduGroups.forEach((eduGroup, index) => {
-            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`
+            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`;
 
             // Извлечение курсов из текущей группы
             const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
-                const courseDetails = extractCourseData(infoBlock)
-                const relevanceData = extractRangeData(infoBlock.querySelector('.range'))
-                const pudSkills = extractSkills(infoBlock, '.info-skills')
+                const courseDetails = extractCourseData(infoBlock);
+                const relevanceData = extractRangeData(infoBlock.querySelector('.range'));
+                const pudSkills = extractSkills(infoBlock, '.info-skills');
 
                 return {
                     ...courseDetails,
                     ...relevanceData,
                     ...pudSkills,
-                }
-            })
+                };
+            });
 
             result.edu_groups.push({
                 label: groupLabel,
                 courses: courses,
-            })
-        })
+            });
+        });
     } else {
-        console.error('Элементы .edu-group не найдены')
+        console.error('Элементы .edu-group не найдены');
     }
 
     // Извлечение дополнительных навыков вакансии
-    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills')
+    result.additional_vacancy_skills = extractAdditionalVacancySkills('.dropdown-add-vacancy-skills');
 
     // Извлечение данных из блока с оценкой сервиса
-    const addRangeContainer = document.querySelector('.block.add-range')
+    const addRangeContainer = document.querySelector('.block.add-range');
     if (addRangeContainer) {
-        const customLabels = ['Полезность', 'Востребованность', 'Удобство']
+        const customLabels = ['Полезность', 'Востребованность', 'Удобство'];
 
         const ranges = [...addRangeContainer.querySelectorAll('.range')].map((rangeBlock, index) => {
             // Получаем кастомный лейбл для текущего rangeBlock
-            const customLabel = customLabels[index] || `Диапазон ${index + 1}`
-            return extractRangeData(rangeBlock, customLabel)
-        })
+            const customLabel = customLabels[index] || `Диапазон ${index + 1}`;
+            return extractRangeData(rangeBlock, customLabel);
+        });
 
         // Объединяем все диапазоны в один объект
-        result.additional_ranges = Object.assign({}, ...ranges)
+        result.additional_ranges = Object.assign({}, ...ranges);
     } else {
-        console.error('Элемент .add-range не найден')
+        console.error('Элемент .add-range не найден');
     }
 
     // Извлечение отзыва пользователя из textarea внутри .block .feedback
-    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA
+    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA;
+
+    // Вычисление разницы времени
+    const startTimeValue = document.querySelector('div.chatbot-timer input')?.value;
+    if (startTimeValue) {
+        // Преобразование начального времени в секунды
+        const startTime = new Date(parseFloat(startTimeValue) * 1000); // Преобразуем в миллисекунды
+        const endTime = new Date();
+
+        if (isNaN(startTime)) {
+            console.error('Неверный формат начального времени:', startTimeValue);
+        } else {
+            // Расчет разницы во времени
+            result.time = {
+                ...calculateTimeDifference(startTime, endTime), // Разбивка времени на часы, минуты, секунды и миллисекунды
+                start_timestamp: (startTime.getTime() / 1000).toFixed(5), // Начальная метка в секундах с миллисекундами
+                end_timestamp: (endTime.getTime() / 1000).toFixed(5), // Конечная метка в секундах с миллисекундами
+                elapsed_time_ms: endTime - startTime, // Чистое время в миллисекундах
+                elapsed_time_s: ((endTime - startTime) / 1000).toFixed(3), // Чистое время в секундах
+            };
+        }
+    } else {
+        console.error('Начальное время не найдено или не задано');
+    }
 
     // Вывод итогового результата
-    console.log('Полный результат:', JSON.stringify(result, null, 2))
+    console.log('Полный результат:', JSON.stringify(result, null, 2));
 
     // Отправка данных на сервер
-    sendDataToServer(result)
+    sendDataToServer(result);
 
-    return result
+    return result;
 }
 
 // Наблюдатель за добавлением кнопки send_evaluate
