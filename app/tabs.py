@@ -263,20 +263,6 @@ def app_tab():
             elem_classes="dropdown-add-vacancy-skills",
         )
 
-        add_subjects_skills = gr.Dropdown(
-            choices=None,
-            value=None,
-            multiselect=True,
-            allow_custom_value=True,
-            label=config_data.Labels_ADD_SUBJECTS_SKILLS,
-            info=None,
-            show_label=True,
-            interactive=False,
-            visible=False,
-            render=True,
-            elem_classes="dropdown-add-subjects-skills",
-        )
-
         add_range = gr.HTML(
             value=ADD_RANGE.format(
                 config_data.HtmlContent_USEFULNESS_CURRENT,
@@ -307,6 +293,20 @@ def app_tab():
             max_length=None,
             elem_classes="feedback",
         )
+
+    add_subjects_skills = gr.Dropdown(
+        choices=None,
+        value=None,
+        multiselect=True,
+        allow_custom_value=True,
+        label=config_data.Labels_ADD_SUBJECTS_SKILLS,
+        info=None,
+        show_label=True,
+        interactive=False,
+        visible=False,
+        render=True,
+        elem_classes="dropdown-add-subjects-skills",
+    )
 
     with gr.Column(
         visible=False,

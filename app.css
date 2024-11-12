@@ -907,6 +907,14 @@ div.dropdown-courses-grades {
     background-color: #fafafa !important;
 }
 
+div.gradio-container > div.main > div.wrap > div.contain > div.column > div.tabs > div.tabitem > div.column > div.form {
+    border: none;
+}
+
+div.dropdown-add-subjects-skills {
+    border: 1px solid #ff0000 !important;
+}
+
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
 div.dropdown-add-subjects-skills span[data-testid='block-info'],
 div.add_evals-container span[data-testid='block-info'],
