@@ -211,13 +211,13 @@ function extractCourseData(infoBlock) {
     const courseDetails = {}
 
     infoItems.forEach((item) => {
-        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
-        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
+        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA
 
         // Удаляем двоеточие из конца строки, если оно есть
-        label = label.replace(/:$/, '');
+        label = label.replace(/:$/, '')
 
-        courseDetails[label] = value;
+        courseDetails[label] = value
     })
 
     // Проверка наличия блока ошибки номера обучения

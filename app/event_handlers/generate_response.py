@@ -196,6 +196,7 @@ def event_handler_generate_response(
     gr.Textbox,
     gr.Column,
     gr.Dropdown,
+    gr.Dropdown,
     gr.HTML,
     gr.Textbox,
     gr.Column,
@@ -211,6 +212,7 @@ def event_handler_generate_response(
             chat_history,
             gr.Textbox(value=None, visible=False),
             gr.Column(visible=False),
+            gr.Dropdown(interactive=False, visible=False),
             gr.Dropdown(interactive=False, visible=False),
             gr.HTML(visible=False),
             gr.Textbox(value=None, visible=False),
@@ -361,6 +363,10 @@ def event_handler_generate_response(
         chat_history,
         gr.Textbox(value=datetime.now(timezone.utc).timestamp(), visible=False),
         gr.Column(visible=config_data.AppSettings_QUALITY),
+        gr.Dropdown(
+            visible=config_data.AppSettings_QUALITY,
+            interactive=config_data.AppSettings_QUALITY,
+        ),
         gr.Dropdown(
             visible=config_data.AppSettings_QUALITY,
             interactive=config_data.AppSettings_QUALITY,

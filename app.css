@@ -811,7 +811,6 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
     }
 }
 
-
 div.subject-info > div.info > div.info-skills {
     display: flex;
     flex-direction: column;
@@ -841,8 +840,7 @@ div.subject-info > div.info > div.info-skills {
     .info .range > label,
     .info .info-item span,
     .info .info-courses-grades span,
-    .info .info-number-education-error span
-    {
+    .info .info-number-education-error span {
         font-size: 0.9rem;
     }
 }
@@ -903,12 +901,14 @@ div.subject-info > div.info > div.info-skills {
 }
 
 div.dropdown-add-vacancy-skills,
+div.dropdown-add-subjects-skills,
 div.dropdown-models,
 div.dropdown-courses-grades {
     background-color: #fafafa !important;
 }
 
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
+div.dropdown-add-subjects-skills span[data-testid='block-info'],
 div.add_evals-container span[data-testid='block-info'],
 div.dropdown-models .has-info,
 div.dropdown-courses-grades .has-info {
@@ -918,6 +918,7 @@ div.dropdown-courses-grades .has-info {
 }
 
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
+div.dropdown-add-subjects-skills span[data-testid='block-info'],
 div.add_evals-container span[data-testid='block-info'] {
     color: #ff0000;
 }
@@ -982,6 +983,7 @@ div.dropdown-models svg.dropdown-arrow {
 
     .settings-item,
     div.dropdown-add-vacancy-skills,
+    div.dropdown-add-subjects-skills,
     div.dropdown-models,
     div.dropdown-courses-grades {
         width: 100%; /* Полная ширина полей */
@@ -989,6 +991,7 @@ div.dropdown-models svg.dropdown-arrow {
 
     .settings-item input,
     div.dropdown-add-vacancy-skills div.wrap,
+    div.dropdown-add-subjects-skills div.wrap,
     div.dropdown-models div.wrap,
     div.dropdown-courses-grades div.wrap {
         width: 100%; /* Полная ширина элементов ввода */
@@ -1030,17 +1033,20 @@ div.dropdown-models svg.dropdown-arrow {
 }
 
 div.dropdown-add-vacancy-skills div.wrap,
+div.dropdown-add-subjects-skills div.wrap,
 div.dropdown-courses-grades div.wrap {
     background-color: #fafafa !important;
     border: 1px solid #363636 !important;
     font-family: 'HSESans', sans-serif !important;
 }
 
-div.dropdown-add-vacancy-skills div.wrap {
+div.dropdown-add-vacancy-skills div.wrap,
+div.dropdown-add-subjects-skills div.wrap {
     border: 1px solid #ff0000 !important;
 }
 
-div.dropdown-add-vacancy-skills div.wrap:focus-within {
+div.dropdown-add-vacancy-skills div.wrap:focus-within,
+div.dropdown-add-subjects-skills div.wrap:focus-within {
     box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
 }
 
@@ -1069,8 +1075,10 @@ div.dropdown-courses-grades div.wrap input {
 }
 
 div.dropdown-add-vacancy-skills div.secondary-wrap input,
+div.dropdown-add-subjects-skills div.secondary-wrap input,
 div.dropdown-courses-grades div.secondary-wrap input,
 div.dropdown-add-vacancy-skills div.secondary-wrap input:disabled,
+div.dropdown-add-subjects-skills div.secondary-wrap input:disabled,
 div.dropdown-courses-grades div.secondary-wrap input:disabled {
     color: #363636 !important;
     -webkit-text-fill-color: #363636 !important;
@@ -1080,39 +1088,46 @@ div.dropdown-courses-grades div.secondary-wrap input:disabled {
     color: #363636;
 }
 
-.dropdown-add-vacancy-skills svg.dropdown-arrow {
+.dropdown-add-vacancy-skills svg.dropdown-arrow,
+.dropdown-add-subjects-skills svg.dropdown-arrow {
     color: #ff0000;
 }
 
 div.dropdown-add-vacancy-skills div.token,
+div.dropdown-add-subjects-skills div.token,
 div.dropdown-courses-grades div.token {
     border-radius: 4px;
     border-color: var(--main-color);
     background-color: #fafafa !important;
 }
 
-div.dropdown-add-vacancy-skills div.token {
+div.dropdown-add-vacancy-skills div.token,
+div.dropdown-add-subjects-skills div.token {
     border-color: #ff0000;
     background-color: rgb(255, 214, 214) !important;
 }
 
 div.dropdown-add-vacancy-skills div.token > span,
+div.dropdown-add-subjects-skills div.token > span,
 div.dropdown-courses-grades div.token > span {
     font-family: 'HSESans', sans-serif !important;
     color: #000000;
 }
 
 div.dropdown-add-vacancy-skills div.token-remove,
+div.dropdown-add-subjects-skills div.token-remove,
 div.dropdown-courses-grades div.token-remove {
     background-color: var(--main-color);
 }
 
-div.dropdown-add-vacancy-skills div.token-remove {
+div.dropdown-add-vacancy-skills div.token-remove,
+div.dropdown-add-subjects-skills div.token-remove {
     background-color: #ff0000;
     border: none !important;
 }
 
 div.dropdown-add-vacancy-skills div.token-remove > svg,
+div.dropdown-add-subjects-skills div.token-remove > svg,
 div.dropdown-courses-grades div.token-remove > svg {
     fill: #fafafa !important;
 }
