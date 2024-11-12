@@ -55,6 +55,11 @@ gradio-app {
 .gradio-container {
     color: var(--main-color) !important;
 }
+@media (max-width: 768px) {
+    .app.svelte-wpkpf6.svelte-wpkpf6 {
+        padding: 8px 16px;
+    }
+}
 
 header {
     display: flex;
@@ -424,6 +429,19 @@ button.send_evaluate:active:not([disabled]) {
     background-color: #fafafa !important;
 }
 
+@media (max-width: 768px) {
+    .account-container {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    .account-container button {
+        width: 100%;
+    }
+    .account-container h1 {
+        font-size: 24px;
+    }
+}
+
 div.dropdown-user .wrap.default {
     background-color: #fafafa !important;
     height: 100%;
@@ -448,8 +466,46 @@ div.step-2 {
 
 .chatbot-container .chatbot .wrapper > label {
     background-color: var(--main-color);
+    max-width: 85%;
     font-family: 'HSESans', sans-serif !important;
     color: #ffffff !important;
+}
+
+.chatbot-container .chatbot .message-wrap {
+    margin-top: 20px;
+}
+
+.chatbot-container .chatbot .message-wrap .user-row .message {
+    background-color: rgb(220 230 252) !important;
+}
+
+@media (max-width: 768px) {
+    .chatbot-container .chatbot .wrapper > label {
+        display: none;
+    }
+
+    .chatbot-container .chatbot .message-wrap > .message-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .chatbot-container .chatbot .message-wrap > .message-row > .avatar-container {
+        margin-bottom: 5px;
+    }
+
+    .chatbot-container .chatbot .message-wrap > .message-row.user-row {
+        flex-direction: column-reverse;
+    }
+
+    .chatbot-container .chatbot .message-wrap > .message-row.user-row > .avatar-container {
+        align-self: flex-end;
+        margin-right: 0px;
+    }
+
+    .chatbot-container .chatbot .message-wrap > .bubble.with-avatar {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+    }
 }
 
 .chatbot-container .chatbot .placeholder-content {
@@ -612,11 +668,13 @@ div.subject-info > div.info > div.item {
     height: 40px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     div.subject-info > div.info > div.item {
+        position: static;
         width: 20px;
         height: 20px;
         font-size: 0.9rem;
+        margin-bottom: 5px;
     }
 }
 
@@ -647,6 +705,17 @@ div.add_evals-container > div.form > div.feedback {
 div.add-range > div.range,
 div.subject-info > div.info > div.range {
     display: flex;
+}
+
+div.edu-group > div.subject-info div.range {
+    gap: 10px;
+}
+
+@media (max-width: 768px) {
+    div.edu-group > div.subject-info div.range {
+        flex-direction: column;
+        gap: 0px;
+    }
 }
 
 div.add-range > div.wrap {
@@ -706,28 +775,6 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
     color: var(--color-accent);
 }
 
-div.subject-info > div.info > div.range > label,
-div.subject-info > div.info > div.info-item > span.label,
-div.subject-info > div.info > div.info-item > span.value,
-div.subject-info > div.info > div.info-courses-grades > span.label,
-div.subject-info > div.info > div.info-courses-grades > span.value,
-div.subject-info-static > div.info > div.info-skills > span.label,
-div.subject-info > div.info > div.info-skills > span.label,
-div.subject-info > div.info > div.info-skills-static > span.label,
-div.subject-info > div.info > div.info-item-error > span.label,
-div.subject-info > div.info > div.info-skills-error > span.label,
-div.subject-info > div.info > div.info-number-education-error > span.label,
-div.subject-info > div.info > div.info-courses-grades-error > span.label {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-div.subject-info-static > div.info > div.info-skills > span.value,
-div.subject-info > div.info > div.info-skills > span.value,
-div.subject-info > div.info > div.info-skills-static > span.value {
-    display: contents;
-}
-
 div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
 div.subject-info > div.info > div.info-skills > span.value > span.skill,
 div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
@@ -764,10 +811,10 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
     }
 }
 
-div.subject-info-static > div.info > div.info-skills > span.value > span.skill:last-child,
-div.subject-info > div.info > div.info-skills > span.value > span.skill:last-child,
-div.subject-info > div.info > div.info-skills-static > span.value > span.skill:last-child {
-    margin-right: 0px;
+
+div.subject-info > div.info > div.info-skills {
+    display: flex;
+    flex-direction: column;
 }
 
 .message-wrap .message > button {
@@ -786,6 +833,18 @@ div.subject-info > div.info > div.info-skills-static > span.value > span.skill:l
 .info .info-item span,
 .info .info-courses-grades span {
     color: #000000 !important;
+}
+
+@media (max-width: 568px) {
+    .info .info-skills > .label,
+    .info .info-skills-static > .label,
+    .info .range > label,
+    .info .info-item span,
+    .info .info-courses-grades span,
+    .info .info-number-education-error span
+    {
+        font-size: 0.9rem;
+    }
 }
 
 .message-container .error {
@@ -1104,6 +1163,16 @@ div.add-range > div.range > div.slider-container {
     width: 250px;
 }
 
+@media (max-width: 425px) {
+    div.subject-info > div.info > div.range > div.subject_relevance {
+        width: 150px !important;
+    }
+
+    div.add-range > div.range > div.slider-container {
+        width: 225px;
+    }
+}
+
 div.subject-info > div.info > div.range > div.subject_relevance > div.slider,
 div.add-range > div.range > div.slider-container > div.slider {
     display: flex;
@@ -1245,6 +1314,7 @@ div.add-range > div.range > div.slider-container > div.slider > div.slider-value
     display: block;
     margin: 0;
     padding: 0.25em 0;
+    font-family: 'HSESans', sans-serif !important;
 }
 
 div.user-instruction > div.instruction_text {

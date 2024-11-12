@@ -158,7 +158,7 @@ def app_tab():
             value=config_data.OtherMessages_START_EVALUATE,
             interactive=False,
             scale=1,
-            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "ok.ico",
+            # icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "ok.ico",
             visible=False,
             elem_classes="start_evaluate",
         )
@@ -283,7 +283,7 @@ def app_tab():
             value=config_data.OtherMessages_EVALUATE,
             interactive=False,
             scale=1,
-            icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "evaluate.ico",
+            # icon=config_data.Path_APP / config_data.StaticPaths_IMAGES / "evaluate.ico",
             visible=False,
             elem_classes="send_evaluate",
         )
