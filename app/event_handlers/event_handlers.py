@@ -47,6 +47,7 @@ def setup_app_event_handlers(
     feedback,
     evaluate_column,
     send_evaluate,
+    type_recommendation,
     top_subjects,
     max_skill_words,
     dropdown_models,
