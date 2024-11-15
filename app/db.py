@@ -9,7 +9,6 @@ import duckdb
 
 # Importing necessary components for the Gradio app
 from app.config import config_data
-from app.data_utils import generate_user_id
 
 db_path = config_data.Path_APP / config_data.StaticPaths_DB / config_data.AppSettings_DB
 db_path.parent.mkdir(parents=True, exist_ok=True)
@@ -44,7 +43,8 @@ def create_tables():
                 course_number TEXT,
                 relevance INTEGER,
                 relevant_skills TEXT,
-                unrelated_skills TEXT
+                unrelated_skills TEXT,
+                PRIMARY KEY (session_id, course_id)
             )
             """
         )
@@ -52,7 +52,7 @@ def create_tables():
             """
             CREATE TABLE IF NOT EXISTS feedback (
                 user_id TEXT,
-                session_id TEXT,
+                session_id TEXT PRIMARY KEY,
                 message TEXT,
                 feedback_comment TEXT,
                 utility INTEGER,
@@ -69,7 +69,7 @@ def create_tables():
             """
             CREATE TABLE IF NOT EXISTS session_time (
                 user_id TEXT,
-                session_id TEXT,
+                session_id TEXT PRIMARY KEY,
                 start_timestamp TEXT,
                 end_timestamp TEXT,
                 elapsed_time_ms REAL,
@@ -85,12 +85,12 @@ def create_tables():
 
 def save_data(json_data):
     try:
-        # Генерация уникального session_id для текущей сессии
-        session_id = generate_user_id()
 
         user_id = json_data.get("user_id")
         if not user_id:
             raise ValueError("Идентификатор пользователя отсутствует в JSON")
+
+        session_id = json_data.get("session_id")
 
         with duckdb.connect(str(db_path)) as conn:
             user_data = json_data.get("user_data", {})
@@ -120,7 +120,7 @@ def save_data(json_data):
 
                     conn.execute(
                         """
-                        INSERT INTO courses (
+                        INSERT OR REPLACE INTO courses (
                             user_id, session_id, course_id, label, discipline, department, faculty, campus, level,
                             audience, format, course_number, relevance, relevant_skills, unrelated_skills
                         )
@@ -170,7 +170,7 @@ def save_data(json_data):
 
             conn.execute(
                 """
-                INSERT INTO feedback (
+                INSERT OR REPLACE INTO feedback (
                     user_id, session_id, message, feedback_comment, utility, popularity, comfort,
                     relevant_vacancy_skills, unrelated_vacancy_skills, additional_vacancy_skills, additional_subject_skills
                 )
@@ -195,7 +195,7 @@ def save_data(json_data):
             time_data = json_data.get("time", {})
             conn.execute(
                 """
-                INSERT INTO session_time (
+                INSERT OR REPLACE INTO session_time (
                     user_id, session_id, start_timestamp, end_timestamp, elapsed_time_ms, elapsed_time_s,
                     hours, minutes, seconds, milliseconds
                 )

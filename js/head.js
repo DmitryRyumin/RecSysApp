@@ -280,7 +280,7 @@ function calculateTimeDifference(startTime, endTime) {
 }
 
 // Функция для отправки данных на сервер
-function sendDataToServer(data) {
+function sendDataToServer(data, showAlerts = true) {
     fetch('http://127.0.0.1:8000/api/submit', {
         method: 'POST',
         headers: {
@@ -290,38 +290,42 @@ function sendDataToServer(data) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error('Ошибка сети при отправке данных')
+                throw new Error('Ошибка сети при отправке данных');
             }
-            return response.json()
+            return response.json();
         })
         .then((responseData) => {
-            if (responseData.status === 'success') {
-                // Действия при успешной обработке
-                alert(responseData.message)
-            } else if (responseData.status === 'error') {
-                // Действия при ошибке на сервере
-                alert('Ошибка сервера: ' + responseData.error)
-                // Дополнительная информация об ошибке: responseData.error
-            } else {
-                // Обработка неожиданных статусов
-                alert('Неизвестный статус ответа от сервера.')
+            if (showAlerts) {
+                if (responseData.status === 'success') {
+                    // Действия при успешной обработке
+                    alert(responseData.message);
+                } else if (responseData.status === 'error') {
+                    // Действия при ошибке на сервере
+                    alert('Ошибка сервера: ' + responseData.error);
+                } else {
+                    // Обработка неожиданных статусов
+                    alert('Неизвестный статус ответа от сервера.');
+                }
             }
         })
         .catch((error) => {
-            // Обработка ошибок без вывода деталей в консоль
-            alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.')
-        })
+            if (showAlerts) {
+                // Обработка ошибок без вывода деталей в консоль
+                alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.');
+            }
+        });
 }
 
 /**
  * Основная функция для обработки данных при нажатии кнопки.
  */
 
-function handleButtonClick() {
+function handleButtonClick(showAlerts = true) {
     const result = {
         user_id: null,
         user_data: null,
         user_message: NO_DATA,
+        session_id: null,
         vacancy: null,
         edu_groups: [],
         additional_vacancy_skills: [],
@@ -340,6 +344,8 @@ function handleButtonClick() {
     result.user_message =
         document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() ||
         NO_DATA;
+
+    result.session_id = document.querySelector('.chatbot-id input')?.value.trim() || NO_DATA;
 
     // Поиск контейнера с ответом бота
     const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
@@ -437,26 +443,81 @@ function handleButtonClick() {
     }
 
     // Вывод итогового результата
-    console.log('Полный результат:', JSON.stringify(result, null, 2));
+    // console.log('Полный результат:', JSON.stringify(result, null, 2));
 
     // Отправка данных на сервер
-    sendDataToServer(result);
+    sendDataToServer(result, showAlerts);
 
     return result;
 }
 
+let intervalId; // Идентификатор для регулярного интервала
+
+function startTimer(interval) {
+    if (!intervalId) {
+        // Запускаем только если интервал еще не запущен
+        intervalId = setInterval(() => {
+            handleButtonClick(showAlerts=false);
+        }, interval);
+
+        // console.log(`Интервал для handleButtonClick запущен с интервалом ${interval / 1000} секунд.`);
+    }
+}
+
+// Функция для остановки интервала
+function stopTimer() {
+    if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        // console.log('Интервал handleButtonClick остановлен.');
+    }
+}
+
+// Наблюдатель за добавлением кнопки send_message для запуска пушек
+const timerButtonObserver = new MutationObserver(() => {
+    const startTimerButton = document.querySelector('.send_message');
+    if (startTimerButton && !startTimerButton.hasAttribute('data-listener')) {
+        startTimerButton.addEventListener('click', () => {
+            // console.log("Кнопка send_message нажата! Запуск начального таймера.");
+            startTimer(30000);
+        });
+        startTimerButton.setAttribute('data-listener', 'true');
+        // console.log("Обработчик добавлен на кнопку send_message.");
+    }
+});
+
+timerButtonObserver.observe(document.body, { childList: true, subtree: true });
+
 // Наблюдатель за добавлением кнопки send_evaluate
 const buttonObserver = new MutationObserver(() => {
-    const button = document.querySelector('.send_evaluate')
+    const button = document.querySelector('.send_evaluate');
     if (button && !button.hasAttribute('data-listener')) {
-        // проверяем, чтобы обработчик не был добавлен дважды
-        button.addEventListener('click', handleButtonClick)
-        button.setAttribute('data-listener', 'true') // Отметим, что обработчик добавлен
+        button.addEventListener('click', () => {
+            handleButtonClick(); // Основной функционал кнопки
+            stopTimer();
+        });
+        button.setAttribute('data-listener', 'true');
+        // console.log('Обработчик добавлен на кнопку send_evaluate.');
     }
-})
+});
 
 // Начнем отслеживать изменения в DOM для кнопки
 buttonObserver.observe(document.body, { childList: true, subtree: true })
+
+// Наблюдатель за добавлением кнопки send_evaluate
+const clearButtonObserver = new MutationObserver(() => {
+    const clearButton = document.querySelector('button[aria-label="Clear"]');
+    if (clearButton && !clearButton.hasAttribute('data-listener')) {
+        clearButton.addEventListener('click', () => {
+            stopTimer();
+        });
+        clearButton.setAttribute('data-listener', 'true');
+        // console.log('Обработчик добавлен на кнопку clearButton.');
+    }
+});
+
+// Начнем отслеживать изменения в DOM для кнопки
+clearButtonObserver.observe(document.body, { childList: true, subtree: true });
 
 // Создание и запуск MutationObserver для инициализации слайдеров
 const observer = new MutationObserver((mutations) => {
