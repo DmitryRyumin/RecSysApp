@@ -1,7 +1,7 @@
 gradio==5.5.0
 gradio_client==1.4.2
 torch==2.2.2
-polars==1.13.0
+polars==1.13.1
 pyarrow==18.0.0
 fastparquet==2024.11.0
 sentence_transformers==3.3.0
