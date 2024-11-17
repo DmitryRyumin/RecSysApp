@@ -139,10 +139,7 @@ def generate_item_info(
     )
 
 
-def generate_skills(
-    item_id: str,
-    max_skill_words: int,
-) -> str:
+def generate_subject_skills(item_id: str, max_skill_words: int) -> str:
     try:
         item_skills = (
             df_puds_skills.filter(
@@ -170,11 +167,40 @@ def generate_skills(
             + "</span> <span class='value'>"
             + f"{skills_content}</span></div>"
         )
-
     except Exception:
         return (
             "<div class='info-skills-error'><span class='label'>"
-            + config_data.InformationMessages_SKILLS_NOT_DEFINED
+            + config_data.InformationMessages_SUBJECT_SKILLS_NOT_DEFINED
+            + "</span></div>"
+        )
+
+
+def generate_vacancy_skills(skills: str, max_skill_words: int) -> str:
+    try:
+        skills = [
+            re.sub(r"[.,;:\s]+$", "", skill.strip())
+            for skill in skills.split(",")
+            if len(skill.split()) <= max_skill_words
+            and skill.strip()
+            and skill.strip().lower() != "none"
+        ]
+
+        if not skills:
+            raise ValueError
+
+        skills_content = "".join(
+            [f"<span class='skill'>{skill}</span>" for skill in skills]
+        )
+        return (
+            f"<div class='info-skills{"-static" if not config_data.AppSettings_QUALITY else ""}'><span class='label'>"
+            + config_data.HtmlContent_VACANCY_SKILLS_LABEL_STATIC
+            + "</span> <span class='value'>"
+            + f"{skills_content}</span></div>"
+        )
+    except Exception:
+        return (
+            "<div class='info-skills-error'><span class='label'>"
+            + config_data.InformationMessages_VACANCY_SKILLS_NOT_DEFINED
             + "</span></div>"
         )
 
@@ -298,7 +324,10 @@ def event_handler_generate_response(
             )
 
             if match:
-                formatted_item = f"{item} | CS={similarity:.4f}"
+                formatted_item = (
+                    f"{item} | CS={similarity:.4f} | "
+                    f"{match.get(config_data.DataframeHeaders_VACANCIES[3], "-")}"
+                )
             else:
                 formatted_item = f"{item} | CS={similarity:.4f}"
 
@@ -374,7 +403,7 @@ def event_handler_generate_response(
                 "<div class='info'>"
                 f"<div class='item'>{item}</div>"
                 + generate_item_info(item_info, edu_level_label, edu_level)
-                + generate_skills(item_info[0], max_skill_words)
+                + generate_subject_skills(item_info[0], max_skill_words)
                 + "</div>"
                 for item, (item_info, edu_level_label, edu_level) in enumerate(
                     items, start=item
@@ -389,10 +418,11 @@ def event_handler_generate_response(
             "<div class='vacancy-info-static'>"
             + "".join(
                 "<div class='info'>"
+                + f"<div class='item'>{i}</div>"
                 + create_html_block(
                     config_data.HtmlContent_VACANCY_LABEL, info.split("|")[0].strip()
                 )
-                + f"<div class='item'>{i}</div>"
+                + generate_vacancy_skills(info.split("|")[2].strip(), max_skill_words)
                 + "</div>"
                 for i, info in enumerate(
                     map(str.strip, items_sorted.split(";")), start=1

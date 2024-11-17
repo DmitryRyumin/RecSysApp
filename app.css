@@ -453,62 +453,72 @@ div.step-2 {
     overflow: visible !important;
 }
 
-.chatbot-container .chatbot {
+div.chatbot-container
+    > div.chatbot
+    > div.wrapper
+    > div.bubble-wrap
+    > div.message-wrap
+    > div.pending
+    > div.dot-flashing {
+    background-color: var(--main-color);
+}
+
+div.chatbot-container div.chatbot {
     background-color: #fafafa !important;
     border: none !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
     font-family: 'HSESans', sans-serif !important;
 }
 
-.chatbot-container .chatbot .bubble-wrap {
+div.chatbot-container div.chatbot .bubble-wrap {
     background-color: #fafafa !important;
 }
 
-.chatbot-container .chatbot .wrapper > label {
+div.chatbot-container div.chatbot .wrapper > label {
     background-color: var(--main-color);
     max-width: 85%;
     font-family: 'HSESans', sans-serif !important;
     color: #ffffff !important;
 }
 
-.chatbot-container .chatbot .message-wrap {
+div.chatbot-container div.chatbot .message-wrap {
     margin-top: 20px;
 }
 
-.chatbot-container .chatbot .message-wrap .user-row .message {
+div.chatbot-container div.chatbot .message-wrap .user-row .message {
     background-color: rgb(220 230 252) !important;
 }
 
 @media (max-width: 768px) {
-    .chatbot-container .chatbot .wrapper > label {
+    div.chatbot-container div.chatbot .wrapper > label {
         display: none;
     }
 
-    .chatbot-container .chatbot .message-wrap > .message-row {
+    div.chatbot-container div.chatbot .message-wrap > .message-row {
         display: flex;
         flex-direction: column;
     }
 
-    .chatbot-container .chatbot .message-wrap > .message-row > .avatar-container {
+    div.chatbot-container div.chatbot .message-wrap > .message-row > .avatar-container {
         margin-bottom: 5px;
     }
 
-    .chatbot-container .chatbot .message-wrap > .message-row.user-row {
+    div.chatbot-container div.chatbot .message-wrap > .message-row.user-row {
         flex-direction: column-reverse;
     }
 
-    .chatbot-container .chatbot .message-wrap > .message-row.user-row > .avatar-container {
+    div.chatbot-container div.chatbot .message-wrap > .message-row.user-row > .avatar-container {
         align-self: flex-end;
         margin-right: 0px;
     }
 
-    .chatbot-container .chatbot .message-wrap > .bubble.with-avatar {
+    div.chatbot-container div.chatbot .message-wrap > .bubble.with-avatar {
         margin-left: 0px !important;
         margin-right: 0px !important;
     }
 }
 
-.chatbot-container .chatbot .placeholder-content {
+div.chatbot-container div.chatbot .placeholder-content {
     color: #363636;
     font-family: 'HSESans', sans-serif !important;
 }
@@ -648,13 +658,6 @@ div.subject-info > div.info {
     border-bottom-color: var(--main-color);
 }
 
-div.vacancy-info-static > div.info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
 div.subject-info-static > div.info:last-child,
 div.vacancy-info-static > div.info:last-child,
 div.subject-info > div.info:last-child {
@@ -677,11 +680,6 @@ div.vacancy-info-static > div.info > div.item {
     border-radius: 50%;
     width: 40px;
     height: 40px;
-}
-
-div.vacancy-info-static > div.info > div.item {
-    position: relative;
-    right: 0px;
 }
 
 @media (max-width: 1024px) {
@@ -761,6 +759,10 @@ div.add-range > div.range > output {
     color: #ff0000;
 }
 
+div.vacancy-info-static > div.info > div.info-skills-static {
+    margin-top: 10px;
+}
+
 div.subject-info > div.info > div.range > label,
 div.add-range > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
@@ -769,8 +771,10 @@ div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info-static > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills-static > span.label,
+div.vacancy-info-static > div.info > div.info-skills-static > span.label,
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
+div.vacancy-info-static > div.info > div.info-skills-error > span.label,
 div.subject-info > div.info > div.info-number-education-error > span.label,
 div.subject-info > div.info > div.info-courses-grades-error > span.label {
     font-weight: bold;
@@ -778,8 +782,13 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
 
 div.subject-info-static > div.info > div.info-skills > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
-div.subject-info > div.info > div.info-skills-static > span.label {
+div.subject-info > div.info > div.info-skills-static > span.label,
+div.vacancy-info-static > div.info > div.info-skills-static > span.label {
     color: #000000 !important;
+}
+
+div.vacancy-info-static > div.info > div.info-item > span.value {
+    margin-right: 50px;
 }
 
 div.subject-info > div.info > div.info-skills > span.label > span.important {
@@ -788,6 +797,7 @@ div.subject-info > div.info > div.info-skills > span.label > span.important {
 
 div.subject-info > div.info > div.info-item-error > span.label,
 div.subject-info > div.info > div.info-skills-error > span.label,
+div.vacancy-info-static > div.info > div.info-skills-error > span.label,
 div.subject-info > div.info > div.info-number-education-error > span.label,
 div.subject-info > div.info > div.info-courses-grades-error > span.label {
     color: var(--color-accent);
@@ -795,7 +805,8 @@ div.subject-info > div.info > div.info-courses-grades-error > span.label {
 
 div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
 div.subject-info > div.info > div.info-skills > span.value > span.skill,
-div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
+div.subject-info > div.info > div.info-skills-static > span.value > span.skill,
+div.vacancy-info-static > div.info > div.info-skills-static > span.value > span.skill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -809,7 +820,8 @@ div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
 }
 
 div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
-div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
+div.subject-info > div.info > div.info-skills-static > span.value > span.skill,
+div.vacancy-info-static > div.info > div.info-skills-static > span.value > span.skill {
     cursor: default;
 }
 
@@ -822,7 +834,8 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
 @media (max-width: 768px) {
     div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
     div.subject-info > div.info > div.info-skills > span.value > span.skill,
-    div.subject-info > div.info > div.info-skills-static > span.value > span.skill {
+    div.subject-info > div.info > div.info-skills-static > span.value > span.skill,
+    div.vacancy-info-static > div.info > div.info-skills-static > span.value > span.skill {
         font-size: 0.9rem;
         padding: 2px 5px;
         margin: 6px 5px 0px 0px;

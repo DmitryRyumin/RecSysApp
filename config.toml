@@ -23,7 +23,8 @@ NOTI_AUTH = [
     "Для входа в систему EdFitter заполните поля выше",
     "Все данные пользователя успешно заполнены",
 ]
-SKILLS_NOT_DEFINED = "Навыки не определены"
+SUBJECT_SKILLS_NOT_DEFINED = "Навыки не определены"
+VACANCY_SKILLS_NOT_DEFINED = "Навыки не найдены"
 LEVEL_NOT_DEFINED = "Курс обучения не указан"
 FROM_TO = "От {} до {}"
 MODEL = "Выберите модель"
@@ -158,7 +159,7 @@ COURSES_GRADES = [
     "Индекс сложности освоения курса №3 (по медианной оценке)",
     "Статистическая погрешности индекса №3",
 ]
-VACANCIES = ["ID", "Name", "Description", "KeySkills", "ProfessionalRoles"]
+VACANCIES = ["ID", "Name", "Description", "KeySkills", "ProfessionalRoles", "City"]
 VACANCIES_FULL_INFO = "full_info"
 
 [Settings]

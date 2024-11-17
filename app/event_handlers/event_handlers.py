@@ -204,7 +204,6 @@ def setup_app_event_handlers(
         inputs=[message, type_recommendation],
         outputs=[
             top_items,
-            max_skill_words,
             dropdown_models,
             settings_row_2,
             dropdown_courses_grades,

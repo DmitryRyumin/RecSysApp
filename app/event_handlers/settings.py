@@ -15,9 +15,7 @@ from app.data_init import model_manager_sbert
 
 def event_handler_type_recommendation(
     message: str, type_recommendation: str
-) -> tuple[
-    gr.Number, gr.Number, gr.Dropdown, gr.Row, gr.Dropdown, list[ChatMessage], gr.Button
-]:
+) -> tuple[gr.Number, gr.Dropdown, gr.Row, gr.Dropdown, list[ChatMessage], gr.Button]:
     model_manager_sbert.change_model(config_data.Models_SBERT[0], type_recommendation)
 
     gr.Info(
@@ -49,7 +47,6 @@ def event_handler_type_recommendation(
 
     return (
         gr.Number(label=top_label),
-        gr.Number(visible=is_subjects),
         gr.Dropdown(
             choices=dropdown_choices,
             value=config_data.Models_SBERT[0],
