@@ -179,6 +179,36 @@ def generate_skills(
         )
 
 
+def get_default_ui_response(chat_history: list[ChatMessage]) -> tuple[
+    gr.Row,
+    gr.Textbox,
+    gr.Button,
+    list[ChatMessage],
+    gr.Textbox,
+    gr.Column,
+    gr.Dropdown,
+    gr.Dropdown,
+    gr.HTML,
+    gr.Textbox,
+    gr.Column,
+    gr.Button,
+]:
+    return (
+        gr.Row(visible=True),
+        gr.Textbox(value=None),
+        gr.Button(visible=True),
+        chat_history,
+        gr.Textbox(value=None, visible=False),
+        gr.Column(visible=False),
+        gr.Dropdown(interactive=False, visible=False),
+        gr.Dropdown(interactive=False, visible=False),
+        gr.HTML(visible=False),
+        gr.Textbox(value=None, visible=False),
+        gr.Column(visible=False),
+        gr.Button(visible=False, interactive=False),
+    )
+
+
 def event_handler_generate_response(
     message: str,
     chat_history: list[ChatMessage],
@@ -203,26 +233,15 @@ def event_handler_generate_response(
     message = message.strip()
 
     if not message:
-        return (
-            gr.Row(visible=True),
-            gr.Textbox(value=None),
-            gr.Button(visible=True),
-            chat_history,
-            gr.Textbox(value=None, visible=False),
-            gr.Column(visible=False),
-            gr.Dropdown(interactive=False, visible=False),
-            gr.Dropdown(interactive=False, visible=False),
-            gr.HTML(visible=False),
-            gr.Textbox(value=None, visible=False),
-            gr.Column(visible=False),
-            gr.Button(visible=False, interactive=False),
-        )
+        return get_default_ui_response(chat_history)
 
     if config_data.AppSettings_QUALITY:
-        type_recommendation = config_data.Settings_TYPE_RECOMMENDATION[0]
-        top_items = config_data.Settings_TOP_ITEMS_QUALITY
-        max_skill_words = config_data.Settings_MAX_SKILL_WORDS
-        dropdown_courses_grades = [config_data.DataframeHeaders_COURSES_GRADES[0]]
+        type_recommendation, top_items, max_skill_words, dropdown_courses_grades = (
+            config_data.Settings_TYPE_RECOMMENDATION[0],
+            config_data.Settings_TOP_ITEMS_QUALITY,
+            config_data.Settings_MAX_SKILL_WORDS,
+            config_data.DataframeHeaders_COURSES_GRADES[0:1],
+        )
 
     embedding = get_embeddings(message, model_manager_sbert.get_current_model())
 
@@ -233,14 +252,13 @@ def event_handler_generate_response(
             .tolist()
         )
         similarities = [
-            (i, j)
-            for i, j in zip(
-                model_manager_sbert.state.names["names"].to_list(), similarities
-            )
+            (name, sim)
+            for name, sim in zip(model_manager_sbert.state.names["names"], similarities)
         ]
 
-    sorted_items = sorted(similarities, key=lambda x: x[1], reverse=True)
-    unique_items = filter_unique_items(sorted_items, top_items)
+    unique_items = filter_unique_items(
+        sorted(similarities, key=lambda x: x[1], reverse=True), top_items
+    )
 
     all_top_items = []
 
