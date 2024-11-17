@@ -634,11 +634,13 @@ div.edu-group > span {
 }
 
 div.subject-info,
-div.subject-info-static {
+div.subject-info-static,
+div.vacancy-info-static {
     padding: 10px;
 }
 
 div.subject-info-static > div.info,
+div.vacancy-info-static > div.info,
 div.subject-info > div.info {
     padding-bottom: 20px;
     margin-bottom: 20px;
@@ -646,14 +648,23 @@ div.subject-info > div.info {
     border-bottom-color: var(--main-color);
 }
 
+div.vacancy-info-static > div.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
 div.subject-info-static > div.info:last-child,
+div.vacancy-info-static > div.info:last-child,
 div.subject-info > div.info:last-child {
     border-bottom-width: 0px;
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
 
-div.subject-info > div.info > div.item {
+div.subject-info > div.info > div.item,
+div.vacancy-info-static > div.info > div.item {
     display: flex;
     position: absolute;
     align-items: center;
@@ -668,8 +679,14 @@ div.subject-info > div.info > div.item {
     height: 40px;
 }
 
+div.vacancy-info-static > div.info > div.item {
+    position: relative;
+    right: 0px;
+}
+
 @media (max-width: 1024px) {
-    div.subject-info > div.info > div.item {
+    div.subject-info > div.info > div.item,
+    div.vacancy-info-static > div.info > div.item {
         position: static;
         width: 20px;
         height: 20px;
@@ -747,6 +764,7 @@ div.add-range > div.range > output {
 div.subject-info > div.info > div.range > label,
 div.add-range > div.range > label,
 div.subject-info > div.info > div.info-item > span.label,
+div.vacancy-info-static > div.info > div.info-item > span.label,
 div.subject-info > div.info > div.info-courses-grades > span.label,
 div.subject-info > div.info > div.info-skills > span.label,
 div.subject-info-static > div.info > div.info-skills > span.label,
@@ -851,6 +869,15 @@ div.subject-info > div.info > div.info-skills {
     color: #000000;
 }
 
+.settings-container > div.form {
+    border: none !important;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.settings-container > div.form > fieldset {
+    background-color: #fafafa !important;
+}
+
 .row-1-container > div {
     background-color: #fafafa !important;
     border: none !important;
@@ -858,7 +885,8 @@ div.subject-info > div.info > div.info-skills {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.settings-item {
+.settings-item,
+.settings-item > div.wrap {
     background-color: #fafafa !important;
 }
 
@@ -915,6 +943,7 @@ div.dropdown-add-subjects-skills {
     border: 1px solid #ff0000 !important;
 }
 
+.settings-container > div.form > fieldset > span[data-testid='block-info'],
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
 div.dropdown-add-subjects-skills span[data-testid='block-info'],
 div.add_evals-container span[data-testid='block-info'],
@@ -939,8 +968,8 @@ div.dropdown-courses-grades p {
 
 div.dropdown-models div.wrap {
     background-color: #fafafa !important;
-    height: 42px;
-    border: 1px solid #363636 !important;
+    /* height: 42px; */
+    /* border: 1px solid #363636 !important; */
     font-family: 'HSESans', sans-serif !important;
 }
 
@@ -1101,6 +1130,7 @@ div.dropdown-courses-grades div.secondary-wrap input:disabled {
     color: #ff0000;
 }
 
+.settings-container > div.form > fieldset > div.wrap > label,
 div.dropdown-add-vacancy-skills div.token,
 div.dropdown-add-subjects-skills div.token,
 div.dropdown-courses-grades div.token {
@@ -1115,11 +1145,19 @@ div.dropdown-add-subjects-skills div.token {
     background-color: rgb(255, 214, 214) !important;
 }
 
+.settings-container > div.form > fieldset > div.wrap > label > span,
 div.dropdown-add-vacancy-skills div.token > span,
 div.dropdown-add-subjects-skills div.token > span,
 div.dropdown-courses-grades div.token > span {
     font-family: 'HSESans', sans-serif !important;
     color: #000000;
+}
+
+.settings-container > div.form > fieldset > div.wrap > label > input,
+.settings-container > div.form > fieldset > div.wrap > label > input:checked,
+.settings-container > div.form > fieldset > div.wrap > label > input:hover {
+    border-color: var(--main-color);
+    background-color: var(--main-color);
 }
 
 div.dropdown-add-vacancy-skills div.token-remove,

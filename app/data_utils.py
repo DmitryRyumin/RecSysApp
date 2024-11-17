@@ -45,12 +45,18 @@ def get_files(directory: Union[str, Path], ext: str = "parquet") -> list[Path]:
 
 
 def load_parquet(
-    path: PosixPath, drop_duplicates: bool = False, subset: Optional[list[str]] = None
+    path: PosixPath,
+    drop_duplicates: bool = False,
+    subset: Optional[list[str]] = None,
+    drop_columns: Optional[list[str]] = None,
 ) -> pl.DataFrame:
     df = pl.read_parquet(path)
 
     if drop_duplicates and subset:
         df = df.unique(subset=subset, keep="first", maintain_order=False)
+
+    if drop_columns:
+        df = df.drop(drop_columns)
 
     return df
 
@@ -60,6 +66,7 @@ def load_puds_data(
     year: str,
     drop_duplicates: bool = False,
     subset: Optional[list[str]] = None,
+    drop_columns: Optional[list[str]] = None,
     full_info_cols: Optional[list[str]] = None,
 ) -> tuple[pl.DataFrame, pl.DataFrame]:
     df = pl.read_parquet(path)
@@ -84,6 +91,9 @@ def load_puds_data(
 
     if drop_duplicates and subset:
         df = df.unique(subset=subset, keep="first", maintain_order=False)
+
+    if drop_columns:
+        df = df.drop(drop_columns)
 
     if full_info_cols:
         alias_full_info = config_data.DataframeHeaders_SUBJECTS_FULL_INFO
@@ -111,6 +121,47 @@ def load_puds_data(
     return df, df_grouped
 
 
+def load_vacancies_data(
+    path: PosixPath,
+    drop_duplicates: bool = False,
+    subset: Optional[list[str]] = None,
+    drop_columns: Optional[list[str]] = None,
+    full_info_cols: Optional[list[str]] = None,
+) -> tuple[pl.DataFrame, pl.DataFrame]:
+    df = pl.read_parquet(path)
+
+    if drop_duplicates and subset:
+        df = df.unique(subset=subset, keep="first", maintain_order=False)
+
+    if drop_columns:
+        df = df.drop(drop_columns)
+
+    if full_info_cols:
+        alias_full_info = config_data.DataframeHeaders_VACANCIES_FULL_INFO
+
+        df = df.with_columns(
+            pl.concat_str(
+                [
+                    pl.col(full_info_cols[0]).fill_null(""),
+                    pl.lit("\n"),
+                    pl.col(full_info_cols[1]).fill_null(""),
+                    pl.lit("\n"),
+                    pl.col(full_info_cols[2]).fill_null(""),
+                    pl.lit("\n"),
+                    pl.col(full_info_cols[3]).fill_null(""),
+                ]
+            ).alias(alias_full_info)
+        )
+
+        df_grouped = df.group_by(subset[3]).agg(
+            pl.col(alias_full_info).alias("full_info_list")
+        )
+    else:
+        df_grouped = pl.DataFrame({})
+
+    return df, df_grouped
+
+
 def get_embeddings(text: str, sbert_model: SentenceTransformer) -> torch.Tensor:
     with torch.no_grad():
         embeddings = sbert_model.encode(
@@ -125,18 +176,20 @@ def get_embeddings(text: str, sbert_model: SentenceTransformer) -> torch.Tensor:
 
 def extract_embeddings(
     model_name: str,
-    d_puds_cleaned: list[dict],
+    d_cleaned: list[dict],
     sbert_model: SentenceTransformer,
+    info_col: str,
+    name_col: str,
+    embeddings_path: str,
+    names_path: str,
     limit: Optional[int] = None,
     force_reload: bool = False,
 ) -> tuple[torch.Tensor, pl.DataFrame]:
     embeddings_col = "embeddings"
     names_col = "names"
-    subject_info_col = config_data.DataframeHeaders_SUBJECTS_FULL_INFO
-    subject_name_col = config_data.DataframeHeaders_RU_SUBJECTS[0]
 
-    embeddings_path = config_data.Path_APP / config_data.StaticPaths_PUDS_EMBEDDINGS
-    names_path = config_data.Path_APP / config_data.StaticPaths_RU_SUBJECTS
+    embeddings_path = config_data.Path_APP / embeddings_path
+    names_path = config_data.Path_APP / names_path
 
     embeddings_path = (
         embeddings_path.parent
@@ -172,17 +225,16 @@ def extract_embeddings(
             return embeddings.to(sbert_model.device), names
 
     def process_item(item: dict) -> tuple[Optional[torch.Tensor], Optional[str]]:
-        subject_info = item.get(subject_info_col)
-        subject_name = item.get(subject_name_col)
+        info = item.get(info_col)
+        name = item.get(name_col)
 
-        if subject_info:
-            return get_embeddings(subject_info, sbert_model), subject_name
+        if info:
+            return get_embeddings(info, sbert_model), name
 
         return None, None
 
     processed_items = [
-        process_item(item)
-        for item in (d_puds_cleaned[:limit] if limit else d_puds_cleaned)
+        process_item(item) for item in (d_cleaned[:limit] if limit else d_cleaned)
     ]
 
     embeddings, names = zip(
@@ -303,6 +355,10 @@ def sort_subjects(subjects: list[str]) -> str:
             )
 
     return "; ".join(result)
+
+
+def sort_vacancies(vacancies: list[str]) -> str:
+    return "; ".join(vacancies)
 
 
 def round_if_number(value: Any, decimal_places: int = 2) -> Union[Decimal, None]:

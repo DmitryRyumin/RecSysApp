@@ -26,6 +26,7 @@ from app.data_utils import (
     get_embeddings,
     filter_unique_items,
     sort_subjects,
+    sort_vacancies,
     round_if_number,
     format_grade,
 )
@@ -99,19 +100,19 @@ def generate_courses_grades(subject_info: list[str]) -> str:
     return courses_grades
 
 
-def generate_subject_info(
-    subject_info: list[str], edu_level_label: str, edu_level: str
+def generate_item_info(
+    item_info: list[str], edu_level_label: str, edu_level: str
 ) -> str:
     number_education_block = (
         create_html_block(
             (
                 config_data.HtmlContent_NUMBERS_EDUCATION
-                if "-" in subject_info[10]
+                if "-" in item_info[10]
                 else config_data.HtmlContent_NUMBER_EDUCATION
             ),
-            subject_info[10],
+            item_info[10],
         )
-        if subject_info[10] != "-"
+        if item_info[10] != "-"
         else "<div class='info-number-education-error'><span class='label'>"
         + config_data.InformationMessages_LEVEL_NOT_DEFINED
         + "</span></div>"
@@ -121,35 +122,31 @@ def generate_subject_info(
         [
             create_html_range(
                 config_data.HtmlContent_SUBJECT_RELEVANCE,
-                subject_info[0],
+                item_info[0],
                 "subject_relevance",
             ),
-            create_html_block(config_data.HtmlContent_SUBJECT_LABEL, subject_info[1]),
-            create_html_block(
-                config_data.HtmlContent_ID_SUBJECT_LABEL, subject_info[0]
-            ),
-            create_html_block(
-                config_data.HtmlContent_DEPARTMENT_LABEL, subject_info[5]
-            ),
-            create_html_block(config_data.HtmlContent_FACULTY_LABEL, subject_info[4]),
-            create_html_block(config_data.HtmlContent_CAMPUS_LABEL, subject_info[3]),
+            create_html_block(config_data.HtmlContent_SUBJECT_LABEL, item_info[1]),
+            create_html_block(config_data.HtmlContent_ID_SUBJECT_LABEL, item_info[0]),
+            create_html_block(config_data.HtmlContent_DEPARTMENT_LABEL, item_info[5]),
+            create_html_block(config_data.HtmlContent_FACULTY_LABEL, item_info[4]),
+            create_html_block(config_data.HtmlContent_CAMPUS_LABEL, item_info[3]),
             create_html_block(edu_level_label, edu_level),
             number_education_block,
-            create_html_block(config_data.HtmlContent_AUDIENCE_LABEL, subject_info[8]),
-            create_html_block(config_data.HtmlContent_FORMAT_LABEL, subject_info[9]),
-            generate_courses_grades(subject_info),
+            create_html_block(config_data.HtmlContent_AUDIENCE_LABEL, item_info[8]),
+            create_html_block(config_data.HtmlContent_FORMAT_LABEL, item_info[9]),
+            generate_courses_grades(item_info),
         ]
     )
 
 
 def generate_skills(
-    subject_id: str,
+    item_id: str,
     max_skill_words: int,
 ) -> str:
     try:
-        subject_skills = (
+        item_skills = (
             df_puds_skills.filter(
-                pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_id)
+                pl.col(config_data.DataframeHeaders_RU_ID) == int(item_id)
             )[0]["LLM_Skills"][0]
             .strip()
             .split(";")
@@ -157,7 +154,7 @@ def generate_skills(
 
         skills = [
             re.sub(r"[.,;:\s]+$", "", skill.strip()).capitalize()
-            for skill in subject_skills
+            for skill in item_skills
             if len(skill.split()) <= max_skill_words and skill.strip()
         ]
 
@@ -185,7 +182,8 @@ def generate_skills(
 def event_handler_generate_response(
     message: str,
     chat_history: list[ChatMessage],
-    top_subjects: int,
+    type_recommendation: str,
+    top_items: int,
     max_skill_words: int,
     dropdown_courses_grades: list[str],
 ) -> tuple[
@@ -221,137 +219,169 @@ def event_handler_generate_response(
         )
 
     if config_data.AppSettings_QUALITY:
-        top_subjects = config_data.Settings_TOP_SUBJECTS_QUALITY
+        type_recommendation = config_data.Settings_TYPE_RECOMMENDATION[0]
+        top_items = config_data.Settings_TOP_ITEMS_QUALITY
         max_skill_words = config_data.Settings_MAX_SKILL_WORDS
         dropdown_courses_grades = [config_data.DataframeHeaders_COURSES_GRADES[0]]
 
-    vacancy_embedding = get_embeddings(message, model_manager_sbert.get_current_model())
+    embedding = get_embeddings(message, model_manager_sbert.get_current_model())
 
     with torch.no_grad():
         similarities = (
-            cosine_similarity(
-                vacancy_embedding, model_manager_sbert.state.puds_embeddings
-            )
+            cosine_similarity(embedding, model_manager_sbert.state.embeddings)
             .cpu()
             .tolist()
         )
         similarities = [
             (i, j)
             for i, j in zip(
-                model_manager_sbert.state.puds_names["names"].to_list(), similarities
+                model_manager_sbert.state.names["names"].to_list(), similarities
             )
         ]
 
-    sorted_subjects = sorted(similarities, key=lambda x: x[1], reverse=True)
-    unique_subjects = filter_unique_items(sorted_subjects, top_subjects)
+    sorted_items = sorted(similarities, key=lambda x: x[1], reverse=True)
+    unique_items = filter_unique_items(sorted_items, top_items)
 
     all_top_items = []
 
-    for subject, similarity in unique_subjects:
-        match = next(
-            (
-                item
-                for item in model_manager_sbert.get_puds_data()
-                if item.get(config_data.DataframeHeaders_RU_SUBJECTS[0]) == subject
-            ),
-            None,
-        )
-
-        if match:
-            formatted_subject = (
-                f"{match.get(config_data.DataframeHeaders_RU_ID, "-")} | {subject} | CS={similarity:.4f} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[2], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[1], "-")} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[3], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[4], "-")} | "
-                f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[5], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[6], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[7], "-")} | "
-                + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[8], "-")}"
-            )
-        else:
-            formatted_subject = f"- | {subject} | CS={similarity:.4f}"
-
-        all_top_items.append(formatted_subject)
-
-    subjects_sorted = sort_subjects(all_top_items)
-
-    grouped_subjects = {}
-    for subject in subjects_sorted.split(";"):
-        subject_info = list(map(str.strip, subject.split("|")))
-
-        for grade, mean_grade in zip(
-            config_data.DataframeHeaders_COURSES_GRADES[::2],
-            config_data.DataframeHeaders_COURSES_GRADES[1::2],
-        ):
-            if grade not in dropdown_courses_grades:
-                subject_info.extend(["-", "-"])
-                continue
-
-            course_grades = df_courses_grades.filter(
-                pl.col(config_data.DataframeHeaders_RU_ID) == int(subject_info[0])
-            )[0]
-
-            curr_grade = round_if_number(course_grades[grade][0])
-            mean_curr_grade = (
-                round_if_number(course_grades[mean_grade][0])
-                if mean_grade in course_grades.columns
-                else "-"
+    for item, similarity in unique_items:
+        if type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[0]:
+            match = next(
+                (
+                    itm
+                    for itm in model_manager_sbert.get_puds_data()
+                    if itm.get(config_data.DataframeHeaders_RU_SUBJECTS[0]) == item
+                ),
+                None,
             )
 
-            subject_info.extend([curr_grade, mean_curr_grade])
+            if match:
+                formatted_item = (
+                    f"{match.get(config_data.DataframeHeaders_RU_ID, "-")} | {item} | CS={similarity:.4f} | "
+                    f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[2], "-")} | "
+                    + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[1], "-")} | "
+                    f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[3], "-")} | "
+                    + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[4], "-")} | "
+                    f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[5], "-")} | "
+                    + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[6], "-")} | "
+                    + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[7], "-")} | "
+                    + f"{match.get(config_data.DataframeHeaders_RU_SUBJECTS[8], "-")}"
+                )
+            else:
+                formatted_item = f"- | {item} | CS={similarity:.4f}"
+        elif type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[1]:
+            match = next(
+                (
+                    itm
+                    for itm in model_manager_sbert.get_vacancies_data()
+                    if itm.get(config_data.DataframeHeaders_VACANCIES[1]) == item
+                ),
+                None,
+            )
 
-        edu_level_label, edu_level = determine_edu_level(subject_info)
+            if match:
+                formatted_item = f"{item} | CS={similarity:.4f}"
+            else:
+                formatted_item = f"{item} | CS={similarity:.4f}"
 
-        if edu_level not in grouped_subjects:
-            grouped_subjects[edu_level] = []
-        grouped_subjects[edu_level].append((subject_info, edu_level_label, edu_level))
+        all_top_items.append(formatted_item)
+
+    if type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[0]:
+        items_sorted = sort_subjects(all_top_items)
+
+        grouped_items = {}
+        for item in items_sorted.split(";"):
+            item_info = list(map(str.strip, item.split("|")))
+
+            for grade, mean_grade in zip(
+                config_data.DataframeHeaders_COURSES_GRADES[::2],
+                config_data.DataframeHeaders_COURSES_GRADES[1::2],
+            ):
+                if grade not in dropdown_courses_grades:
+                    item_info.extend(["-", "-"])
+                    continue
+
+                course_grades = df_courses_grades.filter(
+                    pl.col(config_data.DataframeHeaders_RU_ID) == int(item_info[0])
+                )[0]
+
+                curr_grade = round_if_number(course_grades[grade][0])
+                mean_curr_grade = (
+                    round_if_number(course_grades[mean_grade][0])
+                    if mean_grade in course_grades.columns
+                    else "-"
+                )
+
+                item_info.extend([curr_grade, mean_curr_grade])
+
+            edu_level_label, edu_level = determine_edu_level(item_info)
+
+            if edu_level not in grouped_items:
+                grouped_items[edu_level] = []
+            grouped_items[edu_level].append((item_info, edu_level_label, edu_level))
+    elif type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[1]:
+        items_sorted = sort_vacancies(all_top_items)
 
     content = ""
 
-    vacancy_skills = skills_extractor.key_skills_for_profession(message)
+    if type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[0]:
+        vacancy_skills = skills_extractor.key_skills_for_profession(message)
 
-    skills_vacancy = "".join(
-        [f"<span class='skill'>{skill}</span>" for skill in vacancy_skills]
-    )
-
-    content += (
-        f"<div class='subject-info{"-static" if not config_data.AppSettings_QUALITY else ""}'>"
-        "<div class='info'><div class='info-skills'><span class='label'>"
-        + (
-            config_data.HtmlContent_VACANCY_LABEL.format(
-                "<span class='important'>"
-                + config_data.HtmlContent_VACANCY_LABEL_CLICK
-                + "</span>"
-            )
-            if config_data.AppSettings_QUALITY
-            else config_data.HtmlContent_VACANCY_LABEL_STATIC
+        skills_vacancy = "".join(
+            [f"<span class='skill'>{skill}</span>" for skill in vacancy_skills]
         )
-        + "</span> <span class='value'>"
-        + f"{skills_vacancy}</span></div></div></div>"
-    )
 
-    item = 1
-
-    for edu_level, subjects in grouped_subjects.items():
         content += (
-            f"<div class='edu-group'><span>{edu_level}</span><div class='subject-info'>"
-        )
-
-        content += "".join(
-            "<div class='info'>"
-            f"<div class='item'>{item}</div>"
-            + generate_subject_info(subject_info, edu_level_label, edu_level)
-            + generate_skills(subject_info[0], max_skill_words)
-            + "</div>"
-            for item, (subject_info, edu_level_label, edu_level) in enumerate(
-                subjects, start=item
+            f"<div class='subject-info{"-static" if not config_data.AppSettings_QUALITY else ""}'>"
+            "<div class='info'><div class='info-skills'><span class='label'>"
+            + (
+                config_data.HtmlContent_VACANCY_SKILLS_LABEL.format(
+                    "<span class='important'>"
+                    + config_data.HtmlContent_VACANCY_SKILLS_LABEL_CLICK
+                    + "</span>"
+                )
+                if config_data.AppSettings_QUALITY
+                else config_data.HtmlContent_VACANCY_SKILLS_LABEL_STATIC
             )
+            + "</span> <span class='value'>"
+            + f"{skills_vacancy}</span></div></div></div>"
         )
 
-        item += len(subjects)
+        item = 1
 
-        content += "</div></div>"
+        for edu_level, items in grouped_items.items():
+            content += f"<div class='edu-group'><span>{edu_level}</span><div class='subject-info'>"
+
+            content += "".join(
+                "<div class='info'>"
+                f"<div class='item'>{item}</div>"
+                + generate_item_info(item_info, edu_level_label, edu_level)
+                + generate_skills(item_info[0], max_skill_words)
+                + "</div>"
+                for item, (item_info, edu_level_label, edu_level) in enumerate(
+                    items, start=item
+                )
+            )
+
+            item += len(items)
+
+            content += "</div></div>"
+    elif type_recommendation == config_data.Settings_TYPE_RECOMMENDATION[1]:
+        content += (
+            "<div class='vacancy-info-static'>"
+            + "".join(
+                "<div class='info'>"
+                + create_html_block(
+                    config_data.HtmlContent_VACANCY_LABEL, info.split("|")[0].strip()
+                )
+                + f"<div class='item'>{i}</div>"
+                + "</div>"
+                for i, info in enumerate(
+                    map(str.strip, items_sorted.split(";")), start=1
+                )
+            )
+            + "</div>"
+        )
 
     chat_history.append(ChatMessage(role="user", content=message))
     chat_history.append(ChatMessage(role="assistant", content=content))

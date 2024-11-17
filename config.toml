@@ -12,6 +12,7 @@ DB = "edfitter.duckdb"
 DURATION = 5
 TITLE = "Информация"
 MODEL = "Модель для сопоставления вакансии с учебными курсами изменена на {}"
+TYPE_RECOMMENDATION = "Тип рекомендаций изменен на {}"
 
 [InformationMessages]
 NOTI_IN_DEV = "В разработке"
@@ -57,11 +58,14 @@ START_EVALUATE = "Понятно, начать"
 GROUP_NUMBER = "Номер группы (только для студентов)"
 USERNAME = "Имя пользователя"
 USER_ROLE = "Роль или направление"
-CHATBOT = "Для получения рекомендаций по выбору учебных курсов введите в строку ниже описание интересующей вас вакансии, профессии или сферы занятости"
+CHATBOT_SUBJECTS = "Для получения рекомендаций по выбору учебных курсов введите в строку ниже описание интересующей вас вакансии, профессии или сферы занятости"
+CHATBOT_VACANCIES = "Для получения рекомендаций по выбору вакансий введите в строку ниже описание интересующего вас учебного курса"
 TOP_SUBJECTS = "Количество предлагаемых предметов"
+TOP_VACANCIES = "Количество предлагаемых вакансий"
 TYPE_RECOMMENDATION =  "Тип рекомендаций"
 MAX_SKILL_WORDS = "Максимальное количество слов в одном навыке"
-MODEL = "Модель для сопоставления вакансии с учебными курсами"
+MODEL_SUBJECTS = "Модель для сопоставления вакансии с учебными курсами"
+MODEL_VACANCIES = "Модель для сопоставления предмета с вакансиями"
 COURSES_GRADES = "Показатели успеваемости студентов"
 ADD_VACANCY_SKILLS = "Перечислите навыки, которых нет среди требуемых в данной вакансии выше, но которые кажутся вам необходимыми. Нажимайте ввод после каждого навыка."
 ADD_SUBJECTS_SKILLS = "Если есть навыки, требуемые в вакансии, которые отсутствуют в курсах, вы можете ввести их сюда."
@@ -85,13 +89,14 @@ CAMPUS_LABEL = "Кампус:"
 AUDIENCE_LABEL = "Охват аудитории:"
 FORMAT_LABEL = "Формат изучения:"
 SKILLS_LABEL = "Получаемые навыки:"
-VACANCY_LABEL_STATIC = "Требуемые навыки:"
-VACANCY_LABEL = "Требуемые навыки ({}):"
-VACANCY_LABEL_CLICK = "кликните все неподходящие навыки"
+VACANCY_SKILLS_LABEL_STATIC = "Требуемые навыки:"
+VACANCY_SKILLS_LABEL = "Требуемые навыки ({}):"
+VACANCY_SKILLS_LABEL_CLICK = "кликните все неподходящие навыки"
 COURSES_GRADES = "Метрики курса:"
 USEFULNESS_CURRENT = "Насколько полезно данное приложение в его нынешнем виде?"
 DEMAND_CURRENT = "Насколько было бы востребовано данное приложение в доработанном виде?"
 INTERFACE_CURRENT = "Насколько удобен интерфейс в его нынешнем виде?"
+VACANCY_LABEL = "Вакансия:"
 
 [TabCreators]
 "Приложение" = "app_tab"
@@ -114,8 +119,9 @@ DB = "db"
 PUDS = "data/ПУДы.parquet"
 PUDS_EMBEDDINGS = "data/ПУДы_эмбеддинги.safetensors"
 VACANCIES = "data/Вакансии.parquet"
-VACANCIES_EMBEDDINGS = "data/Вакансии_эмбединги_jina-embeddings-v3.safetensors"
+VACANCIES_EMBEDDINGS = "data/Вакансии_эмбединги.safetensors"
 RU_SUBJECTS = "data/Названия_дисциплин_для_эмбеддингов.parquet"
+RU_VACANCIES = "data/Названия_вакансий_для_эмбеддингов.parquet"
 PUDS_SKILLS = "data/ПУДы_навыки.parquet"
 COURSES_GRADES = "data/Оценки.parquet"
 VACANCY = "data/Вакансии/Vacancy.parquet"
@@ -152,6 +158,8 @@ COURSES_GRADES = [
     "Индекс сложности освоения курса №3 (по медианной оценке)",
     "Статистическая погрешности индекса №3",
 ]
+VACANCIES = ["ID", "Name", "Description", "KeySkills", "ProfessionalRoles"]
+VACANCIES_FULL_INFO = "full_info"
 
 [Settings]
 TYPE_RECOMMENDATION = ["Учебные курсы", "Вакансии"]
@@ -170,9 +178,9 @@ DROPDOWN_ROLE = [
     "Другое",
 ]
 USER_MAX_LENGTH = 40
-TOP_SUBJECTS_RANGE = [5, 40]
-TOP_SUBJECTS = 20
-TOP_SUBJECTS_QUALITY = 10
+TOP_ITEMS_RANGE = [5, 40]
+TOP_ITEMS = 20
+TOP_ITEMS_QUALITY = 10
 MAX_SKILL_WORDS_RANGE = [1, 10]
 MAX_SKILL_WORDS = 4
 PRIORITY = [
