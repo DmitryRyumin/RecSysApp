@@ -50,13 +50,16 @@ def load_parquet(
     subset: Optional[list[str]] = None,
     drop_columns: Optional[list[str]] = None,
 ) -> pl.DataFrame:
-    df = pl.read_parquet(path)
+    if not config_data.AppSettings_DEV:
+        df = pl.read_parquet(path)
 
-    if drop_duplicates and subset:
-        df = df.unique(subset=subset, keep="first", maintain_order=False)
+        if drop_duplicates and subset:
+            df = df.unique(subset=subset, keep="first", maintain_order=False)
 
-    if drop_columns:
-        df = df.drop(drop_columns)
+        if drop_columns:
+            df = df.drop(drop_columns)
+    else:
+        df = pl.DataFrame()
 
     return df
 
@@ -381,3 +384,7 @@ def generate_user_id(length: int = 16) -> str:
     return hashlib.sha256(
         datetime.now().isoformat(timespec="milliseconds").encode()
     ).hexdigest()[:length]
+
+
+def create_numbered_list(base_str: str, total: int = 5) -> list[str]:
+    return list(map(lambda i: f"{base_str} {i}", range(1, total + 1)))

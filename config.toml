@@ -6,6 +6,7 @@ SERVER_PORT = 8000
 TITLE = "EdFitter"
 CSS_PATH = "app.css"
 QUALITY = false
+DEV = false
 DB = "edfitter.duckdb"
 
 [AppInfo]

@@ -139,12 +139,13 @@ class SkillsExtractor:
             / config_data.Models_SBERT_VACANCY[0]
         ),
     ):
-        tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
-        model = AutoModel.from_pretrained(model_path)
-        emb_df = load_embeddings(path_to_vacancies_info)
+        if not config_data.AppSettings_DEV:
+            tokenizer = AutoTokenizer.from_pretrained(tokenizer_path)
+            model = AutoModel.from_pretrained(model_path)
+            emb_df = load_embeddings(path_to_vacancies_info)
 
-        self.embedding_extractor = EmbeddingExtractor(model, tokenizer, emb_df)
-        self.vacancy_finder = VacancyFinder(self.embedding_extractor, emb_df)
+            self.embedding_extractor = EmbeddingExtractor(model, tokenizer, emb_df)
+            self.vacancy_finder = VacancyFinder(self.embedding_extractor, emb_df)
 
     def key_skills_for_profession(
         self,

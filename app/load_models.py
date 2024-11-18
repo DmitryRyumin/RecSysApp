@@ -36,7 +36,7 @@ class BaseModelManager:
 
     @classmethod
     def _load_puds_data_once(cls):
-        if cls._puds_data is None:
+        if cls._puds_data is None and not config_data.AppSettings_DEV:
             df_puds_cleaned, _ = load_puds_data(
                 path=config_data.Path_APP / config_data.StaticPaths_PUDS,
                 year=config_data.DataframeHeaders_SUBJECTS_YEAR,
@@ -49,7 +49,7 @@ class BaseModelManager:
 
     @classmethod
     def _load_vacancies_data_once(cls):
-        if cls._vacancies_data is None:
+        if cls._vacancies_data is None and not config_data.AppSettings_DEV:
             df_vacancies_cleaned, _ = load_vacancies_data(
                 path=config_data.Path_APP / config_data.StaticPaths_VACANCIES,
                 drop_duplicates=False,
@@ -147,5 +147,6 @@ class SbertModelManager(BaseModelManager):
         return self.state.embeddings
 
     def change_model(self, model_name: str, type_embeddings: str) -> None:
-        self.load_model(model_name)
-        self.update_embeddings(type_embeddings)
+        if not config_data.AppSettings_DEV:
+            self.load_model(model_name)
+            self.update_embeddings(type_embeddings)

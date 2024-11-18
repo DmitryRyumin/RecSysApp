@@ -1,6 +1,8 @@
 // Функция для обработки клика по элементам
 function toggleClassOnClick(element) {
     element.addEventListener('click', function () {
+        console.log(element.classList)
+
         element.classList.toggle('deleted')
     })
 }
@@ -211,13 +213,13 @@ function extractCourseData(infoBlock) {
     const courseDetails = {}
 
     infoItems.forEach((item) => {
-        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA;
-        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA;
+        let label = item.querySelector('.label')?.textContent.trim() || NO_DATA
+        const value = item.querySelector('.value')?.textContent.trim() || NO_DATA
 
         // Удаляем двоеточие из конца строки, если оно есть
-        label = label.replace(/:$/, '');
+        label = label.replace(/:$/, '')
 
-        courseDetails[label] = value;
+        courseDetails[label] = value
     })
 
     // Проверка наличия блока ошибки номера обучения
@@ -233,42 +235,42 @@ function extractCourseData(infoBlock) {
  * @param {string} containerSelector - Селектор контейнера с дополнительными навыками.
  * @returns {Array} Массив дополнительных навыков.
  */
-function extractAdditionalSkills (containerSelector) {
-    const container = document.querySelector(containerSelector);
+function extractAdditionalSkills(containerSelector) {
+    const container = document.querySelector(containerSelector)
 
     if (!container) {
-        console.error('Элемент контейнера дополнительных навыков не найден');
-        return [];
+        console.error('Элемент контейнера дополнительных навыков не найден')
+        return []
     }
 
     // Находим все элементы с классом 'token' внутри контейнера
-    const tokenElements = container.querySelectorAll('.token');
+    const tokenElements = container.querySelectorAll('.token')
 
     // Извлекаем текстовые значения из span внутри каждого элемента 'token'
     const skills = [...tokenElements]
         .map((token) => {
-            const skillText = token.querySelector('span')?.textContent.trim() || '';
+            const skillText = token.querySelector('span')?.textContent.trim() || ''
             // Возвращаем только те навыки, которые не пустые
-            return skillText ? skillText : null;
+            return skillText ? skillText : null
         })
-        .filter((skill) => skill !== null); // Пропускаем пустые значения
+        .filter((skill) => skill !== null) // Пропускаем пустые значения
 
-    return skills;
+    return skills
 }
 
 function calculateTimeDifference(startTime, endTime) {
     // Рассчитываем разницу в миллисекундах
-    let timeDifferenceMs = endTime - startTime;
+    let timeDifferenceMs = endTime - startTime
 
     // Разбивка времени на часы, минуты, секунды и миллисекунды
-    const hours = Math.floor(timeDifferenceMs / (1000 * 60 * 60));
-    timeDifferenceMs %= 1000 * 60 * 60; // Оставшаяся часть после вычитания часов
+    const hours = Math.floor(timeDifferenceMs / (1000 * 60 * 60))
+    timeDifferenceMs %= 1000 * 60 * 60 // Оставшаяся часть после вычитания часов
 
-    const minutes = Math.floor(timeDifferenceMs / (1000 * 60));
-    timeDifferenceMs %= 1000 * 60; // Оставшаяся часть после вычитания минут
+    const minutes = Math.floor(timeDifferenceMs / (1000 * 60))
+    timeDifferenceMs %= 1000 * 60 // Оставшаяся часть после вычитания минут
 
-    const seconds = Math.floor(timeDifferenceMs / 1000);
-    const milliseconds = timeDifferenceMs % 1000; // Оставшаяся часть после вычитания секунд
+    const seconds = Math.floor(timeDifferenceMs / 1000)
+    const milliseconds = timeDifferenceMs % 1000 // Оставшаяся часть после вычитания секунд
 
     // Возвращаем объект с разбивкой времени
     return {
@@ -276,7 +278,7 @@ function calculateTimeDifference(startTime, endTime) {
         minutes: minutes,
         seconds: seconds,
         milliseconds: milliseconds,
-    };
+    }
 }
 
 // Функция для отправки данных на сервер
@@ -290,30 +292,30 @@ function sendDataToServer(data, showAlerts = true) {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error('Ошибка сети при отправке данных');
+                throw new Error('Ошибка сети при отправке данных')
             }
-            return response.json();
+            return response.json()
         })
         .then((responseData) => {
             if (showAlerts) {
                 if (responseData.status === 'success') {
                     // Действия при успешной обработке
-                    alert(responseData.message);
+                    alert(responseData.message)
                 } else if (responseData.status === 'error') {
                     // Действия при ошибке на сервере
-                    alert('Ошибка сервера: ' + responseData.error);
+                    alert('Ошибка сервера: ' + responseData.error)
                 } else {
                     // Обработка неожиданных статусов
-                    alert('Неизвестный статус ответа от сервера.');
+                    alert('Неизвестный статус ответа от сервера.')
                 }
             }
         })
         .catch((error) => {
             if (showAlerts) {
                 // Обработка ошибок без вывода деталей в консоль
-                alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.');
+                alert('Не удалось отправить данные на сервер. Пожалуйста, попробуйте позже.')
             }
-        });
+        })
 }
 
 /**
@@ -332,102 +334,102 @@ function handleButtonClick(showAlerts = true) {
         additional_subjects_skills: [],
         feedback: null,
         time: null,
-    };
+    }
 
     // Извлечение данных пользователя
-    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA;
+    result.user_id = document.querySelector('.block.user-id input')?.value.trim() || NO_DATA
 
     // Извлечение данных пользователя
-    result.user_data = extractUserInputData('.user-container .form');
+    result.user_data = extractUserInputData('.user-container .form')
 
     // Поиск сообщения пользователя
     result.user_message =
         document.querySelector('.chatbot-container .message.user button > span.chatbot.prose')?.textContent.trim() ||
-        NO_DATA;
+        NO_DATA
 
-    result.session_id = document.querySelector('.chatbot-id input')?.value.trim() || NO_DATA;
+    result.session_id = document.querySelector('.chatbot-id input')?.value.trim() || NO_DATA
 
     // Поиск контейнера с ответом бота
-    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose');
+    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose')
 
     if (!spanContainer) {
-        console.error('Элемент span с классами chatbot prose не найден');
-        return;
+        console.error('Элемент span с классами chatbot prose не найден')
+        return
     }
 
     // Извлечение информации о вакансии
-    const subjectInfo = spanContainer.querySelector('.subject-info');
+    const subjectInfo = spanContainer.querySelector('.subject-info')
     if (subjectInfo && subjectInfo.parentElement === spanContainer) {
-        result.vacancy = extractSkills(subjectInfo, '.info-skills');
+        result.vacancy = extractSkills(subjectInfo, '.info-skills')
     } else {
-        console.error('Элемент .subject-info не найден');
-        return;
+        console.error('Элемент .subject-info не найден')
+        return
     }
 
     // Обработка групп образовательных программ
-    const eduGroups = spanContainer.querySelectorAll('.edu-group');
+    const eduGroups = spanContainer.querySelectorAll('.edu-group')
 
     if (eduGroups.length > 0) {
         eduGroups.forEach((eduGroup, index) => {
-            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`;
+            const groupLabel = eduGroup.querySelector('span')?.textContent.trim() || `Группа ${index + 1}`
 
             // Извлечение курсов из текущей группы
             const courses = [...eduGroup.querySelectorAll('.info')].map((infoBlock) => {
-                const courseDetails = extractCourseData(infoBlock);
-                const relevanceData = extractRangeData(infoBlock.querySelector('.range'));
-                const pudSkills = extractSkills(infoBlock, '.info-skills');
+                const courseDetails = extractCourseData(infoBlock)
+                const relevanceData = extractRangeData(infoBlock.querySelector('.range'))
+                const pudSkills = extractSkills(infoBlock, '.info-skills')
 
                 return {
                     ...courseDetails,
                     ...relevanceData,
                     ...pudSkills,
-                };
-            });
+                }
+            })
 
             result.edu_groups.push({
                 label: groupLabel,
                 courses: courses,
-            });
-        });
+            })
+        })
     } else {
-        console.error('Элементы .edu-group не найдены');
+        console.error('Элементы .edu-group не найдены')
     }
 
     // Извлечение дополнительных навыков вакансии
-    result.additional_vacancy_skills = extractAdditionalSkills('.dropdown-add-vacancy-skills');
+    result.additional_vacancy_skills = extractAdditionalSkills('.dropdown-add-vacancy-skills')
 
     // Извлечение дополнительных навыков дисциплин
-    result.additional_subjects_skills = extractAdditionalSkills('.dropdown-add-subjects-skills');
+    result.additional_subjects_skills = extractAdditionalSkills('.dropdown-add-subjects-skills')
 
     // Извлечение данных из блока с оценкой сервиса
-    const addRangeContainer = document.querySelector('.block.add-range');
+    const addRangeContainer = document.querySelector('.block.add-range')
     if (addRangeContainer) {
-        const customLabels = ['Полезность', 'Востребованность', 'Удобство'];
+        const customLabels = ['Полезность', 'Востребованность', 'Удобство']
 
         const ranges = [...addRangeContainer.querySelectorAll('.range')].map((rangeBlock, index) => {
             // Получаем кастомный лейбл для текущего rangeBlock
-            const customLabel = customLabels[index] || `Диапазон ${index + 1}`;
-            return extractRangeData(rangeBlock, customLabel);
-        });
+            const customLabel = customLabels[index] || `Диапазон ${index + 1}`
+            return extractRangeData(rangeBlock, customLabel)
+        })
 
         // Объединяем все диапазоны в один объект
-        result.additional_ranges = Object.assign({}, ...ranges);
+        result.additional_ranges = Object.assign({}, ...ranges)
     } else {
-        console.error('Элемент .add-range не найден');
+        console.error('Элемент .add-range не найден')
     }
 
     // Извлечение отзыва пользователя из textarea внутри .block .feedback
-    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA;
+    result.feedback = document.querySelector('.block.feedback textarea')?.value.trim() || NO_DATA
 
     // Вычисление разницы времени
-    const startTimeValue = document.querySelector('div.chatbot-timer input')?.value;
+    const startTimeValue = document.querySelector('div.chatbot-timer input')?.value
     if (startTimeValue) {
         // Преобразование начального времени в секунды
-        const startTime = new Date(parseFloat(startTimeValue) * 1000); // Преобразуем в миллисекунды
-        const endTime = new Date();
+        const startTime = new Date(parseFloat(startTimeValue) * 1000) // Преобразуем в миллисекунды
+        const endTime = new Date()
 
         if (isNaN(startTime)) {
-            console.error('Неверный формат начального времени:', startTimeValue);
+            console.error('Неверный формат начального времени:', startTimeValue)
         } else {
             // Расчет разницы во времени
             result.time = {
@@ -436,29 +438,29 @@ function handleButtonClick(showAlerts = true) {
                 end_timestamp: (endTime.getTime() / 1000).toFixed(5), // Конечная метка в секундах с миллисекундами
                 elapsed_time_ms: endTime - startTime, // Чистое время в миллисекундах
                 elapsed_time_s: ((endTime - startTime) / 1000).toFixed(3), // Чистое время в секундах
-            };
+            }
         }
     } else {
-        console.error('Начальное время не найдено или не задано');
+        console.error('Начальное время не найдено или не задано')
     }
 
     // Вывод итогового результата
     // console.log('Полный результат:', JSON.stringify(result, null, 2));
 
     // Отправка данных на сервер
-    sendDataToServer(result, showAlerts);
+    sendDataToServer(result, showAlerts)
 
-    return result;
+    return result
 }
 
-let intervalId; // Идентификатор для регулярного интервала
+let intervalId // Идентификатор для регулярного интервала
 
 function startTimer(interval) {
     if (!intervalId) {
         // Запускаем только если интервал еще не запущен
         intervalId = setInterval(() => {
-            handleButtonClick(showAlerts=false);
-        }, interval);
+            handleButtonClick((showAlerts = false))
+        }, interval)
 
         // console.log(`Интервал для handleButtonClick запущен с интервалом ${interval / 1000} секунд.`);
     }
@@ -467,57 +469,57 @@ function startTimer(interval) {
 // Функция для остановки интервала
 function stopTimer() {
     if (intervalId) {
-        clearInterval(intervalId);
-        intervalId = null;
+        clearInterval(intervalId)
+        intervalId = null
         // console.log('Интервал handleButtonClick остановлен.');
     }
 }
 
 // Наблюдатель за добавлением кнопки send_message для запуска пушек
 const timerButtonObserver = new MutationObserver(() => {
-    const startTimerButton = document.querySelector('.send_message');
+    const startTimerButton = document.querySelector('.send_message')
     if (startTimerButton && !startTimerButton.hasAttribute('data-listener')) {
         startTimerButton.addEventListener('click', () => {
             // console.log("Кнопка send_message нажата! Запуск начального таймера.");
-            startTimer(30000);
-        });
-        startTimerButton.setAttribute('data-listener', 'true');
+            startTimer(30000)
+        })
+        startTimerButton.setAttribute('data-listener', 'true')
         // console.log("Обработчик добавлен на кнопку send_message.");
     }
-});
+})
 
-timerButtonObserver.observe(document.body, { childList: true, subtree: true });
+timerButtonObserver.observe(document.body, { childList: true, subtree: true })
 
 // Наблюдатель за добавлением кнопки send_evaluate
 const buttonObserver = new MutationObserver(() => {
-    const button = document.querySelector('.send_evaluate');
+    const button = document.querySelector('.send_evaluate')
     if (button && !button.hasAttribute('data-listener')) {
         button.addEventListener('click', () => {
-            handleButtonClick(); // Основной функционал кнопки
-            stopTimer();
-        });
-        button.setAttribute('data-listener', 'true');
+            handleButtonClick() // Основной функционал кнопки
+            stopTimer()
+        })
+        button.setAttribute('data-listener', 'true')
         // console.log('Обработчик добавлен на кнопку send_evaluate.');
     }
-});
+})
 
 // Начнем отслеживать изменения в DOM для кнопки
 buttonObserver.observe(document.body, { childList: true, subtree: true })
 
 // Наблюдатель за добавлением кнопки send_evaluate
 const clearButtonObserver = new MutationObserver(() => {
-    const clearButton = document.querySelector('button[aria-label="Clear"]');
+    const clearButton = document.querySelector('button[aria-label="Clear"]')
     if (clearButton && !clearButton.hasAttribute('data-listener')) {
         clearButton.addEventListener('click', () => {
-            stopTimer();
-        });
-        clearButton.setAttribute('data-listener', 'true');
+            stopTimer()
+        })
+        clearButton.setAttribute('data-listener', 'true')
         // console.log('Обработчик добавлен на кнопку clearButton.');
     }
-});
+})
 
 // Начнем отслеживать изменения в DOM для кнопки
-clearButtonObserver.observe(document.body, { childList: true, subtree: true });
+clearButtonObserver.observe(document.body, { childList: true, subtree: true })
 
 // Создание и запуск MutationObserver для инициализации слайдеров
 const observer = new MutationObserver((mutations) => {
