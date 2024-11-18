@@ -550,11 +550,12 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea {
 }
 
 div.add_evals-container > div.form > div.feedback > label > div > textarea {
-    border: 1px solid #ff0000 !important;
+    border: 1px solid #363636 !important;
 }
 
 div.add_evals-container > div.form > div.feedback > label > div > textarea:focus {
-    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset !important;
+    border-color: var(--main-color) !important;
+    box-shadow: 0 0 0 1px rgba(15, 45, 105, 1), 0px 2px 4px 0px rgba(15, 45, 105, 0.1) inset !important;
 }
 
 .message-container .wrap {
@@ -705,7 +706,7 @@ div.subject-info > div.info > div.info-courses-grades-error {
 
 div.add_evals-container > div.form,
 div.add_evals-container > div.add-range {
-    border: 1px solid #ff0000 !important;
+    border: 1px solid #363636 !important;
 }
 
 div.add_evals-container > div.add-range,
@@ -756,7 +757,7 @@ div.subject-info > div.info > div.range > output,
 div.add-range > div.range > label,
 div.add-range > div.range > output {
     font-family: 'HSESans', sans-serif !important;
-    color: #ff0000;
+    color: #000000;
 }
 
 div.vacancy-info-static > div.info > div.info-skills-static {
@@ -792,7 +793,7 @@ div.vacancy-info-static > div.info > div.info-item > span.value {
 }
 
 div.subject-info > div.info > div.info-skills > span.label > span.important {
-    color: #ff0000 !important;
+    color: var(--additional-color) !important;
 }
 
 div.subject-info > div.info > div.info-item-error > span.label,
@@ -871,7 +872,9 @@ div.subject-info > div.info > div.info-skills {
     .info .range > label,
     .info .info-item span,
     .info .info-courses-grades span,
-    .info .info-number-education-error span {
+    .info .info-number-education-error span,
+    .info .info-courses-grades-error span,
+    .info .info-skills-error span {
         font-size: 0.9rem;
     }
 }
@@ -953,7 +956,7 @@ div.gradio-container > div.main > div.wrap > div.contain > div.column > div.tabs
 }
 
 div.dropdown-add-subjects-skills {
-    border: 1px solid #ff0000 !important;
+    border: 1px solid #363636 !important;
 }
 
 .settings-container > div.form > fieldset > span[data-testid='block-info'],
@@ -970,7 +973,7 @@ div.dropdown-courses-grades .has-info {
 div.dropdown-add-vacancy-skills span[data-testid='block-info'],
 div.dropdown-add-subjects-skills span[data-testid='block-info'],
 div.add_evals-container span[data-testid='block-info'] {
-    color: #ff0000;
+    color: #000000;
 }
 
 div.dropdown-models p,
@@ -1092,12 +1095,13 @@ div.dropdown-courses-grades div.wrap {
 
 div.dropdown-add-vacancy-skills div.wrap,
 div.dropdown-add-subjects-skills div.wrap {
-    border: 1px solid #ff0000 !important;
+    border: 1px solid rgb(54, 54, 54) !important;
 }
 
 div.dropdown-add-vacancy-skills div.wrap:focus-within,
 div.dropdown-add-subjects-skills div.wrap:focus-within {
-    box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
+    border-color: var(--main-color) !important;
+    box-shadow: 0 0 0 1px rgba(15, 45, 105, 1), 0px 2px 4px 0px rgba(15, 45, 105, 0.1) inset !important;
 }
 
 div.dropdown-courses-grades div.wrap .options {
@@ -1140,7 +1144,7 @@ div.dropdown-courses-grades div.secondary-wrap input:disabled {
 
 .dropdown-add-vacancy-skills svg.dropdown-arrow,
 .dropdown-add-subjects-skills svg.dropdown-arrow {
-    color: #ff0000;
+    color: #363636;
 }
 
 .settings-container > div.form > fieldset > div.wrap > label,
@@ -1154,8 +1158,8 @@ div.dropdown-courses-grades div.token {
 
 div.dropdown-add-vacancy-skills div.token,
 div.dropdown-add-subjects-skills div.token {
-    border-color: #ff0000;
-    background-color: rgb(255, 214, 214) !important;
+    border: 2px solid var(--main-color);
+    background-color: rgb(220 230 252) !important;
 }
 
 .settings-container > div.form > fieldset > div.wrap > label > span,
@@ -1181,7 +1185,7 @@ div.dropdown-courses-grades div.token-remove {
 
 div.dropdown-add-vacancy-skills div.token-remove,
 div.dropdown-add-subjects-skills div.token-remove {
-    background-color: #ff0000;
+    background-color: var(--main-color);
     border: none !important;
 }
 
@@ -1252,7 +1256,7 @@ div.add-range > div.range > div.slider-container > div.slider {
     display: flex;
     align-items: center;
     font-size: 16px;
-    color: #ff0000;
+    color: var(--main-color);
 }
 
 div.subject-info > div.info > div.range > div.subject_relevance > div.slider > input[type='range'],
@@ -1264,7 +1268,7 @@ div.add-range > div.range > div.slider-container > div.slider > input[type='rang
     margin-right: 1em;
     margin-top: 3px;
     background-color: #e3e3e3;
-    background-image: linear-gradient(#ff0000, #ff0000);
+    background-image: linear-gradient(var(--main-color), var(--main-color));
     background-size: 0 100%;
     background-repeat: no-repeat;
     cursor: pointer;
@@ -1296,7 +1300,7 @@ div.add-range > div.range > div.slider-container > div.slider > input[type='rang
     width: 16px;
     height: 16px;
     border: 0;
-    background: #ff0000;
+    background: var(--main-color);
     border-radius: 50%;
 }
 
@@ -1306,7 +1310,7 @@ div.add-range > div.range > div.slider-container > div.slider > input[type='rang
     width: 16px;
     height: 16px;
     border: 0;
-    background: #ff0000;
+    background: var(--main-color);
     border-radius: 50%;
 }
 
@@ -1383,7 +1387,7 @@ div.subject-info
     > ul
     > li,
 div.add-range > div.range > div.slider-container > div.slider > div.slider-value > div.slider-value-number > ul > li {
-    color: #ff0000;
+    color: var(--main-color);
     height: 1em;
     display: block;
     margin: 0;
@@ -1415,4 +1419,16 @@ div.user-instruction > div.instruction_text li > span {
     background-color: #dfdede !important;
     padding: 3px 5px;
     color: var(--main-color) !important;
+}
+
+@media (min-width: 600px) {
+    div.evaluate-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    div.evaluate-container > button.send_evaluate {
+        width: 40%;
+        flex-grow: 0 !important;
+    }
 }

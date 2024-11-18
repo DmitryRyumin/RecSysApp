@@ -171,6 +171,27 @@ def app_tab():
         variant="default",
         elem_classes="chatbot-container",
     ) as chatbot_column:
+        chatbotid = gr.Textbox(
+            value=None,
+            lines=1,
+            max_lines=1,
+            placeholder=None,
+            label=None,
+            info=None,
+            show_label=False,
+            container=False,
+            scale=1,
+            interactive=False,
+            visible=False,
+            autofocus=False,
+            autoscroll=True,
+            render=True,
+            type="text",
+            show_copy_button=False,
+            max_length=None,
+            elem_classes="chatbot-id",
+        )
+
         chatbot = gr.Chatbot(
             type="messages",
             label=config_data.Labels_CHATBOT_SUBJECTS,
@@ -339,6 +360,7 @@ def app_tab():
         start_evaluate,
         step_2,
         chatbot_column,
+        chatbotid,
         chatbot,
         chatbot_timer,
         message_row,

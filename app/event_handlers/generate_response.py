@@ -29,6 +29,7 @@ from app.data_utils import (
     sort_vacancies,
     round_if_number,
     format_grade,
+    generate_user_id,
 )
 
 
@@ -246,6 +247,7 @@ def event_handler_generate_response(
     gr.Row,
     gr.Textbox,
     gr.Button,
+    gr.Textbox,
     list[ChatMessage],
     gr.Textbox,
     gr.Column,
@@ -438,6 +440,7 @@ def event_handler_generate_response(
         gr.Row(visible=not config_data.AppSettings_QUALITY),
         gr.Textbox(value=None, visible=not config_data.AppSettings_QUALITY),
         gr.Button(visible=not config_data.AppSettings_QUALITY),
+        gr.Textbox(value=generate_user_id(), visible=False),
         chat_history,
         gr.Textbox(value=datetime.now(timezone.utc).timestamp(), visible=False),
         gr.Column(visible=config_data.AppSettings_QUALITY),
