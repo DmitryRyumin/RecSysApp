@@ -16,7 +16,10 @@ from app.event_handlers.generate_response import event_handler_generate_response
 from app.event_handlers.message import event_handler_message
 from app.event_handlers.chatbot import event_handler_chatbot_clear
 from app.event_handlers.evaluate import event_handler_evaluate
-from app.event_handlers.settings import event_handler_dropdown_models
+from app.event_handlers.settings import (
+    event_handler_type_recommendation,
+    event_handler_dropdown_models,
+)
 
 
 def setup_app_event_handlers(
@@ -48,9 +51,11 @@ def setup_app_event_handlers(
     feedback,
     evaluate_column,
     send_evaluate,
-    top_subjects,
+    type_recommendation,
+    top_items,
     max_skill_words,
     dropdown_models,
+    settings_row_2,
     dropdown_courses_grades,
 ):
     account.click(
@@ -135,7 +140,8 @@ def setup_app_event_handlers(
         inputs=[
             message,
             chatbot,
-            top_subjects,
+            type_recommendation,
+            top_items,
             max_skill_words,
             dropdown_courses_grades,
         ],
@@ -195,9 +201,23 @@ def setup_app_event_handlers(
         queue=True,
     )
 
+    type_recommendation.change(
+        fn=event_handler_type_recommendation,
+        inputs=[message, type_recommendation],
+        outputs=[
+            top_items,
+            dropdown_models,
+            settings_row_2,
+            dropdown_courses_grades,
+            chatbot,
+            send_message,
+        ],
+        queue=True,
+    )
+
     dropdown_models.change(
         fn=event_handler_dropdown_models,
-        inputs=[message, dropdown_models],
+        inputs=[message, type_recommendation, dropdown_models],
         outputs=[send_message],
         queue=True,
     )

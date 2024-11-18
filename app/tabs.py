@@ -194,7 +194,7 @@ def app_tab():
 
         chatbot = gr.Chatbot(
             type="messages",
-            label=config_data.Labels_CHATBOT,
+            label=config_data.Labels_CHATBOT_SUBJECTS,
             autoscroll=False,
             visible=False,
             render=True,
@@ -383,22 +383,35 @@ def settings_app_tab():
         variant="default",
         elem_classes="settings-container",
     ):
+        type_recommendation = gr.Radio(
+            choices=config_data.Settings_TYPE_RECOMMENDATION,
+            value=config_data.Settings_TYPE_RECOMMENDATION[0],
+            label=config_data.Labels_TYPE_RECOMMENDATION,
+            info=None,
+            show_label=True,
+            container=True,
+            interactive=True,
+            visible=True,
+            render=True,
+            elem_classes="settings-type-recommendation",
+        )
+
         with gr.Row(
             visible=True,
             render=True,
             variant="default",
             elem_classes="row-1-container",
         ):
-            top_subjects = gr.Number(
+            top_items = gr.Number(
                 value=(
-                    config_data.Settings_TOP_SUBJECTS
+                    config_data.Settings_TOP_ITEMS
                     if not config_data.AppSettings_QUALITY
-                    else config_data.Settings_TOP_SUBJECTS_QUALITY
+                    else config_data.Settings_TOP_ITEMS_QUALITY
                 ),
                 label=config_data.Labels_TOP_SUBJECTS,
                 info=config_data.InformationMessages_FROM_TO.format(
-                    config_data.Settings_TOP_SUBJECTS_RANGE[0],
-                    config_data.Settings_TOP_SUBJECTS_RANGE[1],
+                    config_data.Settings_TOP_ITEMS_RANGE[0],
+                    config_data.Settings_TOP_ITEMS_RANGE[1],
                 ),
                 show_label=True,
                 container=True,
@@ -406,8 +419,8 @@ def settings_app_tab():
                 interactive=True,
                 visible=True,
                 render=True,
-                minimum=config_data.Settings_TOP_SUBJECTS_RANGE[0],
-                maximum=config_data.Settings_TOP_SUBJECTS_RANGE[1],
+                minimum=config_data.Settings_TOP_ITEMS_RANGE[0],
+                maximum=config_data.Settings_TOP_ITEMS_RANGE[1],
                 step=1,
                 elem_classes="settings-item",
             )
@@ -436,7 +449,7 @@ def settings_app_tab():
                 value=config_data.Models_SBERT[0],
                 multiselect=False,
                 allow_custom_value=False,
-                label=config_data.Labels_MODEL,
+                label=config_data.Labels_MODEL_SUBJECTS,
                 info=config_data.InformationMessages_MODEL,
                 show_label=True,
                 interactive=True,
@@ -449,7 +462,7 @@ def settings_app_tab():
             render=True,
             variant="default",
             elem_classes="row-2-container",
-        ):
+        ) as settings_row_2:
             dropdown_courses_grades = gr.Dropdown(
                 choices=config_data.DataframeHeaders_COURSES_GRADES[::2],
                 value=config_data.DataframeHeaders_COURSES_GRADES[0],
@@ -464,7 +477,14 @@ def settings_app_tab():
                 elem_classes="dropdown-courses-grades",
             )
 
-    return (top_subjects, max_skill_words, dropdown_models, dropdown_courses_grades)
+    return (
+        type_recommendation,
+        top_items,
+        max_skill_words,
+        dropdown_models,
+        settings_row_2,
+        dropdown_courses_grades,
+    )
 
 
 # def about_app_tab():

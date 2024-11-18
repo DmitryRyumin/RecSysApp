@@ -5,7 +5,7 @@ colorFrom: gray
 colorTo: red
 sdk: gradio
 python_version: 3.12
-sdk_version: 5.5.0
+sdk_version: 5.6.0
 app_file: app.py
 app_port: 7860
 header: default
