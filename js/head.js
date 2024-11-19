@@ -1,10 +1,19 @@
 // Функция для обработки клика по элементам
 function toggleClassOnClick(element) {
-    element.addEventListener('click', function () {
-        console.log(element.classList)
+    if (!element.dataset.listener) {
+        element.addEventListener('click', function (event) {
+            event.stopPropagation(); // Останавливаем всплытие события
+            event.preventDefault(); // Останавливаем стандартное поведение
 
-        element.classList.toggle('deleted')
-    })
+            // Переключаем класс 'deleted'
+            element.classList.toggle('deleted');
+
+            // Применяем стили
+            element.style.backgroundColor = element.classList.contains('deleted') ? 'red' : '';
+        });
+
+        element.dataset.listener = 'true'; // Отмечаем, что обработчик добавлен
+    }
 }
 
 class Slider {
@@ -98,16 +107,17 @@ class Slider {
     }
 }
 
+// Обновленная функция инициализации обработчиков
 const initializeObservers = (target) => {
-    // Инициализация слайдеров в 'subject-info' и 'add-range'
-    initializeSliders(target, 'div.subject-info > div.info > div.range > div.subject_relevance')
-    initializeSliders(target, 'div.add-range > div.range > div.slider-container')
+    // Инициализация слайдеров
+    initializeSliders(target, 'div.subject-info > div.info > div.range > div.subject_relevance');
+    initializeSliders(target, 'div.add-range > div.range > div.slider-container');
 
     // Добавление обработчиков кликов для элементов навыков
     target
         .querySelectorAll('div.subject-info > div.info > div.info-skills > span.value > span.skill')
-        .forEach(toggleClassOnClick)
-}
+        .forEach((element) => toggleClassOnClick(element));
+};
 
 /**
  * Инициализирует слайдеры для заданных элементов, если они не были инициализированы.
@@ -117,11 +127,11 @@ const initializeObservers = (target) => {
 const initializeSliders = (target, selector) => {
     target.querySelectorAll(selector).forEach((element) => {
         if (!element.classList.contains('initialized')) {
-            new Slider(element, { min: 1, max: 7, value: 4 })
-            element.classList.add('initialized')
+            new Slider(element, { min: 1, max: 7, value: 4 });
+            element.classList.add('initialized');
         }
-    })
-}
+    });
+};
 
 const NO_DATA = 'Нет данных'
 const NOT_SPECIFIED = 'не указан'
@@ -350,10 +360,10 @@ function handleButtonClick(showAlerts = true) {
     result.session_id = document.querySelector('.chatbot-id input')?.value.trim() || NO_DATA
 
     // Поиск контейнера с ответом бота
-    const spanContainer = document.querySelector('.chatbot-container .message.bot button > span.chatbot.prose')
+    const spanContainer = document.querySelector('.chatbot-container .message.bot button span.chatbot')
 
     if (!spanContainer) {
-        console.error('Элемент span с классами chatbot prose не найден')
+        console.error('Элемент span с классами chatbot не найден')
         return
     }
 
@@ -445,7 +455,7 @@ function handleButtonClick(showAlerts = true) {
     }
 
     // Вывод итогового результата
-    // console.log('Полный результат:', JSON.stringify(result, null, 2));
+    console.log('Полный результат:', JSON.stringify(result, null, 2));
 
     // Отправка данных на сервер
     sendDataToServer(result, showAlerts)
