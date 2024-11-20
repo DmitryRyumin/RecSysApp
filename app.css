@@ -315,7 +315,7 @@ div.dropdown-user .dropdown-arrow {
     color: #363636;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
     .user-container {
         display: flex;
         flex-direction: column; /* Располагаем элементы в столбик */
@@ -331,9 +331,14 @@ div.dropdown-user .dropdown-arrow {
     div.dropdown-user .wrap {
         width: 100%; /* Полная ширина элементов ввода */
     }
+
+    .user-container .form,
+    .row-1-container .form {
+        width: 100%;
+    }
 }
 
-@media (min-width: 568px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .user-container {
         display: flex;
         flex-wrap: wrap; /* Позволяет элементам переноситься */
@@ -375,7 +380,9 @@ button.account,
 button.auth,
 button.start_evaluate,
 button.send_evaluate {
-    display: flex;
+    display: inline-block;
+    width: auto;
+    margin: 0 auto;
     padding: 10px 20px;
     font-size: 16px;
     font-weight: bold;
@@ -389,7 +396,22 @@ button.send_evaluate {
     border-radius: 4px;
     transition: all 0.3s ease;
 }
+div.auth-container {
+    display: inline-block;
+    width: auto;
+    margin: 0 auto;
+}
 
+@media (max-width: 767px) {
+
+    button.account,
+    button.auth,
+    button.start_evaluate,
+    button.send_evaluate,
+    div.auth-container {
+        width: 100%;
+    }
+}
 button.account.show {
     flex: none !important;
     flex-grow: 0 !important;
@@ -482,12 +504,33 @@ div.chatbot-container div.chatbot .wrapper > label {
 }
 
 div.chatbot-container div.chatbot .message-wrap {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 div.chatbot-container div.chatbot .message-wrap .user-row .message {
     background-color: rgb(220 230 252) !important;
 }
+
+div.chatbot-container div.chatbot .message-wrap > .bubble.with-avatar {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+
+div.chatbot-container div.chatbot .message-wrap .message-row.bot-row  {
+    margin-top: 40px;
+}
+
+/* @media (min-width: 767px){
+    div.chatbot-container div.chatbot .message-wrap .message-row.bot-row {
+        min-width: 95%;
+    }
+}
+
+@media (max-width: 767px){
+    div.chatbot-container div.chatbot .message-wrap .message-row.bot-row {
+        max-width: 100%;
+    }
+} */
 
 @media (max-width: 768px) {
     div.chatbot-container div.chatbot .wrapper > label {
@@ -497,6 +540,7 @@ div.chatbot-container div.chatbot .message-wrap .user-row .message {
     div.chatbot-container div.chatbot .message-wrap > .message-row {
         display: flex;
         flex-direction: column;
+        gap: 10px;
     }
 
     div.chatbot-container div.chatbot .message-wrap > .message-row > .avatar-container {
@@ -510,11 +554,6 @@ div.chatbot-container div.chatbot .message-wrap .user-row .message {
     div.chatbot-container div.chatbot .message-wrap > .message-row.user-row > .avatar-container {
         align-self: flex-end;
         margin-right: 0px;
-    }
-
-    div.chatbot-container div.chatbot .message-wrap > .bubble.with-avatar {
-        margin-left: 0px !important;
-        margin-right: 0px !important;
     }
 }
 
@@ -562,10 +601,22 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea:focus
     background-color: #fafafa !important;
 }
 
+
 .message-wrap .message {
-    background-color: #fafafa !important;
+    background-color: #ffffff !important;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: none !important;
+}
+.message-wrap .message.bot {
+    padding: 12px;
 }
 
+@media (max-width: 767px) {
+    .message-wrap .message.bot {
+        padding: 0px;
+    }
+}
 .chatbot-container .image-preview {
     background-color: #fafafa !important;
 }
@@ -573,16 +624,15 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea:focus
 .icon-button-wrapper.svelte-sr71km {
     background-color: #fafafa !important;
 }
+
 .chatbot-container .icon-button-wrapper {
-    border-radius: 5px;
     border: none !important;
+    border-radius: 5px;
     border-width: 0;
 }
 
 .chatbot-container .icon-button-wrapper > button {
-    color: #0f2d69;
-    background-color: #e0e7ff;
-    border: none;
+    background-color: #F1F1F1;
     border-radius: 5px;
     padding: 6px;
     cursor: pointer;
@@ -591,13 +641,17 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea:focus
 }
 
 .chatbot-container .icon-button-wrapper > button svg {
-    color: #363636;
+    color: #000;
 }
 
 .chatbot-container .icon-button-wrapper > button:hover {
-    background-color: #b3c7ff; /* Более тёмный оттенок фона для интерактивного эффекта */
+    background-color: var(--additional-color); /* Более тёмный оттенок фона для интерактивного эффекта */
     transform: scale(1.05);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+}
+
+.chatbot-container .icon-button-wrapper > button:hover svg {
+    color: #fff;
 }
 
 .icon-button-wrapper.top-panel {
@@ -623,8 +677,18 @@ button.send_message > img {
 }
 
 div.avatar-container {
+    display: none;
     justify-content: center;
     align-items: center;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+div.avatar-container img {
+    padding: 0;
+}
+
+div.user-row div.avatar-container > img {
+    clip-path: circle(43%);
 }
 
 div.chatbot img[alt='bot avatar'],
@@ -727,7 +791,7 @@ div.edu-group > div.subject-info div.range {
     gap: 10px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     div.edu-group > div.subject-info div.range {
         flex-direction: column;
         gap: 0px;
@@ -832,7 +896,7 @@ div.subject-info > div.info > div.info-skills > span.value > span.skill.deleted 
     box-shadow: 0 0 0 1px rgba(255, 0, 0, 1), 0px 2px 4px 0px rgba(255, 0, 0, 0.1) inset;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 568px) {
     div.subject-info-static > div.info > div.info-skills > span.value > span.skill,
     div.subject-info > div.info > div.info-skills > span.value > span.skill,
     div.subject-info > div.info > div.info-skills-static > span.value > span.skill,
@@ -1027,7 +1091,7 @@ div.dropdown-models svg.dropdown-arrow {
     color: #363636;
 }
 
-@media (max-width: 568px) {
+@media (max-width: 767px) {
     .row-1-container {
         display: flex;
         flex-direction: column; /* Располагаем элементы в столбик */
@@ -1051,7 +1115,7 @@ div.dropdown-models svg.dropdown-arrow {
     }
 }
 
-@media (min-width: 568px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .row-1-container {
         display: flex;
         flex-wrap: wrap; /* Позволяет элементам переноситься */
@@ -1419,16 +1483,4 @@ div.user-instruction > div.instruction_text li > span {
     background-color: #dfdede !important;
     padding: 3px 5px;
     color: var(--main-color) !important;
-}
-
-@media (min-width: 600px) {
-    div.evaluate-container {
-        flex-direction: row;
-        justify-content: center;
-    }
-
-    div.evaluate-container > button.send_evaluate {
-        width: 40%;
-        flex-grow: 0 !important;
-    }
 }
