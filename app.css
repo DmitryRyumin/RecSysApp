@@ -403,7 +403,6 @@ div.auth-container {
 }
 
 @media (max-width: 767px) {
-
     button.account,
     button.auth,
     button.start_evaluate,
@@ -516,7 +515,7 @@ div.chatbot-container div.chatbot .message-wrap > .bubble.with-avatar {
     margin-right: 0px !important;
 }
 
-div.chatbot-container div.chatbot .message-wrap .message-row.bot-row  {
+div.chatbot-container div.chatbot .message-wrap .message-row.bot-row {
     margin-top: 40px;
 }
 
@@ -601,7 +600,6 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea:focus
     background-color: #fafafa !important;
 }
 
-
 .message-wrap .message {
     background-color: #ffffff !important;
     border-radius: 6px;
@@ -632,7 +630,7 @@ div.add_evals-container > div.form > div.feedback > label > div > textarea:focus
 }
 
 .chatbot-container .icon-button-wrapper > button {
-    background-color: #F1F1F1;
+    background-color: #f1f1f1;
     border-radius: 5px;
     padding: 6px;
     cursor: pointer;
@@ -706,12 +704,6 @@ div.edu-group > span {
     color: #000000 !important;
     font-size: 18px;
     font-weight: bold;
-}
-
-div.subject-info,
-div.subject-info-static,
-div.vacancy-info-static {
-    padding: 10px;
 }
 
 div.subject-info-static > div.info,

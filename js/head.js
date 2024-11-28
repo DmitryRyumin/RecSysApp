@@ -2,17 +2,17 @@
 function toggleClassOnClick(element) {
     if (!element.dataset.listener) {
         element.addEventListener('click', function (event) {
-            event.stopPropagation(); // Останавливаем всплытие события
-            event.preventDefault(); // Останавливаем стандартное поведение
+            event.stopPropagation() // Останавливаем всплытие события
+            event.preventDefault() // Останавливаем стандартное поведение
 
             // Переключаем класс 'deleted'
-            element.classList.toggle('deleted');
+            element.classList.toggle('deleted')
 
             // Применяем стили
-            element.style.backgroundColor = element.classList.contains('deleted') ? 'red' : '';
-        });
+            element.style.backgroundColor = element.classList.contains('deleted') ? 'red' : ''
+        })
 
-        element.dataset.listener = 'true'; // Отмечаем, что обработчик добавлен
+        element.dataset.listener = 'true' // Отмечаем, что обработчик добавлен
     }
 }
 
@@ -110,14 +110,14 @@ class Slider {
 // Обновленная функция инициализации обработчиков
 const initializeObservers = (target) => {
     // Инициализация слайдеров
-    initializeSliders(target, 'div.subject-info > div.info > div.range > div.subject_relevance');
-    initializeSliders(target, 'div.add-range > div.range > div.slider-container');
+    initializeSliders(target, 'div.subject-info > div.info > div.range > div.subject_relevance')
+    initializeSliders(target, 'div.add-range > div.range > div.slider-container')
 
     // Добавление обработчиков кликов для элементов навыков
     target
         .querySelectorAll('div.subject-info > div.info > div.info-skills > span.value > span.skill')
-        .forEach((element) => toggleClassOnClick(element));
-};
+        .forEach((element) => toggleClassOnClick(element))
+}
 
 /**
  * Инициализирует слайдеры для заданных элементов, если они не были инициализированы.
@@ -127,11 +127,11 @@ const initializeObservers = (target) => {
 const initializeSliders = (target, selector) => {
     target.querySelectorAll(selector).forEach((element) => {
         if (!element.classList.contains('initialized')) {
-            new Slider(element, { min: 1, max: 7, value: 4 });
-            element.classList.add('initialized');
+            new Slider(element, { min: 1, max: 7, value: 4 })
+            element.classList.add('initialized')
         }
-    });
-};
+    })
+}
 
 const NO_DATA = 'Нет данных'
 const NOT_SPECIFIED = 'не указан'
@@ -455,7 +455,7 @@ function handleButtonClick(showAlerts = true) {
     }
 
     // Вывод итогового результата
-    console.log('Полный результат:', JSON.stringify(result, null, 2));
+    console.log('Полный результат:', JSON.stringify(result, null, 2))
 
     // Отправка данных на сервер
     sendDataToServer(result, showAlerts)
