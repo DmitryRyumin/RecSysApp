@@ -485,6 +485,7 @@ div.chatbot-container
 }
 
 div.chatbot-container div.chatbot {
+    height: 52vh !important;
     background-color: #fafafa !important;
     border: none !important;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.15);
@@ -666,12 +667,13 @@ button.send_message > img {
     transition: all 0.3s ease;
 }
 
-.chatbot-container .progress-text {
+.progress-text {
     background-color: #fafafa !important;
 }
 
-.message-container .eta-bar {
+.eta-bar {
     background-color: var(--main-color);
+    opacity: 0 !important;
 }
 
 div.avatar-container {
@@ -950,10 +952,11 @@ div.subject-info > div.info > div.info-skills {
     background-color: #fafafa !important;
 }
 
-.row-1-container > div {
+.row-1-container > div,
+.row-2-container > div {
     background-color: #fafafa !important;
     border: none !important;
-    padding: 20px 0;
+    padding: 10px 0;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -1203,13 +1206,44 @@ div.dropdown-courses-grades div.secondary-wrap input:disabled {
     color: #363636;
 }
 
-.settings-container > div.form > fieldset > div.wrap > label,
+.settings-container > div.form > fieldset > div.wrap >
 div.dropdown-add-vacancy-skills div.token,
 div.dropdown-add-subjects-skills div.token,
 div.dropdown-courses-grades div.token {
     border-radius: 4px;
     border-color: var(--main-color);
     background-color: #fafafa !important;
+}
+
+.settings-type-recommendation label {
+    background-color: #fafafa !important;
+    border-color: var(--main-color) !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.settings-type-recommendation label > input {
+    display: none;
+}
+
+.settings-type-recommendation label.selected {
+    background-color: var(--main-color) !important;
+}
+
+.settings-type-recommendation label span {
+    margin-left: 0px;
+}
+
+.settings-type-recommendation label.selected span {
+    color: white !important;
+}
+
+.settings-type-recommendation label:hover {
+    background-color: var(--additional-color) !important;
+    border-color: var(--additional-color) !important;
+
+}
+
+.settings-type-recommendation label:hover span {
+    color: white !important;
 }
 
 div.dropdown-add-vacancy-skills div.token,
@@ -1475,4 +1509,9 @@ div.user-instruction > div.instruction_text li > span {
     background-color: #dfdede !important;
     padding: 3px 5px;
     color: var(--main-color) !important;
+}
+
+.message.pending {
+    width: 85% !important;
+    height: 32px !important;
 }
